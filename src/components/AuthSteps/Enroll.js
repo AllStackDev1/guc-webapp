@@ -7,6 +7,7 @@ import useApi from 'context/api'
 import useApp from 'context/app'
 
 import CustomInput from 'components/Forms/CustomInput'
+import PhoneInput from 'components/Forms/PhoneInput'
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required!'),
@@ -14,8 +15,8 @@ const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email!').required('Email is required!'),
   phoneNumber: yup
     .string()
-    .matches(/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/, {
-      message: 'Invalid phone number, exclude country code!'
+    .matches(/^[0]\d{10}$/, {
+      message: 'Invalid phone number, exclude country code or spaces!'
     })
     .required('Phone number is required!')
 })
@@ -34,17 +35,24 @@ const Enroll = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
+        await enroll({
+          ...values,
+          phoneNumber: '+234' + values.phoneNumber.split(/^[0]/)[1]
+        })
         setErrorMessage(null)
         setSuccessMessage(
-          'An Application code has been sent to your email address'
+          'An application code has been sent to your email address'
         )
         setStep('code')
       } catch (error) {
         setSuccessMessage(null)
-        setErrorMessage(
-          error?.message || error?.data?.message || 'Unexpected error.'
-        )
+        if (error?.data?.message === 'celebrate request validation failed') {
+          setErrorMessage('Invalid data, please check form.')
+        } else {
+          setErrorMessage(
+            error?.message || error?.data?.message || 'Unexpected error.'
+          )
+        }
       } finally {
         setSubmitting(false)
       }
@@ -120,7 +128,7 @@ const Enroll = () => {
         />
       </Box>
       <Box mb={{ lg: 8 }}>
-        <CustomInput
+        <PhoneInput
           type='text'
           isRequired
           name='phoneNumber'
@@ -130,7 +138,7 @@ const Enroll = () => {
           error={errors.phoneNumber}
           touched={touched.phoneNumber}
           defaultValue={values.phoneNumber}
-          placeholder='Enter your Phone Number'
+          placeholder='Enter your Phone Number eg; 08012345678'
         />
       </Box>
 

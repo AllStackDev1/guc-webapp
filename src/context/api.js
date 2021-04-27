@@ -31,12 +31,20 @@ export const ApiContextProvider = ({ children }) => {
     })
   }
 
+  const resendCode = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/resend-code`,
+      body: JSON.stringify(payload)
+    })
+  }
+
   const applicantUpdateProfile = async payload => {
     return await http.patch({
       url: `${BASE_URL}/applicant/update-profile`,
       body: JSON.stringify(payload)
     })
   }
+
   //#endregion
 
   //#region ADMIN API
@@ -88,6 +96,7 @@ export const ApiContextProvider = ({ children }) => {
         login,
         enroll,
         verifyOTP,
+        resendCode,
         createAdmin,
         getAllAdmin,
         getApplicant,

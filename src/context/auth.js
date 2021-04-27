@@ -7,9 +7,7 @@ const AuthContext = createContext()
 export const AuthContextProvider = ({ children }) => {
   const [session, setSession] = useState(true)
   const [otpId, setOtpId] = useState(null)
-  const [token, setToken] = useState(
-    JSON.parse(window.sessionStorage.getItem('_gcut'))
-  )
+  const [token, setToken] = useState(window.sessionStorage.getItem('_gcut'))
 
   const store = token => {
     setToken(token)

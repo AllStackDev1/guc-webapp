@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import * as yup from 'yup'
 import OtpInput from 'react-otp-input'

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import {
   Box,
@@ -19,6 +18,7 @@ import { Enroll, ApplicationCode, Verification } from 'components/AuthSteps'
 
 import useApp from 'context/app'
 import useAuth from 'context/auth'
+// import useApi from 'context/api'
 
 import { TrophyIcon } from 'theme/Icons'
 
@@ -26,6 +26,7 @@ const Auth = () => {
   document.title = 'GCU | Application Portal'
   const { step, setStep, successMessage, errorMessage } = useApp()
   const { isAuthenticated } = useAuth()
+  // const { auth, resendCode } = useApi()
 
   const history = useHistory()
 
@@ -61,6 +62,14 @@ const Auth = () => {
       }
     }
   }, [step, setStep, isAuthenticated])
+
+  const handleCodeRetrial = async () => {
+    // try {
+    //   const res = await resendCode()
+    // } catch (err) {
+    // } finally {
+    // }
+  }
 
   return (
     <>
@@ -161,6 +170,15 @@ const Auth = () => {
                   {successMessage || errorMessage}
                 </AlertTitle>
               </Alert>
+            </Box>
+          )}
+
+          {step === 'code' && (
+            <Box mt={{ lg: 8 }}>
+              <Text>Didn't receive code</Text>
+              <Text role='button' onClick={() => handleCodeRetrial()}>
+                Send Application Code
+              </Text>
             </Box>
           )}
         </Container>
