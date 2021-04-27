@@ -1,0 +1,118 @@
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
+    src: url('Montserrat-Black.woff') format('woff'), url('Montserrat-Black.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 800;
+    src: url('Montserrat-ExtraBold.woff') format('woff'), url('Montserrat-ExtraBold.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src: url('Montserrat-Bold.woff') format('woff'), url('Montserrat-Bold.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+    src: url('Montserrat-SemiBold.woff') format('woff'), url('Montserrat-SemiBold.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url('Montserrat-Medium.woff') format('woff'), url('Montserrat-Medium.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url('Montserrat-Regular.woff') format('woff'), url('Montserrat-Regular.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+    src: url('Montserrat-Light.woff') format('woff'), url('Montserrat-Light.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200;
+    src: url('Montserrat-Thin.woff') format('woff'), url('Montserrat-Thin.ttf') format('ttf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
+    src: url('TRYVesterbro-Bold.woff') format('woff'), url('TRYVesterbro-Bold.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 800;
+    src: url('TRYVesterbro-Extrabold.woff') format('woff'), url('TRYVesterbro-Extrabold.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src: url('TRYVesterbro-Medium.woff') format('woff'), url('TRYVesterbro-Medium.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src: url('TRYVesterbro-Regular.woff') format('woff'), url('TRYVesterbro-Regular.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+    src: url('TRYVesterbro-Light.woff') format('woff'), url('TRYVesterbro-Light.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'TRYVesterbro';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 200;
+    src: url('TRYVesterbro-Poster.woff') format('woff'), url('TRYVesterbro-Poster.otf') format('otf');
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('PlayfairDisplay-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}

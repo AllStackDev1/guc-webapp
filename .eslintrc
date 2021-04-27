@@ -26,6 +26,7 @@
     "react/display-name": "off",
     "react/jsx-first-prop-new-line": "off",
     "react/jsx-closing-bracket-location": "off",
+    "import/no-extraneous-dependencies": "off",
     "prettier/prettier": [
       "error",
       {
