@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Box, Flex, Icon, Image, Link, Text } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu } from '@headlessui/react'
 import { FiChevronDown, FiChevronUp, FiUser } from 'react-icons/fi'
@@ -21,7 +21,6 @@ const MotionBox = motion(Box)
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth()
-
   const { user } = isAuthenticated()
 
   return (
@@ -42,9 +41,17 @@ const Navbar = () => {
       overflowX={{ base: 'hidden', md: 'visible' }}
     >
       <Link as={ReachRouter} to='/dashboard' _hover={{ textDecor: 'none' }}>
-        <Box as='picture'>
-          <Image src={Logo1} srcSet={`${Logo1} 300w, ${Logo2} 768w`} />
-        </Box>
+        <Box
+          bgImage={{
+            base: `url('${Logo1}')`,
+            lg: `url('${Logo2}')`
+          }}
+          bgSize='cover'
+          bgPos='center'
+          bgRepeat='no-repeat'
+          w={{ base: '3.125rem', lg: '5.875rem' }}
+          h={{ base: '3.063rem', lg: '5.688rem' }}
+        />
       </Link>
 
       <Flex align='center'>

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import * as yup from 'yup'
 import OtpInput from 'react-otp-input'
@@ -87,7 +88,7 @@ const Verification = () => {
           onChange={otp => formik.setFieldValue('pin', otp)}
         />
         {formik.errors.pin && (
-          <Text mt={1} color='red.500' fontSize='sm'>
+          <Text align='left' mt={1} color='red.500' fontSize='sm'>
             {formik.errors.pin}
           </Text>
         )}

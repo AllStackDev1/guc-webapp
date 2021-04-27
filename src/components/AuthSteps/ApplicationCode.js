@@ -30,7 +30,7 @@ const ApplicationCode = () => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const res = await auth(values)
-        setOtpId(res.response?.pinId)
+        setOtpId(res.data.pinId)
         setErrorMessage(null)
         setSuccessMessage(res.message)
         setStep('otp')
@@ -79,7 +79,7 @@ const ApplicationCode = () => {
           onChange={otp => formik.setFieldValue('code', otp)}
         />
         {formik.errors.code && (
-          <Text mt={1} color='red.500' fontSize='sm'>
+          <Text align='left' mt={1} color='red.500' fontSize='sm'>
             {formik.errors.code}
           </Text>
         )}

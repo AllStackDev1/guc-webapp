@@ -1,5 +1,9 @@
-// import { lazy } from 'react'
+import { lazy } from 'react'
 
-// const Dashboard = lazy(() => import('./dashboard'))
+const Dashboard = lazy(() => import('./dashboard'))
 
-// export default Pages
+const Admin = {
+  Dashboard
+}
+
+export default Admin

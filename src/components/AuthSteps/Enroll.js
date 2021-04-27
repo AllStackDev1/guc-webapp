@@ -70,7 +70,7 @@ const Enroll = () => {
       onSubmit={handleSubmit}
     >
       <Flex flexDir='column' mb={{ lg: 6 }}>
-        <Text as='label' id='firstName' fontSize='sm' mb={2}>
+        <Text as='label' align='left' id='firstName' fontSize='sm' mb={2}>
           Full Name
           <Text as='span' color='red.500'>
             {' *'}

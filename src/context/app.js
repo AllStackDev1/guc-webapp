@@ -9,7 +9,7 @@ export const AppContextProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const [step, setStep] = useState('confirm')
+  const [step, setStep] = useState('enroll')
   const [modal, setModal] = useState('')
   const [data, setData] = useState([])
 

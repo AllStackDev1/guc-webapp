@@ -3,14 +3,14 @@ import React from 'react'
 
 import Layout from 'container/Layout'
 
-// import useAuth from 'context/auth'
+import useAuth from 'context/auth'
 
 const Dashboard = () => {
   document.title = 'Dashboard | The GCU Application Portal'
-  // const { isAuthenticated } = useAuth()
-  // const { user } = isAuthenticated()
+  const { isAuthenticated } = useAuth()
+  const { user } = isAuthenticated()
 
-  return <Layout>Hello Dashboard</Layout>
+  return <Layout>Hello Applicant, {user?.firstName}</Layout>
 }
 
 export default Dashboard
