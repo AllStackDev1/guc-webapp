@@ -13,7 +13,12 @@ const Router = () => {
   return (
     <React.Suspense fallback={<Splash />}>
       <Switch>
-        <Route exact path='/' component={Index.Auth} />
+        <Redirect exact from='/' to='/application-process' />
+        <Route
+          exact
+          path='/application-process'
+          component={Index.Application}
+        />
         <Route path='/logout' component={Index.Logout} />
         <Route exact path='/login' component={Index.Login} />
         <PrivateRoute

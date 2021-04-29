@@ -1,15 +1,15 @@
 import { lazy } from 'react'
 
-const Logout = lazy(() => import('./logout'))
-const NotFound = lazy(() => import('./404'))
 const Login = lazy(() => import('./login'))
-const Auth = lazy(() => import('./auth'))
+const NotFound = lazy(() => import('./404'))
+const Logout = lazy(() => import('./logout'))
+const Application = lazy(() => import('./application'))
 
 const Pages = {
-  Auth,
   Login,
   Logout,
-  NotFound
+  NotFound,
+  Application
 }
 
 export default Pages

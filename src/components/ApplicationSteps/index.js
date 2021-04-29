@@ -1,0 +1,8 @@
+export { default as StepOne } from './Step-1'
+export { default as StepTwo } from './Step-2'
+export { default as StepThree } from './Step-3'
+export { default as StepFour } from './Step-4'
+export { default as StepFive } from './Step-5'
+export { default as StepSixOne } from './Step-6.1'
+export { default as StepSixTwo } from './Step-6.2'
+export { default as StepSeven } from './Step-7'

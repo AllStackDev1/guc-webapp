@@ -19,7 +19,7 @@ const CustomInput = ({ id, isRequired, error, touched, label, ...rest }) => {
           {label}
         </FormLabel>
       )}
-      <Input {...rest} h={{ md: 16 }} bgColor='gray.50' />
+      <Input {...rest} h={16} bgColor='gray.50' />
       <FormErrorMessage>{error}</FormErrorMessage>
     </FormControl>
   )

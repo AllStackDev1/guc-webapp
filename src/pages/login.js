@@ -19,11 +19,11 @@ import useAuth from 'context/auth'
 import useApi from 'context/api'
 
 import CustomInput from 'components/Forms/CustomInput'
+import CustomPasswordInput from 'components/Forms/CustomPasswordInput'
 
 import Logo1 from 'assets/images/logo@1x.svg'
 import Logo2 from 'assets/images/logo@2x.svg'
 import LogoBGImage from 'assets/images/login-side-bg-img.png'
-import PasswordInput from 'components/Forms/PasswordInput'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email!').required('Email is required!'),
@@ -152,7 +152,7 @@ const Login = () => {
               />
             </Box>
             <Box mb={{ lg: 8 }}>
-              <PasswordInput
+              <CustomPasswordInput
                 isRequired
                 name='password'
                 label='Password'

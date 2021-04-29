@@ -5,9 +5,10 @@ import jwt_decode from 'jwt-decode'
 const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
+  const [token, setToken] = useState(window.sessionStorage.getItem('_gcut'))
+  const [phoneNumber, setPhoneNumber] = useState(null)
   const [session, setSession] = useState(true)
   const [otpId, setOtpId] = useState(null)
-  const [token, setToken] = useState(window.sessionStorage.getItem('_gcut'))
 
   const store = token => {
     setToken(token)
@@ -32,6 +33,8 @@ export const AuthContextProvider = ({ children }) => {
         session,
         setOtpId,
         setSession,
+        phoneNumber,
+        setPhoneNumber,
         isAuthenticated
       }}
     >

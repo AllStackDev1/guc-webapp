@@ -12,3 +12,30 @@ html, body {
 input, textarea, [contenteditable] {
   caret-color: #C82B38;
 }
+
+.intl-tel-input:focus {
+  outline: none;
+}
+
+.intl-tel-input input {
+  width: 100%;
+  min-width: 0px;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  height: var(--chakra-sizes-16);
+  font-size: var(--chakra-fontSizes-md);
+  border-radius: var(--chakra-radii-md);
+  border: 1px solid;
+  border-color: inherit;
+  background: inherit;
+  background-color: var(--chakra-colors-gray-50);
+}
+
+.intl-tel-input.allow-dropdown .flag-container {
+  width: unset !important;
+}
