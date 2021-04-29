@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import validator from 'validator'
 import { useFormik } from 'formik'
-import { Box, Flex, Text, Button, Heading } from '@chakra-ui/react'
+import { Box, Flex, Text, Button, Heading, Container } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomPhoneInput from 'components/Forms/CustomPhoneInput'
@@ -70,7 +70,12 @@ const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
   } = formik
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '3xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Online Application
       </Heading>
@@ -148,14 +153,14 @@ const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
         </Box>
 
         <Button
-          mt={8}
+          mt={10}
           w='100%'
           rounded='0'
           type='submit'
           color='#fff'
           fontSize='md'
           boxShadow='lg'
-          fontWeight={400}
+          fontWeight={600}
           colorScheme='gcuButton'
           h={{ base: '3.375rem' }}
           _focus={{ outline: 'none' }}
@@ -165,7 +170,7 @@ const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
           Continue
         </Button>
       </Flex>
-    </Box>
+    </Container>
   )
 }
 

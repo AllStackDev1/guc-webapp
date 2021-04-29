@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
-import { Box, Flex, Text, Button, Heading } from '@chakra-ui/react'
+import { Box, Flex, Text, Button, Heading, Container } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 
 import Legal from './Legal'
@@ -50,14 +50,19 @@ const StepFour = ({
     }
   })
 
-  // React.useEffect(() => {
-  //   if (!otpId) {
-  //     return setStep(3)
-  //   }
-  // }, [otpId, setStep])
+  React.useEffect(() => {
+    if (!otpId) {
+      return setStep(3)
+    }
+  }, [otpId, setStep])
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '2xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         OTP Verification
       </Heading>
@@ -99,7 +104,7 @@ const StepFour = ({
           </Button>
         </Box>
       </Flex>
-    </Box>
+    </Container>
   )
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { Box, Flex, Button, Heading } from '@chakra-ui/react'
+import { Box, Flex, Button, Heading, Container } from '@chakra-ui/react'
 
 import Legal from './Legal'
 import CustomOTPInput from 'components/Forms/CustomOTPInput'
@@ -48,7 +48,12 @@ const StepThree = ({
   })
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '2xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Application Code
       </Heading>
@@ -80,7 +85,7 @@ const StepThree = ({
           </Button>
         </Box>
       </Flex>
-    </Box>
+    </Container>
   )
 }
 

@@ -1,12 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Text, Button, Heading } from '@chakra-ui/react'
+import { Box, Text, Button, Heading, Container } from '@chakra-ui/react'
 
 import { TrophyIcon } from 'theme/Icons'
 
 const StepFive = ({ setStep }) => {
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '2xl' }}
+    >
       <Box
         mx='auto'
         mb={{ lg: 16 }}
@@ -27,8 +32,8 @@ const StepFive = ({ setStep }) => {
         fontSize='lg'
         lineHeight='30px'
       >
-        Awesome your OTP Code has been verifed click the button below to
-        continue your application.
+        Awesome your account have been verified click the button below to
+        purchase your application form.
       </Text>
 
       <Box mt={8} align='center'>
@@ -48,7 +53,7 @@ const StepFive = ({ setStep }) => {
           Continue Application
         </Button>
       </Box>
-    </Box>
+    </Container>
   )
 }
 

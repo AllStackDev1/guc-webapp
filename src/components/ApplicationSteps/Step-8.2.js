@@ -1,17 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
   Box,
-  Text,
   Flex,
+  Text,
+  Icon,
   Button,
   Heading,
-  Avatar,
   Container
 } from '@chakra-ui/react'
 import { FiPlus } from 'react-icons/fi'
+import { CalendarIcon } from 'theme/Icons'
 
-const StepSixTwo = () => {
+const StepEightTwo = () => {
   return (
     <Container
       align='center'
@@ -20,7 +20,7 @@ const StepSixTwo = () => {
       minW={{ lg: '3xl' }}
     >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
-        Previous Schools
+        Sibling
       </Heading>
 
       <Flex mt={{ lg: 16 }} px={{ lg: 10 }} flexDir='column' align='flex-start'>
@@ -28,29 +28,29 @@ const StepSixTwo = () => {
           w='100%'
           border='1px'
           rounded='md'
-          py={{ lg: 10 }}
+          py={{ lg: 5 }}
           px={{ lg: 5 }}
+          pos='relative'
           textAlign='left'
-          align='flex-start'
-          bgColor='#FBFBFB'
+          bgColor='gcu.600'
           borderColor='gray.200'
-          justify='space-around'
         >
-          <Avatar name='Kings College Lagos' />
+          <Flex w={8} h={8} align='center' bgColor='gcu.50'>
+            <Icon mx='auto' as={CalendarIcon} />
+          </Flex>
 
-          <Box>
+          <Box ml={5}>
             <Heading lineHeight='2' as='h6' fontSize='md' fontFamily='body'>
-              Kings College Lagos
+              Jerry Ikenna Ibeawuchi
             </Heading>
-            <Text lineHeight='2'>
-              No 30 ladioke akintola lekki Phase I, Lagos
-            </Text>
-            <Text lineHeight='2'>Jerrysonibe@gmail.com</Text>
-            <Text lineHeight='2'>Mar 2017 to Jan 2018</Text>
+            <Text lineHeight='2'>Male</Text>
+            <Text lineHeight='2'>June / 20 / 2021</Text>
           </Box>
 
           <Button
             bg='unset'
+            right={10}
+            pos='absolute'
             fontWeight='normal'
             textColor='gcu.100'
             _focus={{ bg: 'unset' }}
@@ -62,15 +62,15 @@ const StepSixTwo = () => {
 
         <Button
           bg='unset'
-          fontSize='sm'
+          leftIcon={<FiPlus />}
           fontWeight='bold'
           textColor='gcu.100'
-          leftIcon={<FiPlus />}
+          fontSize='sm'
           aria-label='Add Another School'
           _focus={{ bg: 'unset' }}
           _hover={{ bg: 'unset' }}
         >
-          Add Another School
+          Add Another Siblings
         </Button>
 
         <Flex w='100%' justify='space-between'>
@@ -111,11 +111,4 @@ const StepSixTwo = () => {
   )
 }
 
-StepSixTwo.propTypes = {
-  enroll: PropTypes.func.isRequired,
-  setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
-}
-
-export default StepSixTwo
+export default StepEightTwo

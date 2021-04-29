@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
@@ -9,6 +10,7 @@ import {
   Button,
   Heading,
   ListItem,
+  Container,
   OrderedList
 } from '@chakra-ui/react'
 
@@ -67,12 +69,17 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
     touched,
     handleBlur,
     handleChange,
-    // isSubmitting,
+    isSubmitting,
     handleSubmit
   } = formik
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '5xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Student Background
       </Heading>
@@ -85,32 +92,36 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
         onSubmit={handleSubmit}
       >
         <OrderedList spacing={3}>
-          {lists.map(list => (
+          {lists.map((list, idx) => (
             <ListItem
               d='flex'
               key={list.id}
               textAlign='left'
               alignItems='center'
             >
+              <Text mr={4} fontWeight='bold'>
+                {idx + 1}.
+              </Text>
               <Text
-                w='80%'
+                w='40%'
                 textAlign='left'
                 fontWeight={500}
                 fontSize={{ base: 'xs', lg: 'sm' }}
-                ml={2}
               >
                 {list.text}
               </Text>
-              <CustomInput
-                type='text'
-                isRequired
-                name={list.id}
-                onBlur={handleBlur}
-                error={errors.phoneNumber?.[list.id]}
-                touched={touched.phoneNumber?.[list.id]}
-                onChange={handleChange}
-                defaultValue={values.phoneNumber?.[list.id]}
-              />
+              <Box w='50%'>
+                <CustomInput
+                  type='text'
+                  isRequired
+                  name={list.id}
+                  onBlur={handleBlur}
+                  error={errors.list?.id}
+                  touched={touched.list?.id}
+                  onChange={handleChange}
+                  defaultValue={values.list?.id}
+                />
+              </Box>
             </ListItem>
           ))}
         </OrderedList>
@@ -146,7 +157,7 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               color='#fff'
               fontSize='md'
               boxShadow='lg'
-              fontWeight={400}
+              fontWeight={600}
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
@@ -156,7 +167,7 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
           </Flex>
         </Flex>
       </Flex>
-    </Box>
+    </Container>
   )
 }
 

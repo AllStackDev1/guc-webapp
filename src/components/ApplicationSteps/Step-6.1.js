@@ -2,7 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { Box, Flex, Grid, GridItem, Button, Heading } from '@chakra-ui/react'
+import {
+  Flex,
+  Grid,
+  GridItem,
+  Button,
+  Heading,
+  Container
+} from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 
@@ -62,12 +69,17 @@ const StepSixOne = ({
     touched,
     handleBlur,
     handleChange,
-    isSubmitting,
+    // isSubmitting,
     handleSubmit
   } = formik
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '3xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Previous Schools
       </Heading>
@@ -140,7 +152,7 @@ const StepSixOne = ({
               defaultValue={values.previousSchool?.startDate}
             />
           </GridItem>
-          <GridItem>
+          <GridItem colSpan={2}>
             <CustomInput
               type='date'
               isRequired
@@ -156,25 +168,42 @@ const StepSixOne = ({
           </GridItem>
         </Grid>
 
-        <Button
-          mt={8}
-          w='100%'
-          rounded='0'
-          type='submit'
-          color='#fff'
-          fontSize='md'
-          boxShadow='lg'
-          fontWeight={400}
-          colorScheme='gcuButton'
-          h={{ base: '3.375rem' }}
-          _focus={{ outline: 'none' }}
-          isLoading={isSubmitting}
-          isDisabled={isSubmitting}
-        >
-          Continue
-        </Button>
+        <Flex w='100%' justify='flex-end'>
+          <Button
+            mt={8}
+            w='200px'
+            mr={3}
+            rounded='0'
+            type='submit'
+            color='gcu.100'
+            fontSize='sm'
+            boxShadow='lg'
+            fontWeight={600}
+            variant='outline'
+            colorScheme='gcuButton'
+            h={{ base: '3.375rem' }}
+            _focus={{ outline: 'none' }}
+          >
+            Cancel
+          </Button>
+          <Button
+            mt={8}
+            w='200px'
+            rounded='0'
+            type='submit'
+            color='#fff'
+            fontSize='sm'
+            boxShadow='lg'
+            fontWeight={400}
+            colorScheme='gcuButton'
+            h={{ base: '3.375rem' }}
+            _focus={{ outline: 'none' }}
+          >
+            Next
+          </Button>
+        </Flex>
       </Flex>
-    </Box>
+    </Container>
   )
 }
 

@@ -7,7 +7,8 @@ import {
   Button,
   Heading,
   ListItem,
-  ListIcon
+  ListIcon,
+  Container
 } from '@chakra-ui/react'
 
 const CircleCheckIcon = () => (
@@ -57,7 +58,12 @@ const StepOne = ({ setStep }) => {
   ]
 
   return (
-    <Box>
+    <Container
+      align='center'
+      mt={{ lg: 4 }}
+      px={{ lg: 10 }}
+      minW={{ lg: '2xl' }}
+    >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Application Process
       </Heading>
@@ -88,8 +94,13 @@ const StepOne = ({ setStep }) => {
         </List>
 
         <Text {...textStyle}>
-          Applicants will undergo a test according to their age category, please
-          click here (GL assessments link)
+          Applicants will undergo an online test according to their age
+          category, you would recieve an{' '}
+          <Text as='span' fontWeight='700'>
+            Application ID
+          </Text>{' '}
+          in your registered email, use this code and your one time password
+          (OTP) to login and complete your application.
         </Text>
       </Box>
 
@@ -110,7 +121,7 @@ const StepOne = ({ setStep }) => {
           Apply Now !!
         </Button>
       </Box>
-    </Box>
+    </Container>
   )
 }
 

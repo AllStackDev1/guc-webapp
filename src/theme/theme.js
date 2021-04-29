@@ -32,6 +32,7 @@ export const theme = extendTheme({
   },
   colors: {
     gcu: {
+      50: '#FFE8EA',
       100: '#C82B38',
       200: '#2E3748',
       300: '#9B0D39',
