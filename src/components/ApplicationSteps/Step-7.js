@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as yup from 'yup'
 import { useFormik } from 'formik'
 import {
   Box,
@@ -9,6 +7,7 @@ import {
   Flex,
   Button,
   Heading,
+  useToast,
   ListItem,
   Container,
   OrderedList
@@ -16,12 +15,11 @@ import {
 
 import CustomInput from 'components/Forms/CustomInput'
 
-const validationSchema = yup.object().shape({
-  specialNeeds: yup.string().required('First name is required!'),
-  enrollNetwork: yup.string().required('Last name is required!')
-})
+import { StepSevenSchema } from './validations'
 
-const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
+const StepSeven = ({ setStep, setStudentBackground }) => {
+  const toast = useToast()
+
   const lists = [
     {
       id: 'specialNeeds',
@@ -39,24 +37,38 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
       specialNeeds: '',
       enrollNetwork: ''
     },
-    validationSchema,
+    validationSchema: StepSevenSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
+        await setStudentBackground(values)
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Student background information saved!'
+        })
+        window.sessionStorage.setItem('step', 8.1)
+        setStep(8.1)
       } catch (error) {
-        setSuccessMessage(null)
+        let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
+          eMgs = 'Invalid data, please check form.'
         } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
         }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -98,28 +110,35 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               key={list.id}
               textAlign='left'
               alignItems='center'
+              justifyContent='space-between'
             >
-              <Text mr={4} fontWeight='bold'>
-                {idx + 1}.
-              </Text>
-              <Text
-                w='40%'
-                textAlign='left'
-                fontWeight={500}
-                fontSize={{ base: 'xs', lg: 'sm' }}
-              >
-                {list.text}
-              </Text>
+              <Flex w='45%' align='center'>
+                <Text mr={4} fontWeight='bold'>
+                  {idx + 1}.
+                </Text>
+                <Text
+                  textAlign='left'
+                  fontWeight={500}
+                  fontSize={{ base: 'xs', lg: 'sm' }}
+                >
+                  {list.text}{' '}
+                  <Text as='span' color='red.500'>
+                    *
+                  </Text>
+                </Text>
+              </Flex>
+
               <Box w='50%'>
                 <CustomInput
                   type='text'
                   isRequired
                   name={list.id}
                   onBlur={handleBlur}
-                  error={errors.list?.id}
-                  touched={touched.list?.id}
+                  placeholder='Please enter yes(with more details) or no'
+                  error={errors[list.id]}
+                  touched={touched[list.id]}
                   onChange={handleChange}
-                  defaultValue={values.list?.id}
+                  defaultValue={values[list.id]}
                 />
               </Box>
             </ListItem>
@@ -137,7 +156,7 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               mt={8}
               w='200px'
               rounded='0'
-              type='submit'
+              type='button'
               color='gcu.100'
               fontSize='md'
               boxShadow='lg'
@@ -146,6 +165,7 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              onClick={() => setStep(6.2)}
             >
               Previous
             </Button>
@@ -161,6 +181,8 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
             >
               Next
             </Button>
@@ -172,10 +194,8 @@ const StepSeven = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
 }
 
 StepSeven.propTypes = {
-  enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setStudentBackground: PropTypes.func.isRequired
 }
 
 export default StepSeven

@@ -27,7 +27,7 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
   const handlePaystackSuccessAction = async resp => {
     try {
       if (resp.status === 'success') {
-        await applicantUpdateProfile({ stage: 6 })
+        await applicantUpdateProfile({ status: 'PAID', stage: 6 })
         toast({
           duration: 5000,
           isClosable: true,
@@ -44,7 +44,8 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
       if (error?.data?.message === 'celebrate request validation failed') {
         eMgs = 'Invalid data, please check form.'
       } else {
-        eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
       }
       toast({
         duration: 9000,

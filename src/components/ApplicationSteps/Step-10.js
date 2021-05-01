@@ -1,131 +1,179 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as yup from 'yup'
 import { useFormik } from 'formik'
 import {
   Flex,
+  Grid,
   Button,
   Heading,
-  Grid,
   GridItem,
+  useToast,
   Container
 } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 
-const validationSchema = yup.object().shape({
-  contactInfo: yup.object().shape({
-    relation: yup.string(),
-    title: yup.string(),
-    forename: yup.string(),
-    surename: yup.string(),
-    email: yup.string(),
-    occupation: yup.string(),
-    addressOne: yup.string(),
-    addressTwo: yup.string(),
-    township: yup.string(),
-    mobileNumber: yup.string(),
-    homeNumber: yup.string(),
-    workNumber: yup.string(),
-    homeLanguage: yup.string(),
-    studentAddress: yup.string(),
-    hearAboutUs: yup.string(),
-    permissions: yup.string()
-  })
-})
+import { StepTenSchema } from './validations'
 
-const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
+const StepTen = ({ setStep, setguardianContact }) => {
+  const toast = useToast()
   const lists = [
     {
       id: 'relation',
-      text: 'Relation to Student'
+      text: 'Relation to Student',
+      isRequired: true,
+      options: [
+        'Father',
+        'Monther',
+        'Grand Father',
+        'Grand Mother',
+        'Uncle',
+        'Aunty',
+        'Sister',
+        'Brother',
+        'Guardian'
+      ]
     },
     {
       id: 'title',
-      text: 'Select Title'
+      text: 'Select Title',
+      isRequired: true,
+      options: ['Mr', 'Mrs', 'Sir', 'Ma', 'Chief']
     },
     {
       id: 'forename',
-      text: 'Forename'
+      text: 'Forename',
+      isRequired: true
     },
     {
-      id: 'surename',
-      text: 'Surename'
+      id: 'surname',
+      text: 'Surname',
+      isRequired: true
     },
     {
       id: 'email',
-      text: 'Email address'
+      text: 'Email address',
+      isRequired: true
     },
     {
       id: 'occupation',
-      text: 'Occupation'
+      text: 'Occupation',
+      isRequired: true
     },
     {
       id: 'addressOne',
-      text: 'Address 1'
+      text: 'Address 1',
+      isRequired: true
     },
     {
       id: 'addressTwo',
       text: 'Address 2'
     },
     {
-      id: 'township',
-      text: 'Township'
+      id: 'state',
+      text: 'State',
+      isRequired: true
     },
     {
       id: 'mobileNumber',
-      text: 'Mobile Number'
+      text: 'Mobile Number',
+      type: 'phone',
+      isRequired: true
     },
     {
       id: 'homeNumber',
+      type: 'phone',
       text: 'Home Number'
     },
     {
       id: 'workNumber',
+      type: 'phone',
       text: 'Work Number'
     },
     {
       id: 'homeLanguage',
-      text: 'Language Spoken at Home'
+      text: 'Language Spoken at Home',
+      isRequired: true
     },
     {
       id: 'studentAddress',
-      text: 'Address of student'
+      text: 'Address of student',
+      isRequired: true
     },
     {
       id: 'hearAboutUs',
-      text: 'How did u hear about us'
+      text: 'How did u hear about us',
+      isRequired: true,
+      options: [
+        'Search Engine',
+        'Facebook',
+        'LinkedIn',
+        'TV',
+        'Radio',
+        'Friend',
+        'Others'
+      ]
     },
     {
       id: 'permissions',
-      text: 'I give permission for the students photo to appear on:'
+      text: 'I give permission for the students photo to appear on:',
+      isRequired: true,
+      options: ['Yes', 'No']
     }
   ]
 
   const formik = useFormik({
     initialValues: {
-      specialNeeds: '',
-      enrollNetwork: ''
+      state: '',
+      title: '',
+      email: '',
+      surname: '',
+      forename: '',
+      relation: '',
+      occupation: '',
+      addressOne: '',
+      addressTwo: '',
+      homeNumber: '',
+      workNumber: '',
+      permissions: '',
+      hearAboutUs: '',
+      mobileNumber: '',
+      homeLanguage: '',
+      studentAddress: ''
     },
-    validationSchema,
+    validationSchema: StepTenSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
+        await setguardianContact(values)
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Guardian contact information saved!'
+        })
+        window.sessionStorage.setItem('step', 11)
+        setStep(11)
       } catch (error) {
-        setSuccessMessage(null)
+        let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
+          eMgs = 'Invalid data, please check form.'
         } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
         }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -138,7 +186,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
     touched,
     handleBlur,
     handleChange,
-    // isSubmitting,
+    isSubmitting,
     handleSubmit
   } = formik
 
@@ -150,7 +198,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
       minW={{ lg: '4xl' }}
     >
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
-        Contact Information
+        Guardian Contact Information
       </Heading>
 
       <Flex
@@ -163,30 +211,31 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
         <Grid templateColumns='repeat(2, 1fr)' gap={6}>
           {lists.map((list, idx) => (
             <GridItem key={list.id} colSpan={[14, 15].includes(idx) ? 2 : 1}>
-              {[1, 14, 15].includes(idx) ? (
+              {list.options ? (
                 <CustomSelect
-                  isRequired
+                  name={list.id}
                   label={list.text}
                   onBlur={handleBlur}
+                  options={list.options}
                   onChange={handleChange}
-                  name={list.id}
-                  placeholder='Select Option'
                   error={errors[list.id]}
                   touched={touched[list.id]}
-                  options={['Male', 'Female', 'Others']}
+                  placeholder='Select Option'
+                  isRequired={list.isRequired}
                   defaultValue={values[list.id]}
                 />
               ) : (
                 <CustomInput
                   type='text'
-                  isRequired
                   name={list.id}
                   label={list.text}
                   onBlur={handleBlur}
-                  error={errors.list?.id}
-                  touched={touched.list?.id}
                   onChange={handleChange}
-                  defaultValue={values.list?.id}
+                  error={errors[list.id]}
+                  placeholder={list.text}
+                  touched={touched[list.id]}
+                  isRequired={list.isRequired}
+                  defaultValue={values[list.id]}
                 />
               )}
             </GridItem>
@@ -199,7 +248,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               mt={8}
               w='200px'
               rounded='0'
-              type='submit'
+              type='button'
               color='gcu.100'
               fontSize='md'
               boxShadow='lg'
@@ -208,6 +257,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              onClick={() => setStep(9)}
             >
               Previous
             </Button>
@@ -223,6 +273,8 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
             >
               Next
             </Button>
@@ -233,11 +285,9 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
   )
 }
 
-StepNine.propTypes = {
-  enroll: PropTypes.func.isRequired,
+StepTen.propTypes = {
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setguardianContact: PropTypes.func.isRequired
 }
 
-export default StepNine
+export default StepTen

@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
+import jwt_decode from 'jwt-decode'
 import {
   Box,
   Flex,
@@ -28,6 +30,7 @@ const validationSchema = yup.object().shape({
 
 const StepFour = ({
   auth,
+  user,
   code,
   otpId,
   store,
@@ -55,11 +58,16 @@ const StepFour = ({
         setSuccessMessage(null)
         const res = await verifyOTP(values)
         store(res.data)
-        setStep(res.data.stage)
+        const user = jwt_decode(res.data)
+        if (user.status === 'PENDING') {
+          setStep(5)
+        } else {
+          setStep(user.stage)
+        }
       } catch (error) {
         setSuccessMessage(null)
         setErrorMessage(
-          error?.message || error?.data?.message || 'Unexpected error.'
+          error?.message || error?.data?.message || 'Unexpected network error.'
         )
       } finally {
         setSubmitting(false)
@@ -88,7 +96,7 @@ const StepFour = ({
         setErrorMessage('Invalid data, please check form.')
       } else {
         setErrorMessage(
-          error?.message || error?.data?.message || 'Unexpected error.'
+          error?.message || error?.data?.message || 'Unexpected network error.'
         )
       }
     } finally {
@@ -191,6 +199,7 @@ const StepFour = ({
 }
 
 StepFour.propTypes = {
+  user: PropTypes.any,
   errorMessage: PropTypes.any,
   successMessage: PropTypes.any,
   auth: PropTypes.any.isRequired,

@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as yup from 'yup'
 import { useFormik } from 'formik'
 import {
   Box,
@@ -11,31 +9,25 @@ import {
   Heading,
   Checkbox,
   ListItem,
+  useToast,
   Container,
-  OrderedList
+  OrderedList,
+  useDisclosure
 } from '@chakra-ui/react'
 import { FiPlus } from 'react-icons/fi'
 
 import CustomInput from 'components/Forms/CustomInput'
+import CustomUploader from 'components/Forms/CustomUploader'
+import PreviewModal from './PreviewModal'
 
-const validationSchema = yup.object().shape({
-  health: yup.object().shape({
-    asthma: yup.bool(),
-    allergies: yup.bool(),
-    diabiates: yup.bool(),
-    epilepsy: yup.bool(),
-    requireMedicalPlan: yup.string(),
-    regularMedication: yup.string(),
-    dietaryRestrictions: yup.string(),
-    physicalRestriction: yup.string(),
-    otherMedicalIssues: yup.string(),
-    isImmune: yup.string(),
-    immuneFile: yup.string()
-  })
-})
-// enrollNetwork: yup.string().required('Last name is required!')
+import { fileToBase64 } from 'utils/mics'
+import { StepNineSchema } from './validations'
 
-const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
+const StepNine = ({ setStep, setHealthMedical }) => {
+  const [file, setFile] = React.useState(undefined)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
+
   const lists = [
     {
       id: 1,
@@ -51,12 +43,12 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
     {
       id: 3,
       text: 'Does your child take regular medication?',
-      field: 'regularMedication'
+      field: 'takeRegularMedication'
     },
     {
       id: 4,
       text: 'Are there any dietary restrictions?',
-      field: 'dietaryRestrictions'
+      field: 'dietaryRestriction'
     },
     {
       id: 5,
@@ -72,34 +64,62 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
       id: 7,
       text:
         'Is your child immunised? (Please attach a copy of the immunisation history)',
-      field: 'isImmune',
+      field: 'isImmunised',
       file: 'immuneFile'
     }
   ]
 
   const formik = useFormik({
     initialValues: {
-      specialNeeds: '',
-      enrollNetwork: ''
+      asthma: false,
+      allergies: false,
+      diabiates: false,
+      epilepsy: false,
+      immuneFile: '',
+      requireMedicalPlan: '',
+      takeRegularMedication: '',
+      dietaryRestriction: '',
+      physicalRestriction: '',
+      otherMedicalIssues: '',
+      isImmunised: ''
     },
-    validationSchema,
+    validationSchema: StepNineSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
-      } catch (error) {
-        setSuccessMessage(null)
-        if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
-        } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+        const data = {
+          ...values,
+          immuneFile:
+            values.immuneFile && (await fileToBase64(values.immuneFile))
         }
+        await setHealthMedical(data)
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Health and medical saved successfully!'
+        })
+        window.sessionStorage.setItem('step', 10)
+        setStep(10)
+      } catch (error) {
+        let eMgs
+        if (error?.data?.message === 'celebrate request validation failed') {
+          eMgs = 'Invalid data, please check form.'
+        } else {
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
+        }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -112,9 +132,15 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
     touched,
     handleBlur,
     handleChange,
+    setFieldValue,
     isSubmitting,
     handleSubmit
   } = formik
+
+  const handlePreview = file => {
+    setFile(file)
+    onOpen()
+  }
 
   return (
     <Container
@@ -123,6 +149,8 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
       px={{ lg: 10 }}
       minW={{ lg: '6xl' }}
     >
+      {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
+
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Health and Medical
       </Heading>
@@ -153,7 +181,10 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
                   fontWeight={500}
                   fontSize={{ base: 'xs', lg: 'sm' }}
                 >
-                  {list.text}
+                  {list.text}{' '}
+                  <Text as='span' color='red.500'>
+                    *
+                  </Text>
                 </Text>
               </Flex>
 
@@ -179,27 +210,76 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
                     isRequired
                     name={list.field}
                     onBlur={handleBlur}
-                    error={errors.list?.field}
-                    touched={touched.list?.field}
+                    placeholder='Please enter yes(with more details) or no'
+                    error={errors[list.field]}
+                    touched={touched[list.field]}
                     onChange={handleChange}
-                    defaultValue={values.list?.field}
+                    defaultValue={values[list.field]}
                   />
                 )}
-                {list.file && (
-                  <Button
-                    px={0}
-                    bg='unset'
-                    fontSize='sm'
-                    fontWeight='600'
-                    textColor='gcu.100'
-                    leftIcon={<FiPlus />}
-                    _focus={{ bg: 'unset' }}
-                    _hover={{ bg: 'unset' }}
-                    aria-label='Attach a copy of immunisation history'
-                  >
-                    Attach a copy of immunisation history
-                  </Button>
-                )}
+                {list.file &&
+                  (values.immuneFile ? (
+                    <>
+                      <Flex
+                        mt={1}
+                        color='gcu.100'
+                        pos='relative'
+                        align='center'
+                      >
+                        <Box mr={4}>
+                          <Button
+                            p={0}
+                            bg='unset'
+                            type='button'
+                            _hover={{ bg: 'unset' }}
+                            onClick={e => {
+                              e.preventDefault()
+                              handlePreview(values.immuneFile)
+                            }}
+                          >
+                            Preview
+                          </Button>
+                        </Box>
+                        <Box>
+                          <Button
+                            p={0}
+                            bg='unset'
+                            type='button'
+                            _hover={{ bg: 'unset' }}
+                            onClick={e => {
+                              e.preventDefault()
+                              return setFieldValue('immuneFile', undefined)
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </Box>
+                      </Flex>
+                      {errors.immuneFile && (
+                        <Text color='red.500' fontSize='xs'>
+                          {errors.immuneFile}
+                        </Text>
+                      )}
+                    </>
+                  ) : (
+                    <Flex mt={1} color='gcu.100' pos='relative' align='center'>
+                      <CustomUploader
+                        left={0}
+                        form={formik}
+                        pos='absolute'
+                        cursor='pointer'
+                        field={{ name: 'immuneFile' }}
+                        accept='application/pdf, image/jpg, image/jpeg, image/png'
+                      />
+                      <FiPlus />
+                      <Text ml={1} fontSize='sm' fontWeight='600'>
+                        Attach a copy of immunisation history
+                        <Text as='span' ml={1} fontSize='xs'>
+                          (optional)
+                        </Text>
+                      </Text>
+                    </Flex>
+                  ))}
               </Box>
             </ListItem>
           ))}
@@ -216,7 +296,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               mt={8}
               w='200px'
               rounded='0'
-              type='submit'
+              type='button'
               color='gcu.100'
               fontSize='md'
               boxShadow='lg'
@@ -225,6 +305,7 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              onClick={() => setStep(8.2)}
             >
               Previous
             </Button>
@@ -240,6 +321,8 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
               colorScheme='gcuButton'
               h={{ base: '3.375rem' }}
               _focus={{ outline: 'none' }}
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
             >
               Next
             </Button>
@@ -251,10 +334,8 @@ const StepNine = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
 }
 
 StepNine.propTypes = {
-  enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setHealthMedical: PropTypes.func.isRequired
 }
 
 export default StepNine

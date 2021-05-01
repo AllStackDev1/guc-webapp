@@ -143,6 +143,146 @@ export const ApiContextProvider = ({ children }) => {
   }
   //#endregion
 
+  //#region STUDENT BACKGROUND API
+  const setStudentBackground = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/student-backgrounds`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getStudentBackground = async query => {
+    return await http.get({
+      url: `${BASE_URL}/student-backgrounds`,
+      query
+    })
+  }
+
+  const updateStudentBackground = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/student-backgrounds/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteStudentBackground = async id => {
+    return await http.post({
+      url: `${BASE_URL}/student-backgrounds/${id}`
+    })
+  }
+  //#endregion
+
+  //#region SIBLING API
+  const setSibling = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/siblings`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getSiblings = async query => {
+    return await http.get({ url: `${BASE_URL}/siblings`, query })
+  }
+
+  const updateSibling = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/siblings/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteSibling = async id => {
+    return await http.delete({ url: `${BASE_URL}/siblings/${id}` })
+  }
+  //#endregion
+
+  //#region HEALTH AND MEDICAL API
+  const setHealthMedical = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/healths-and-medicals`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getHealthMedical = async query => {
+    return await http.get({
+      url: `${BASE_URL}/healths-and-medicals`,
+      query
+    })
+  }
+
+  const updateHealthMedical = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/healths-and-medicals/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteHealthMedical = async id => {
+    return await http.post({
+      url: `${BASE_URL}/healths-and-medicals/${id}`
+    })
+  }
+  //#endregion
+
+  //#region GUARDIAN CONTACT INFORMATION API
+  const setguardianContact = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/guardian-contact-informations`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getGuardianContact = async query => {
+    return await http.get({
+      url: `${BASE_URL}/guardian-contact-informations`,
+      query
+    })
+  }
+
+  const updateGuardianContact = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/guardian-contact-informations/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteGuardianContact = async id => {
+    return await http.post({
+      url: `${BASE_URL}/guardian-contact-informations/${id}`
+    })
+  }
+  //#endregion
+
+  //#region EMERGENCY CONTACT API
+  const setEmergenyContact = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/emergency-contacts`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getEmergenyContact = async query => {
+    return await http.get({
+      url: `${BASE_URL}/emergency-contacts`,
+      query
+    })
+  }
+
+  const updateEmergenyContact = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/emergency-contacts/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteEmergenyContact = async id => {
+    return await http.post({
+      url: `${BASE_URL}/emergency-contacts/${id}`
+    })
+  }
+  //#endregion
+
   return (
     <ApiContext.Provider
       value={{
@@ -150,22 +290,42 @@ export const ApiContextProvider = ({ children }) => {
         login,
         enroll,
         verifyOTP,
+        setSibling,
         resendCode,
         createAdmin,
         getAllAdmin,
+        getSiblings,
         getApplicant,
+        updateSibling,
+        deleteSibling,
         getApplicants,
         updateApplicant,
-        setPreviousSchool,
-        getPreviousSchools,
-        updatePreviousSchool,
-        deletePreviousSchool,
+        setHealthMedical,
+        getHealthMedical,
         setInitialEnquiry,
         getInitialEnquiry,
+        setPreviousSchool,
         adminUpdateProfile,
+        getPreviousSchools,
+        setguardianContact,
+        getGuardianContact,
+        setEmergenyContact,
+        getEmergenyContact,
+        updateHealthMedical,
+        deleteHealthMedical,
+        setStudentBackground,
+        getStudentBackground,
+        updatePreviousSchool,
+        deletePreviousSchool,
         updateInitialEnquiry,
         deleteInitialEnquiry,
-        applicantUpdateProfile
+        updateGuardianContact,
+        deleteGuardianContact,
+        updateEmergenyContact,
+        deleteEmergenyContact,
+        applicantUpdateProfile,
+        updateStudentBackground,
+        deleteStudentBackground
       }}
     >
       {children}

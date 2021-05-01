@@ -57,7 +57,9 @@ const StepTwo = ({
           setErrorMessage('Invalid data, please check form.')
         } else {
           setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
+            error?.message ||
+              error?.data?.message ||
+              'Unexpected network error.'
           )
         }
       } finally {

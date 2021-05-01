@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -55,7 +54,7 @@ const StepSixTwo = ({
         status: 'success',
         position: 'top-right',
         title: 'Success',
-        description: 'Previous schoool saved successfully!'
+        description: 'Previous schoool removed successfully!'
       })
       window.sessionStorage.removeItem('previous-schoools')
       window.location.reload()
@@ -64,7 +63,8 @@ const StepSixTwo = ({
       if (error?.data?.message === 'celebrate request validation failed') {
         eMgs = 'Invalid data, please check form.'
       } else {
-        eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
       }
       toast({
         duration: 9000,
@@ -79,9 +79,11 @@ const StepSixTwo = ({
     }
   }
 
-  if (!isLoading && !error && !data?.length) {
-    setStep(6.1)
-  }
+  React.useEffect(() => {
+    if (!isLoading && !error && !data?.length) {
+      setStep(6.1)
+    }
+  }, [isLoading, error, data, setStep])
 
   return (
     <>
@@ -215,7 +217,7 @@ const StepSixTwo = ({
                 colorScheme='gcuButton'
                 h={{ base: '3.375rem' }}
                 _focus={{ outline: 'none' }}
-                onClick={() => {}}
+                onClick={() => setStep(7)}
               >
                 Next
               </Button>

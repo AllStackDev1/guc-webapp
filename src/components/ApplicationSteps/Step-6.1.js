@@ -65,7 +65,10 @@ const StepSixOne = ({
         if (error?.data?.message === 'celebrate request validation failed') {
           eMgs = 'Invalid data, please check form.'
         } else {
-          eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
         }
         toast({
           duration: 9000,

@@ -23,17 +23,15 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
                 Something went wrong
               </Text>
               <Button
-                bg='cf.800'
-                variant='solid'
-                color='white'
                 size='md'
+                color='white'
                 rounded='20px'
-                fontSize={30}
+                colorScheme='gcuButton'
                 onClick={() => reload()}
-                leftIcon={<IoIosRefresh />}
+                leftIcon={<IoIosRefresh size={25} />}
                 _hover={{ bg: 'gcu.100' }}
               >
-                <Text fontSize='md'>Try again</Text>
+                <Text fontSize='sm'>Try again</Text>
               </Button>
             </>
           )}

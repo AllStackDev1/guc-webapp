@@ -57,7 +57,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       studentInfo: {
         dob: '',
         gender: '',
-        surName: '',
+        surname: '',
         religion: '',
         firstName: '',
         middleName: '',
@@ -99,7 +99,10 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
         if (error?.data?.message === 'celebrate request validation failed') {
           eMgs = 'Invalid data, please check form.'
         } else {
-          eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
         }
         toast({
           duration: 9000,
@@ -121,6 +124,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
     touched,
     handleBlur,
     handleChange,
+    setFieldValue,
     isSubmitting,
     handleSubmit
   } = formik
@@ -167,7 +171,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       isRequired: true
     },
     {
-      id: 'surName',
+      id: 'surname',
       text: 'Surname',
       isRequired: true
     },
@@ -301,7 +305,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                               color='gcu.100'
                               _hover={{ bg: 'unset' }}
                               onClick={() => {
-                                return formik.setFieldValue(
+                                return setFieldValue(
                                   `documents.${e.name}`,
                                   undefined
                                 )

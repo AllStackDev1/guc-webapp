@@ -1,59 +1,62 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as yup from 'yup'
 import { useFormik } from 'formik'
 import {
   Flex,
   Grid,
-  GridItem,
   Button,
   Heading,
+  useToast,
+  GridItem,
   Container
 } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 
-const validationSchema = yup.object().shape({
-  emergencyContact: yup.object().shape({
-    name: yup.string().required('Name is required!'),
-    relationship: yup.string().required('Relationship type is required!'),
-    phoneNumber: yup.string().required('Phone number is required!')
-  })
-})
+import { StepElevenSchema } from './validations'
 
-const StepEleven = ({
-  enroll,
-  setStep,
-  setErrorMessage,
-  setSuccessMessage
-}) => {
+const StepEleven = ({ setStep, setEmergenyContact }) => {
+  const toast = useToast()
+
   const formik = useFormik({
     initialValues: {
-      emergencyContact: {
-        name: '',
-        relationship: '',
-        phoneNumber: ''
-      }
+      name: '',
+      relationship: '',
+      contactNumber: ''
     },
-    validationSchema,
+    validationSchema: StepElevenSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
+        await setEmergenyContact(values)
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Emergency contact saved!'
+        })
+        window.sessionStorage.setItem('step', 12)
+        setStep(12)
       } catch (error) {
-        setSuccessMessage(null)
+        let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
+          eMgs = 'Invalid data, please check form.'
         } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
         }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -66,7 +69,7 @@ const StepEleven = ({
     touched,
     handleBlur,
     handleChange,
-    // isSubmitting,
+    isSubmitting,
     handleSubmit
   } = formik
 
@@ -100,11 +103,11 @@ const StepEleven = ({
               label='Name'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='emergencyContact.name'
+              name='name'
               placeholder='Enter Name'
-              error={errors.emergencyContact?.name}
-              touched={touched.emergencyContact?.name}
-              defaultValue={values.emergencyContact?.name}
+              error={errors.name}
+              touched={touched.name}
+              defaultValue={values.name}
             />
           </GridItem>
           <GridItem>
@@ -113,7 +116,7 @@ const StepEleven = ({
               label='Relationship to student'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='emergencyContact.relationship'
+              name='relationship'
               placeholder='Select Option'
               options={[
                 'Mother',
@@ -125,9 +128,9 @@ const StepEleven = ({
                 'Grand Father',
                 'Grand Mother'
               ]}
-              error={errors.emergencyContact?.relationship}
-              touched={touched.emergencyContact?.relationship}
-              defaultValue={values.emergencyContact?.relationship}
+              error={errors.relationship}
+              touched={touched.relationship}
+              defaultValue={values.relationship}
             />
           </GridItem>
           <GridItem colSpan={2}>
@@ -137,11 +140,11 @@ const StepEleven = ({
               label='Contact Number'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='emergencyContact.phoneNumber'
+              name='contactNumber'
               placeholder='Enter contact number'
-              error={errors.emergencyContact?.phoneNumber}
-              touched={touched.emergencyContact?.phoneNumber}
-              defaultValue={values.emergencyContact?.phoneNumber}
+              error={errors.contactNumber}
+              touched={touched.contactNumber}
+              defaultValue={values.contactNumber}
             />
           </GridItem>
         </Grid>
@@ -150,7 +153,7 @@ const StepEleven = ({
           <Button
             w='200px'
             rounded='0'
-            type='submit'
+            type='button'
             color='gcu.100'
             fontSize='sm'
             boxShadow='lg'
@@ -159,6 +162,7 @@ const StepEleven = ({
             colorScheme='gcuButton'
             h={{ base: '3.375rem' }}
             _focus={{ outline: 'none' }}
+            onClick={() => setStep(10)}
           >
             Previous
           </Button>
@@ -173,6 +177,8 @@ const StepEleven = ({
             colorScheme='gcuButton'
             h={{ base: '3.375rem' }}
             _focus={{ outline: 'none' }}
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
           >
             Next
           </Button>
@@ -183,10 +189,8 @@ const StepEleven = ({
 }
 
 StepEleven.propTypes = {
-  enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setEmergenyContact: PropTypes.func.isRequired
 }
 
 export default StepEleven

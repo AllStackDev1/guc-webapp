@@ -59,7 +59,7 @@ const StepThree = ({
       } catch (error) {
         setSuccessMessage(null)
         setErrorMessage(
-          error?.message || error?.data?.message || 'Unexpected error.'
+          error?.message || error?.data?.message || 'Unexpected network error.'
         )
       } finally {
         setSubmitting(false)
@@ -78,7 +78,7 @@ const StepThree = ({
         setErrorMessage('Invalid data, please check form.')
       } else {
         setErrorMessage(
-          error?.message || error?.data?.message || 'Unexpected error.'
+          error?.message || error?.data?.message || 'Unexpected network error.'
         )
       }
     } finally {

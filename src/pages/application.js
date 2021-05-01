@@ -29,39 +29,9 @@ import BgShape from 'assets/images/bg-shape.png'
 
 const Auth = () => {
   document.title = 'GCU | Application Portal'
-  const {
-    auth,
-    enroll,
-    verifyOTP,
-    resendCode,
-    resendOTP,
-    setInitialEnquiry,
-    setPreviousSchool,
-    getPreviousSchools,
-    deletePreviousSchool,
-    updatePreviousSchool,
-    applicantUpdateProfile
-  } = useApi()
-  const {
-    isAuthenticated,
-    setPhoneNumber,
-    phoneNumber,
-    setOtpId,
-    setCode,
-    store,
-    otpId,
-    code
-  } = useAuth()
-  const {
-    setSuccessMessage,
-    setErrorMessage,
-    successMessage,
-    errorMessage,
-    setEditData,
-    editData,
-    setStep,
-    step
-  } = useApp()
+  const apis = useApi()
+  const auth = useAuth()
+  const app = useApp()
 
   const getStep = key => {
     switch (key) {
@@ -100,20 +70,18 @@ const Auth = () => {
     }
   }
 
-  const display = getStep(step)
+  const display = getStep(app.step)
 
-  // React.useEffect(() => {
-  //   if (step === 5) {
-  //     if (!isAuthenticated()) {
-  //       return setStep(3)
-  //     }
-  //   }
-  // }, [step, setStep, isAuthenticated])
+  const user = auth.isAuthenticated()?.user
 
   return (
     display && (
       <Box bg='white'>
-        <AuthNavbar value={display.value} step={step} setStep={setStep} />
+        <AuthNavbar
+          value={display.value}
+          step={app.step}
+          setStep={app.setStep}
+        />
         <Flex
           w='100%'
           as='main'
@@ -121,34 +89,7 @@ const Auth = () => {
           flexDir='column'
           py={{ base: '', lg: 16 }}
         >
-          <display.Step
-            auth={auth}
-            user={isAuthenticated()?.user}
-            code={code}
-            otpId={otpId}
-            store={store}
-            enroll={enroll}
-            setStep={setStep}
-            setCode={setCode}
-            editData={editData}
-            setOtpId={setOtpId}
-            verifyOTP={verifyOTP}
-            resendOTP={resendOTP}
-            resendCode={resendCode}
-            setEditData={setEditData}
-            phoneNumber={phoneNumber}
-            errorMessage={errorMessage}
-            successMessage={successMessage}
-            setPhoneNumber={setPhoneNumber}
-            setErrorMessage={setErrorMessage}
-            setSuccessMessage={setSuccessMessage}
-            setInitialEnquiry={setInitialEnquiry}
-            setPreviousSchool={setPreviousSchool}
-            getPreviousSchools={getPreviousSchools}
-            deletePreviousSchool={deletePreviousSchool}
-            updatePreviousSchool={updatePreviousSchool}
-            applicantUpdateProfile={applicantUpdateProfile}
-          />
+          <display.Step {...app} {...apis} {...auth} user={user} />
         </Flex>
         <Box
           right={0}
