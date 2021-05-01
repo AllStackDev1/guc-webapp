@@ -28,8 +28,8 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
   const { data, error, isLoading } = useFetch('siblings', getSiblings, reload)
 
   const handleAdd = () => {
-    setEditData(null)
-    setStep(6.1)
+    setEditData({})
+    setStep(8.1)
   }
 
   const handleEdit = e => {

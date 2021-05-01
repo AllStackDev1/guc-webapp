@@ -35,7 +35,7 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         setSubmitting(true)
-        if (editData) {
+        if (editData?._id) {
           await updateSibling(editData._id, values)
         } else {
           await setSibling(values)
