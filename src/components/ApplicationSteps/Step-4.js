@@ -1,7 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
-import { Box, Flex, Text, Button, Heading, Container } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Text,
+  Alert,
+  Button,
+  Heading,
+  Container,
+  AlertIcon,
+  AlertTitle
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
 
 import Legal from './Legal'
@@ -17,14 +27,21 @@ const validationSchema = yup.object().shape({
 })
 
 const StepFour = ({
+  auth,
+  code,
   otpId,
   store,
   setStep,
   verifyOTP,
   phoneNumber,
+  errorMessage,
+  successMessage,
   setErrorMessage,
   setSuccessMessage
 }) => {
+  const [count, setCount] = React.useState(60)
+  const [loading, setLoading] = React.useState(false)
+
   const formik = useFormik({
     initialValues: {
       pin: '',
@@ -34,11 +51,11 @@ const StepFour = ({
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const res = await verifyOTP(values)
-        store(res.data)
         setErrorMessage(null)
         setSuccessMessage(null)
-        setStep(5)
+        const res = await verifyOTP(values)
+        store(res.data)
+        setStep(res.data.stage)
       } catch (error) {
         setSuccessMessage(null)
         setErrorMessage(
@@ -55,6 +72,42 @@ const StepFour = ({
       return setStep(3)
     }
   }, [otpId, setStep])
+
+  const handleResendOTP = async () => {
+    try {
+      if (!code) {
+        throw new Error('Unexpected error, please contact support.')
+      }
+      setLoading(true)
+      const res = await auth({ code })
+      setErrorMessage(null)
+      setSuccessMessage(res.message)
+    } catch (error) {
+      setSuccessMessage(null)
+      if (error?.data?.message === 'celebrate request validation failed') {
+        setErrorMessage('Invalid data, please check form.')
+      } else {
+        setErrorMessage(
+          error?.message || error?.data?.message || 'Unexpected error.'
+        )
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  React.useEffect(() => {
+    const idI = setInterval(() => {
+      setCount(prev => prev - 1)
+    }, 1000)
+    const idT = setTimeout(() => {
+      clearInterval(idI)
+    }, 60000)
+    return () => {
+      clearInterval(idI)
+      clearTimeout(idT)
+    }
+  }, [setCount])
 
   return (
     <Container
@@ -104,11 +157,44 @@ const StepFour = ({
           </Button>
         </Box>
       </Flex>
+
+      <Box mt={{ lg: 8 }}>
+        <Text>Didn't receive OTP ({count}s)</Text>
+
+        {!count && (
+          <Button
+            px={0}
+            bg='unset'
+            color='gcu.100'
+            isLoading={loading}
+            isDisabled={loading}
+            _hover={{ bg: 'unset' }}
+            onClick={() => handleResendOTP()}
+          >
+            Resend OTP
+          </Button>
+        )}
+      </Box>
+
+      {(successMessage || errorMessage) && (
+        <Box mt={{ lg: 8 }}>
+          <Alert px={5} py={6} status={errorMessage ? 'error' : 'success'}>
+            <AlertIcon />
+            <AlertTitle color={errorMessage ? 'red.600' : 'green.600'} mr={2}>
+              {successMessage || errorMessage}
+            </AlertTitle>
+          </Alert>
+        </Box>
+      )}
     </Container>
   )
 }
 
 StepFour.propTypes = {
+  errorMessage: PropTypes.any,
+  successMessage: PropTypes.any,
+  auth: PropTypes.any.isRequired,
+  code: PropTypes.any.isRequired,
   otpId: PropTypes.any.isRequired,
   store: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,

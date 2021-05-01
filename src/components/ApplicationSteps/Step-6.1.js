@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
+import moment from 'moment'
 import { useFormik } from 'formik'
 import {
   Flex,
@@ -8,55 +9,72 @@ import {
   GridItem,
   Button,
   Heading,
-  Container
+  Container,
+  useToast
 } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 
 const validationSchema = yup.object().shape({
-  previousSchool: yup.object().shape({
-    name: yup.string().required('School name is required!'),
-    address: yup.string().required('School address is required!'),
-    email: yup.string().email('Invalid email!').required('Email is required!'),
-    endDate: yup.string().required('Date of Leaving is required!'),
-    startDate: yup.string().required('Date of Arrival is required!')
-  })
+  name: yup.string().required('This field is required!'),
+  address: yup.string().required('This field is required!'),
+  email: yup.string().email('Invalid email!').required('This field required!'),
+  dateOfArrival: yup.string().required('This field is required!'),
+  dateOfLeaving: yup.string().required('This field is required!')
 })
 
 const StepSixOne = ({
-  enroll,
   setStep,
-  setErrorMessage,
-  setSuccessMessage
+  editData,
+  setPreviousSchool,
+  updatePreviousSchool
 }) => {
+  const toast = useToast()
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      previousSchool: {
-        name: '',
-        email: '',
-        address: '',
-        endDate: '',
-        startDate: ''
-      }
+      name: editData?.name || '',
+      email: editData?.email || '',
+      address: editData?.address || '',
+      dateOfArrival: editData?.dateOfArrival || '',
+      dateOfLeaving: editData?.dateOfLeaving || ''
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
-      } catch (error) {
-        setSuccessMessage(null)
-        if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
+        setSubmitting(true)
+        if (editData) {
+          await updatePreviousSchool(editData._id, values)
         } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+          await setPreviousSchool(values)
         }
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Previous schoool saved successfully!'
+        })
+        window.sessionStorage.removeItem('previous-schoools')
+        window.sessionStorage.setItem('step', 6.2)
+        setStep(6.2)
+      } catch (error) {
+        let eMgs
+        if (error?.data?.message === 'celebrate request validation failed') {
+          eMgs = 'Invalid data, please check form.'
+        } else {
+          eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+        }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -69,7 +87,7 @@ const StepSixOne = ({
     touched,
     handleBlur,
     handleChange,
-    // isSubmitting,
+    isSubmitting,
     handleSubmit
   } = formik
 
@@ -103,11 +121,11 @@ const StepSixOne = ({
               label='School Name'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='previousSchool.name'
+              name='name'
               placeholder='Enter School Name'
-              error={errors.previousSchool?.name}
-              touched={touched.previousSchool?.name}
-              defaultValue={values.previousSchool?.name}
+              error={errors.name}
+              touched={touched.name}
+              defaultValue={values.name}
             />
           </GridItem>
           <GridItem>
@@ -117,11 +135,11 @@ const StepSixOne = ({
               label='Address'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='previousSchool.address'
+              name='address'
               placeholder='Enter School Address'
-              error={errors.previousSchool?.address}
-              touched={touched.previousSchool?.address}
-              defaultValue={values.previousSchool?.address}
+              error={errors.address}
+              touched={touched.address}
+              defaultValue={values.address}
             />
           </GridItem>
           <GridItem>
@@ -131,11 +149,11 @@ const StepSixOne = ({
               label='Email address'
               onBlur={handleBlur}
               onChange={handleChange}
-              name='previousSchool.email'
+              name='email'
               placeholder='Enter School Email'
-              error={errors.previousSchool?.email}
-              touched={touched.previousSchool?.email}
-              defaultValue={values.previousSchool?.email}
+              error={errors.email}
+              touched={touched.email}
+              defaultValue={values.email}
             />
           </GridItem>
           <GridItem>
@@ -145,11 +163,10 @@ const StepSixOne = ({
               onBlur={handleBlur}
               label='Date of Arrival'
               onChange={handleChange}
-              name='previousSchool.startDate'
-              placeholder='Enter School startDate'
-              error={errors.previousSchool?.startDate}
-              touched={touched.previousSchool?.startDate}
-              defaultValue={values.previousSchool?.startDate}
+              name='dateOfArrival'
+              error={errors.dateOfArrival}
+              touched={touched.dateOfArrival}
+              defaultValue={moment(values.dateOfArrival).format('YYYY-MM-DD')}
             />
           </GridItem>
           <GridItem colSpan={2}>
@@ -158,12 +175,11 @@ const StepSixOne = ({
               isRequired
               onBlur={handleBlur}
               label='Date of Leaving'
+              name='dateOfLeaving'
               onChange={handleChange}
-              name='previousSchool.endDate'
-              placeholder='Enter School endDate'
-              error={errors.previousSchool?.endDate}
-              touched={touched.previousSchool?.endDate}
-              defaultValue={values.previousSchool?.endDate}
+              error={errors.dateOfLeaving}
+              touched={touched.dateOfLeaving}
+              defaultValue={moment(values.dateOfLeaving).format('YYYY-MM-DD')}
             />
           </GridItem>
         </Grid>
@@ -174,7 +190,7 @@ const StepSixOne = ({
             w='200px'
             mr={3}
             rounded='0'
-            type='submit'
+            type='button'
             color='gcu.100'
             fontSize='sm'
             boxShadow='lg'
@@ -183,6 +199,7 @@ const StepSixOne = ({
             colorScheme='gcuButton'
             h={{ base: '3.375rem' }}
             _focus={{ outline: 'none' }}
+            onClick={() => setStep(6.2)}
           >
             Cancel
           </Button>
@@ -198,6 +215,8 @@ const StepSixOne = ({
             colorScheme='gcuButton'
             h={{ base: '3.375rem' }}
             _focus={{ outline: 'none' }}
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
           >
             Next
           </Button>
@@ -208,10 +227,10 @@ const StepSixOne = ({
 }
 
 StepSixOne.propTypes = {
-  enroll: PropTypes.func.isRequired,
+  editData: PropTypes.object,
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setPreviousSchool: PropTypes.func.isRequired,
+  updatePreviousSchool: PropTypes.func.isRequired
 }
 
 export default StepSixOne

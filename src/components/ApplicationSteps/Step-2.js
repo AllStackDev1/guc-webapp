@@ -25,7 +25,13 @@ const validationSchema = yup.object().shape({
     .required('Phone number is required!')
 })
 
-const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
+const StepTwo = ({
+  enroll,
+  setStep,
+  setPhoneNumber,
+  setErrorMessage,
+  setSuccessMessage
+}) => {
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -36,8 +42,11 @@ const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
+        const data = { ...values }
+        delete data.country
+        const res = await enroll(data)
         setErrorMessage(null)
+        setPhoneNumber(res.data.phoneNumber)
         setSuccessMessage(
           'An application code has been sent to your email address'
         )
@@ -177,6 +186,7 @@ const StepTwo = ({ enroll, setStep, setErrorMessage, setSuccessMessage }) => {
 StepTwo.propTypes = {
   enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
+  setPhoneNumber: PropTypes.func.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
   setSuccessMessage: PropTypes.func.isRequired
 }

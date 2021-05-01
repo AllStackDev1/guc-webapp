@@ -40,7 +40,7 @@ export const ApiContextProvider = ({ children }) => {
 
   const applicantUpdateProfile = async payload => {
     return await http.patch({
-      url: `${BASE_URL}/applicant/update-profile`,
+      url: `${BASE_URL}/applicants/update-profile`,
       body: JSON.stringify(payload)
     })
   }
@@ -89,6 +89,60 @@ export const ApiContextProvider = ({ children }) => {
   }
   //#endregion
 
+  //#region INITIAL ENQUIRIES API
+  const setInitialEnquiry = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/initial-enquiries`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getInitialEnquiry = async query => {
+    return await http.get({
+      url: `${BASE_URL}/initial-enquiries`,
+      query
+    })
+  }
+
+  const updateInitialEnquiry = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/initial-enquiries/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteInitialEnquiry = async id => {
+    return await http.post({ url: `${BASE_URL}/initial-enquiries/${id}` })
+  }
+  //#endregion
+
+  //#region PREVIOUS SCHOOL API
+  const setPreviousSchool = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/previous-schools`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getPreviousSchools = async query => {
+    return await http.get({
+      url: `${BASE_URL}/previous-schools`,
+      query
+    })
+  }
+
+  const updatePreviousSchool = async (id, payload) => {
+    return await http.put({
+      url: `${BASE_URL}/previous-schools/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deletePreviousSchool = async id => {
+    return await http.delete({ url: `${BASE_URL}/previous-schools/${id}` })
+  }
+  //#endregion
+
   return (
     <ApiContext.Provider
       value={{
@@ -102,7 +156,15 @@ export const ApiContextProvider = ({ children }) => {
         getApplicant,
         getApplicants,
         updateApplicant,
+        setPreviousSchool,
+        getPreviousSchools,
+        updatePreviousSchool,
+        deletePreviousSchool,
+        setInitialEnquiry,
+        getInitialEnquiry,
         adminUpdateProfile,
+        updateInitialEnquiry,
+        deleteInitialEnquiry,
         applicantUpdateProfile
       }}
     >

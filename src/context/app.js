@@ -9,9 +9,12 @@ export const AppContextProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const [step, setStep] = useState(12)
   const [modal, setModal] = useState('')
+  const [step, setStep] = useState(
+    window.sessionStorage.getItem('step') * 1 || 1
+  )
   const [data, setData] = useState([])
+  const [editData, setEditData] = useState(null)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -35,6 +38,8 @@ export const AppContextProvider = ({ children }) => {
         isOpen,
         setStep,
         onClose,
+        editData,
+        setEditData,
         toggleMenu,
         errorMessage,
         successMessage,

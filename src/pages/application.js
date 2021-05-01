@@ -1,14 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import {
-  Box,
-  Flex,
-  Text,
-  Alert,
-  Container,
-  AlertIcon,
-  AlertTitle
-} from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 
 import AuthNavbar from 'container/AuthNavbar'
 import {
@@ -37,20 +29,36 @@ import BgShape from 'assets/images/bg-shape.png'
 
 const Auth = () => {
   document.title = 'GCU | Application Portal'
-  const { auth, enroll, verifyOTP, resendCode } = useApi()
+  const {
+    auth,
+    enroll,
+    verifyOTP,
+    resendCode,
+    resendOTP,
+    setInitialEnquiry,
+    setPreviousSchool,
+    getPreviousSchools,
+    deletePreviousSchool,
+    updatePreviousSchool,
+    applicantUpdateProfile
+  } = useApi()
   const {
     isAuthenticated,
     setPhoneNumber,
     phoneNumber,
     setOtpId,
+    setCode,
     store,
-    otpId
+    otpId,
+    code
   } = useAuth()
   const {
     setSuccessMessage,
     setErrorMessage,
     successMessage,
     errorMessage,
+    setEditData,
+    editData,
     setStep,
     step
   } = useApp()
@@ -58,33 +66,33 @@ const Auth = () => {
   const getStep = key => {
     switch (key) {
       case 1:
-        return { value: 8, Step: StepOne }
+        return { value: 0, Step: StepOne }
       case 2:
-        return { value: 16, Step: StepTwo }
+        return { value: 8.33, Step: StepTwo }
       case 3:
-        return { value: 24, Step: StepThree }
+        return { value: 16.67, Step: StepThree }
       case 4:
-        return { value: 33, Step: StepFour }
+        return { value: 25, Step: StepFour }
       case 5:
-        return { value: 40, Step: StepFive }
+        return { value: 33.33, Step: StepFive }
       case 6:
-        return { value: 45, Step: StepSix }
+        return { value: 41.67, Step: StepSix }
       case 6.1:
         return { value: 50, Step: StepSixOne }
       case 6.2:
-        return { value: 55, Step: StepSixTwo }
+        return { value: 50, Step: StepSixTwo }
       case 7:
-        return { value: 60, Step: StepSeven }
+        return { value: 58.33, Step: StepSeven }
       case 8.1:
-        return { value: 62, Step: StepEightOne }
+        return { value: 66.67, Step: StepEightOne }
       case 8.2:
-        return { value: 67, Step: StepEightTwo }
+        return { value: 66.67, Step: StepEightTwo }
       case 9:
         return { value: 75, Step: StepNine }
       case 10:
-        return { value: 80, Step: StepTen }
+        return { value: 83.33, Step: StepTen }
       case 11:
-        return { value: 95, Step: StepEleven }
+        return { value: 91.67, Step: StepEleven }
       case 12:
         return { value: 100, Step: StepTwelve }
       default:
@@ -94,21 +102,13 @@ const Auth = () => {
 
   const display = getStep(step)
 
-  React.useEffect(() => {
-    if (step === 'confirm') {
-      if (!isAuthenticated()) {
-        return setStep(3)
-      }
-    }
-  }, [step, setStep, isAuthenticated])
-
-  const handleCodeRetrial = async () => {
-    // try {
-    //   const res = await resendCode()
-    // } catch (err) {
-    // } finally {
-    // }
-  }
+  // React.useEffect(() => {
+  //   if (step === 5) {
+  //     if (!isAuthenticated()) {
+  //       return setStep(3)
+  //     }
+  //   }
+  // }, [step, setStep, isAuthenticated])
 
   return (
     display && (
@@ -116,47 +116,39 @@ const Auth = () => {
         <AuthNavbar value={display.value} step={step} setStep={setStep} />
         <Flex
           w='100%'
-          minH='100vh'
           as='main'
+          minH='100vh'
           flexDir='column'
           py={{ base: '', lg: 16 }}
         >
           <display.Step
             auth={auth}
+            user={isAuthenticated()?.user}
+            code={code}
             otpId={otpId}
             store={store}
             enroll={enroll}
             setStep={setStep}
+            setCode={setCode}
+            editData={editData}
             setOtpId={setOtpId}
             verifyOTP={verifyOTP}
+            resendOTP={resendOTP}
+            resendCode={resendCode}
+            setEditData={setEditData}
             phoneNumber={phoneNumber}
+            errorMessage={errorMessage}
+            successMessage={successMessage}
             setPhoneNumber={setPhoneNumber}
             setErrorMessage={setErrorMessage}
             setSuccessMessage={setSuccessMessage}
+            setInitialEnquiry={setInitialEnquiry}
+            setPreviousSchool={setPreviousSchool}
+            getPreviousSchools={getPreviousSchools}
+            deletePreviousSchool={deletePreviousSchool}
+            updatePreviousSchool={updatePreviousSchool}
+            applicantUpdateProfile={applicantUpdateProfile}
           />
-
-          {(successMessage || errorMessage) && (
-            <Box mt={{ lg: 8 }}>
-              <Alert px={5} py={6} status={errorMessage ? 'error' : 'success'}>
-                <AlertIcon />
-                <AlertTitle
-                  color={errorMessage ? 'red.600' : 'green.600'}
-                  mr={2}
-                >
-                  {successMessage || errorMessage}
-                </AlertTitle>
-              </Alert>
-            </Box>
-          )}
-
-          {step === 'code' && (
-            <Box mt={{ lg: 8 }}>
-              <Text>Didn't receive code</Text>
-              <Text role='button' onClick={() => handleCodeRetrial()}>
-                Send Application Code
-              </Text>
-            </Box>
-          )}
         </Flex>
         <Box
           right={0}

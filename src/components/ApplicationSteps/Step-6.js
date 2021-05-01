@@ -1,71 +1,114 @@
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as yup from 'yup'
 import { useFormik } from 'formik'
 import {
-  Tabs,
-  TabList,
-  TabPanels,
+  Box,
   Tab,
-  TabPanel,
+  Tabs,
   Flex,
   Text,
   Grid,
-  GridItem,
   Button,
+  TabList,
+  useToast,
   Heading,
+  TabPanel,
+  GridItem,
+  Checkbox,
+  TabPanels,
   Container,
-  Checkbox
+  useDisclosure
 } from '@chakra-ui/react'
+import countryList from 'react-select-country-list'
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
+import CustomUploader from 'components/Forms/CustomUploader'
 
-const validationSchema = yup.object().shape({
-  previousSchool: yup.object().shape({
-    name: yup.string().required('School name is required!'),
-    address: yup.string().required('School address is required!'),
-    email: yup.string().email('Invalid email!').required('Email is required!'),
-    endDate: yup.string().required('Date of Leaving is required!'),
-    startDate: yup.string().required('Date of Arrival is required!')
-  })
-})
+import PreviewModal from './PreviewModal'
 
-const StepSixOne = ({
-  enroll,
-  setStep,
-  setErrorMessage,
-  setSuccessMessage
-}) => {
+import { StepSixSchema } from './validations'
+import { fileToBase64 } from 'utils/mics'
+
+const StepSixOne = ({ setStep, setInitialEnquiry }) => {
+  const [docOne, setDocOne] = React.useState(false)
+  const [docTwo, setDocTwo] = React.useState(false)
+  const [docThree, setDocThree] = React.useState(false)
+  const [file, setFile] = React.useState(undefined)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const countries = React.useMemo(
+    () =>
+      countryList()
+        .getData()
+        .map(e => e.label),
+    []
+  )
+
+  const toast = useToast()
+
   const formik = useFormik({
     initialValues: {
-      previousSchool: {
-        name: '',
-        email: '',
-        address: '',
-        endDate: '',
-        startDate: ''
+      documents: {
+        schoolReport: undefined,
+        passportPhoto: undefined,
+        birthCertOrPassport: undefined
+      },
+      studentInfo: {
+        dob: '',
+        gender: '',
+        surName: '',
+        religion: '',
+        firstName: '',
+        middleName: '',
+        nationality: '',
+        homeLanguage: '',
+        preferedName: '',
+        firstLanguage: '',
+        countryOfBirth: '',
+        dualNationality: ''
       }
     },
-    validationSchema,
+    validationSchema: StepSixSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await enroll(values)
-        setErrorMessage(null)
-        setSuccessMessage(
-          'An application code has been sent to your email address'
-        )
-        setStep(3)
-      } catch (error) {
-        setSuccessMessage(null)
-        if (error?.data?.message === 'celebrate request validation failed') {
-          setErrorMessage('Invalid data, please check form.')
-        } else {
-          setErrorMessage(
-            error?.message || error?.data?.message || 'Unexpected error.'
-          )
+        const data = {
+          ...values,
+          documents: {
+            schoolReport: await fileToBase64(values.documents.schoolReport),
+            passportPhoto: await fileToBase64(values.documents.passportPhoto),
+            birthCertOrPassport: await fileToBase64(
+              values.documents.birthCertOrPassport
+            )
+          }
         }
+
+        await setInitialEnquiry(data)
+        toast({
+          duration: 5000,
+          isClosable: true,
+          status: 'success',
+          position: 'top-right',
+          title: 'Success',
+          description: 'Initial enquiry saved successfully!'
+        })
+        window.sessionStorage.setItem('step', 6.1)
+        setStep(6.1)
+      } catch (error) {
+        let eMgs
+        if (error?.data?.message === 'celebrate request validation failed') {
+          eMgs = 'Invalid data, please check form.'
+        } else {
+          eMgs = error?.message || error?.data?.message || 'Unexpected error.'
+        }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
       } finally {
         setSubmitting(false)
       }
@@ -93,202 +136,267 @@ const StepSixOne = ({
   const tabOne = [
     {
       id: 1,
+      checked: docOne,
+      name: 'birthCertOrPassport',
+      toggle: () => setDocOne(!docOne),
       title: 'Birth Certificate / Passport',
-      remove: () => {},
-      preview: () => {},
-      upload: () => {}
+      accept: 'application/pdf, image/jpg, image/jpeg, image/png'
     },
     {
       id: 2,
-      title: 'Immunisation History',
-      remove: () => {},
-      preview: () => {},
-      upload: () => {}
+      checked: docTwo,
+      name: 'schoolReport',
+      toggle: () => setDocTwo(!docTwo),
+      title: 'Most recent school report',
+      accept: 'application/pdf, image/jpg, image/jpeg, image/png'
     },
     {
       id: 3,
+      checked: docThree,
+      name: 'passportPhoto',
       title: 'Passport Photo',
-      remove: () => {},
-      preview: () => {},
-      upload: () => {}
+      toggle: () => setDocThree(!docThree),
+      accept: 'image/jpg, image/jpeg, image/png'
     }
   ]
 
   const tabTwo = [
     {
       id: 'firstName',
-      text: 'First Name'
+      text: 'First Name',
+      isRequired: true
     },
     {
       id: 'surName',
-      text: 'Surname'
+      text: 'Surname',
+      isRequired: true
     },
     {
       id: 'middleName',
-      text: 'Middle Name'
+      text: 'Middle Name',
+      isRequired: true
     },
     {
       id: 'preferedName',
-      text: 'Prefered Name (Name)'
+      text: 'Prefered Name (Name)',
+      isRequired: true
     },
     {
       id: 'dob',
-      text: 'Date of birth'
+      text: 'Date of birth',
+      isRequired: true
     },
     {
       id: 'gender',
-      text: 'Gender'
+      text: 'Gender',
+      isRequired: true,
+      options: ['Male', 'Female', 'Others']
     },
     {
       id: 'countryOfBirth',
-      text: 'Country of birth'
+      text: 'Country of birth',
+      isRequired: true,
+      options: countries
     },
     {
       id: 'nationality',
-      text: 'Nationality  (as it appears in passport)'
+      text: 'Nationality  (as it appears in passport)',
+      isRequired: true,
+      options: countries
     },
     {
       id: 'dualNationality',
-      text: 'Dual Nationality (if applicable)'
+      text: 'Dual Nationality (if applicable)',
+      isRequired: false,
+      options: countries
     },
     {
       id: 'firstLanguage',
-      text: 'First Language'
+      text: 'First Language',
+      isRequired: true
     },
     {
       id: 'homeLanguage',
-      text: 'Language Spoken at home'
+      text: 'Language Spoken at home',
+      isRequired: true
     },
     {
       id: 'religion',
-      text: 'Religion'
+      text: 'Religion',
+      isRequired: true
     }
   ]
 
+  const handlePreview = file => {
+    setFile(file)
+    onOpen()
+  }
+
   return (
     <Container align='center' mt={{ lg: 4 }} minW={{ lg: '4xl' }}>
+      {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
+
       <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
         Initial Enquiry
       </Heading>
 
-      <Tabs mt={8} isFitted>
-        <TabList w='70%'>
-          <Tab {...tabBtnStyle}>Document Upload</Tab>
-          <Tab {...tabBtnStyle}>Student Information</Tab>
-        </TabList>
+      <Box as='form' onSubmit={handleSubmit} noValidate>
+        <Tabs mt={8} isFitted>
+          <TabList w='70%'>
+            <Tab {...tabBtnStyle}>Document Upload</Tab>
+            <Tab {...tabBtnStyle}>Student Information</Tab>
+          </TabList>
 
-        <TabPanels mt={8}>
-          <TabPanel>
-            {tabOne.map(e => (
-              <Flex py={2} key={e.id} justify='space-between'>
-                <Text color='gray.500' fontWeight='500' fontSize='lg'>
-                  {e.title}
-                </Text>
-                <Flex>
-                  <Checkbox
-                    color='gray.500'
-                    fontWeight='500'
-                    fontSize='lg'
-                    checked={false}
-                  />
-                  <Button
-                    ml={2}
-                    px={0}
-                    bg='unset'
-                    color='gcu.100'
-                    _hover={{ bg: 'unset' }}
-                    onClick={e.upload}
-                  >
-                    Click to upload
-                  </Button>
-                  <Button
-                    px={2}
-                    bg='unset'
-                    color='gcu.100'
-                    _hover={{ bg: 'unset' }}
-                    onClick={e.preview}
-                  >
-                    Preview
-                  </Button>
-                  <Button
-                    px={0}
-                    bg='unset'
-                    color='gcu.100'
-                    _hover={{ bg: 'unset' }}
-                    onClick={e.remove}
-                  >
-                    Remove
-                  </Button>
+          <TabPanels mt={8}>
+            <TabPanel>
+              {tabOne.map(e => (
+                <Flex py={2} key={e.id} align='center' justify='space-between'>
+                  <Box textAlign='left'>
+                    <Text color='gray.500' fontWeight='500' fontSize='lg'>
+                      {e.title}{' '}
+                      <Text as='span' color='gcu.100'>
+                        *
+                      </Text>
+                    </Text>
+                    {errors.documents?.[e.name] && touched.documents?.[e.name] && (
+                      <Text fontSize='xs' color='red.500'>
+                        {errors.documents[e.name]}
+                      </Text>
+                    )}
+                  </Box>
+
+                  <Flex>
+                    <Checkbox
+                      fontSize='lg'
+                      color='gray.500'
+                      fontWeight='500'
+                      colorScheme='green'
+                      checked={e.checked}
+                      onChange={e.toggle}
+                      isDisabled={values.documents[e.name]}
+                    />
+                    {e.checked &&
+                      (values.documents[e.name] ? (
+                        <>
+                          <Box mx={4}>
+                            <Button
+                              p={0}
+                              bg='unset'
+                              type='button'
+                              color='gcu.100'
+                              _hover={{ bg: 'unset' }}
+                              onClick={() => {
+                                handlePreview(values.documents[e.name])
+                              }}
+                            >
+                              Preview
+                            </Button>
+                          </Box>
+
+                          <Box>
+                            <Button
+                              p={0}
+                              bg='unset'
+                              type='button'
+                              color='gcu.100'
+                              _hover={{ bg: 'unset' }}
+                              onClick={() => {
+                                return formik.setFieldValue(
+                                  `documents.${e.name}`,
+                                  undefined
+                                )
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </Box>
+                        </>
+                      ) : (
+                        <Flex ml={4} pos='relative' align='center'>
+                          <CustomUploader
+                            left={0}
+                            form={formik}
+                            pos='absolute'
+                            cursor='pointer'
+                            field={{ name: `documents.${e.name}` }}
+                            accept={e.accept}
+                          />
+                          <Text color='gcu.100' fontWeight='600'>
+                            Click to upload
+                          </Text>
+                        </Flex>
+                      ))}
+                  </Flex>
                 </Flex>
-              </Flex>
-            ))}
-          </TabPanel>
-          <TabPanel>
-            <Grid templateColumns='repeat(2, 1fr)' gap={6}>
-              {tabTwo.map((list, idx) => (
-                <GridItem
-                  key={list.id}
-                  colSpan={[14, 15].includes(idx) ? 2 : 1}
-                >
-                  {[5, 6, 7, 8].includes(idx) ? (
-                    <CustomSelect
-                      isRequired
-                      label={list.text}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      name={list.id}
-                      placeholder='Select Option'
-                      error={errors[list.id]}
-                      touched={touched[list.id]}
-                      options={['Male', 'Female', 'Others']}
-                      defaultValue={values[list.id]}
-                    />
-                  ) : (
-                    <CustomInput
-                      type={list.id === 'dob' ? 'date' : 'text'}
-                      isRequired
-                      name={list.id}
-                      label={list.text}
-                      onBlur={handleBlur}
-                      error={errors.list?.id}
-                      touched={touched.list?.id}
-                      onChange={handleChange}
-                      defaultValue={values.list?.id}
-                    />
-                  )}
-                </GridItem>
               ))}
-            </Grid>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+            </TabPanel>
+            <TabPanel>
+              <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+                {tabTwo.map((list, idx) => (
+                  <GridItem
+                    key={list.id}
+                    colSpan={[14, 15].includes(idx) ? 2 : 1}
+                  >
+                    {list.options ? (
+                      <CustomSelect
+                        label={list.text}
+                        onBlur={handleBlur}
+                        options={list.options}
+                        onChange={handleChange}
+                        placeholder='Select Option'
+                        isRequired={list.isRequired}
+                        name={`studentInfo.${list.id}`}
+                        error={errors.studentInfo?.[list.id]}
+                        touched={touched.studentInfo?.[list.id]}
+                        defaultValue={values.studentInfo?.[list.id]}
+                      />
+                    ) : (
+                      <CustomInput
+                        label={list.text}
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        isRequired={list.isRequired}
+                        name={`studentInfo.${list.id}`}
+                        error={errors.studentInfo?.[list.id]}
+                        touched={touched.studentInfo?.[list.id]}
+                        defaultValue={values.studentInfo?.[list.id]}
+                        type={list.id === 'dob' ? 'date' : 'text'}
+                      />
+                    )}
+                  </GridItem>
+                ))}
+              </Grid>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
 
-      <Flex mt={8} w='100%' px={4} justify='flex-end'>
-        <Button
-          mt={8}
-          w='200px'
-          rounded='0'
-          type='submit'
-          color='#fff'
-          fontSize='sm'
-          boxShadow='lg'
-          fontWeight={400}
-          colorScheme='gcuButton'
-          h={{ base: '3.375rem' }}
-          _focus={{ outline: 'none' }}
-        >
-          Next
-        </Button>
-      </Flex>
+        <Flex mt={8} w='100%' px={4} justify='flex-end'>
+          <Button
+            mt={8}
+            w='200px'
+            rounded='0'
+            type='submit'
+            color='#fff'
+            fontSize='sm'
+            boxShadow='lg'
+            fontWeight={400}
+            colorScheme='gcuButton'
+            h={{ base: '3.375rem' }}
+            _focus={{ outline: 'none' }}
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+          >
+            Next
+          </Button>
+        </Flex>
+      </Box>
     </Container>
   )
 }
 
 StepSixOne.propTypes = {
-  enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired
+  setInitialEnquiry: PropTypes.func.isRequired
 }
 
 export default StepSixOne

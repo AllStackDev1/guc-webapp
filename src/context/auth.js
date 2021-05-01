@@ -9,6 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   const [phoneNumber, setPhoneNumber] = useState(null)
   const [session, setSession] = useState(true)
   const [otpId, setOtpId] = useState(null)
+  const [code, setCode] = useState(null)
 
   const store = token => {
     setToken(token)
@@ -27,9 +28,11 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        code,
         token,
         otpId,
         store,
+        setCode,
         session,
         setOtpId,
         setSession,

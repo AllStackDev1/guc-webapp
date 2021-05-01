@@ -41,8 +41,8 @@ const CustomOTPInput = ({ mt, error, ...rest }) => {
 
 CustomOTPInput.propTypes = {
   mt: PropTypes.any,
+  error: PropTypes.string,
   value: PropTypes.any.isRequired,
-  error: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired
 }
