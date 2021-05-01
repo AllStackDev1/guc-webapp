@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable no-console */
+import React, { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
 import {
@@ -31,13 +32,15 @@ import { StepSixSchema } from './validations'
 import { fileToBase64 } from 'utils/mics'
 
 const StepSixOne = ({ setStep, setInitialEnquiry }) => {
-  const [docOne, setDocOne] = React.useState(false)
-  const [docTwo, setDocTwo] = React.useState(false)
-  const [docThree, setDocThree] = React.useState(false)
-  const [file, setFile] = React.useState(undefined)
+  const [docOne, setDocOne] = useState(false)
+  const [docTwo, setDocTwo] = useState(false)
+  const [docThree, setDocThree] = useState(false)
+  const [file, setFile] = useState(undefined)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const countries = React.useMemo(
+  const tabRef = useRef(null)
+
+  const countries = useMemo(
     () =>
       countryList()
         .getData()
@@ -119,6 +122,8 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
   })
 
   const {
+    dirty,
+    isValid,
     values,
     errors,
     touched,
@@ -236,6 +241,13 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
     onOpen()
   }
 
+  const handleNext = () => {
+    if (tabRef.current) {
+      tabRef.current.focus()
+      tabRef.current.click()
+    }
+  }
+
   return (
     <Container align='center' mt={{ lg: 4 }} minW={{ lg: '4xl' }}>
       {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
@@ -248,7 +260,9 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
         <Tabs mt={8} isFitted>
           <TabList w='70%'>
             <Tab {...tabBtnStyle}>Document Upload</Tab>
-            <Tab {...tabBtnStyle}>Student Information</Tab>
+            <Tab ref={tabRef} {...tabBtnStyle}>
+              Student Information
+            </Tab>
           </TabList>
 
           <TabPanels mt={8}>
@@ -379,7 +393,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
             mt={8}
             w='200px'
             rounded='0'
-            type='submit'
+            type={isValid && dirty ? 'submit' : 'button'}
             color='#fff'
             fontSize='sm'
             boxShadow='lg'
@@ -389,6 +403,12 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
             _focus={{ outline: 'none' }}
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
+            onClick={e => {
+              if (!(isValid && dirty)) {
+                e.preventDefault()
+                handleNext()
+              }
+            }}
           >
             Next
           </Button>
