@@ -51,7 +51,9 @@ const PasswordInput = ({ id, isRequired, error, touched, label, ...rest }) => {
           />
         </InputRightElement>
       </InputGroup>
-      <FormErrorMessage>{error}</FormErrorMessage>
+      <FormErrorMessage fontSize={{ base: 'xs', lg: 'sm' }}>
+        {error}
+      </FormErrorMessage>
     </FormControl>
   )
 }

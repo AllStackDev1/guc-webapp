@@ -19,19 +19,20 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
           )}
           {error && (
             <>
-              <Text fontSize='md' ml={2} color='gcu.100'>
+              <Text fontSize={{ base: 'xs', lg: 'md' }} ml={2} color='gcu.100'>
                 Something went wrong
               </Text>
               <Button
                 size='md'
                 color='white'
                 rounded='20px'
+                fontSize={{ base: 20, lg: 25 }}
                 colorScheme='gcuButton'
                 onClick={() => reload()}
-                leftIcon={<IoIosRefresh size={25} />}
+                leftIcon={<IoIosRefresh />}
                 _hover={{ bg: 'gcu.100' }}
               >
-                <Text fontSize='sm'>Try again</Text>
+                <Text fontSize={{ base: 'xs', lg: 'sm' }}>Try again</Text>
               </Button>
             </>
           )}

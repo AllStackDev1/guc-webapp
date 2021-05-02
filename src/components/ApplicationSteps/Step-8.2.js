@@ -87,7 +87,7 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
         px={{ lg: 10 }}
         minW={{ lg: '3xl' }}
       >
-        <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+        <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
           Sibling
         </Heading>
         {isLoading || error ? (
@@ -166,12 +166,12 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
               fontWeight='bold'
               textColor='gcu.100'
               fontSize='sm'
-              aria-label='Add Another School'
+              aria-label='Add other School'
               _focus={{ bg: 'unset' }}
               _hover={{ bg: 'unset' }}
               onClick={() => handleAdd()}
             >
-              Add Another Siblings
+              Add other siblings
             </Button>
 
             <Flex w='100%' justify='space-between'>

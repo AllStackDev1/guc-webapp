@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
 import {
+  Box,
   Flex,
   Grid,
-  Button,
   Heading,
   GridItem,
   useToast,
@@ -15,6 +15,7 @@ import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 
 import { StepTenSchema } from './validations'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepTen = ({ setStep, setguardianContact }) => {
   const toast = useToast()
@@ -25,7 +26,7 @@ const StepTen = ({ setStep, setguardianContact }) => {
       isRequired: true,
       options: [
         'Father',
-        'Monther',
+        'Mother',
         'Grand Father',
         'Grand Mother',
         'Uncle',
@@ -42,13 +43,13 @@ const StepTen = ({ setStep, setguardianContact }) => {
       options: ['Mr', 'Mrs', 'Sir', 'Ma', 'Chief']
     },
     {
-      id: 'forename',
-      text: 'Forename',
+      id: 'firstName',
+      text: 'First Name',
       isRequired: true
     },
     {
-      id: 'surname',
-      text: 'Surname',
+      id: 'familyName',
+      text: 'Family Name',
       isRequired: true
     },
     {
@@ -128,8 +129,8 @@ const StepTen = ({ setStep, setguardianContact }) => {
       state: '',
       title: '',
       email: '',
-      surname: '',
-      forename: '',
+      familyName: '',
+      firstName: '',
       relation: '',
       occupation: '',
       addressOne: '',
@@ -193,24 +194,27 @@ const StepTen = ({ setStep, setguardianContact }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '4xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Guardian Contact Information
       </Heading>
 
       <Flex
         as='form'
-        mt={{ lg: 20 }}
+        mt={{ base: 5, lg: 20 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
-        <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+        <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={6}>
           {lists.map((list, idx) => (
-            <GridItem key={list.id} colSpan={[14, 15].includes(idx) ? 2 : 1}>
+            <GridItem
+              key={list.id}
+              colSpan={{ lg: [14, 15].includes(idx) ? 2 : 1 }}
+            >
               {list.options ? (
                 <CustomSelect
                   name={list.id}
@@ -242,43 +246,27 @@ const StepTen = ({ setStep, setguardianContact }) => {
           ))}
         </Grid>
 
-        <Flex mt={{ lg: 12 }} flexDir='column' align='flex-start'>
-          <Flex w='100%' justify='space-between'>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='button'
-              color='gcu.100'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
-              variant='outline'
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
-              onClick={() => setStep(9)}
-            >
-              Previous
-            </Button>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='submit'
-              color='#fff'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
-              isLoading={isSubmitting}
-              isDisabled={isSubmitting}
-            >
-              Next
-            </Button>
-          </Flex>
+        <Flex
+          mt={6}
+          mb={{ base: 12, lg: 0 }}
+          flexDir={{ base: 'column-reverse', lg: 'row' }}
+          justify={{ lg: 'space-between' }}
+        >
+          <CustomButton
+            type='button'
+            variant='outline'
+            label='Previous'
+            color='gcu.100'
+            onClick={() => setStep(9)}
+          />
+          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+          <CustomButton
+            label='Next'
+            type='submit'
+            color='#fff'
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+          />
         </Flex>
       </Flex>
     </Container>

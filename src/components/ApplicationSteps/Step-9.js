@@ -14,14 +14,15 @@ import {
   OrderedList,
   useDisclosure
 } from '@chakra-ui/react'
-import { FiPlus } from 'react-icons/fi'
+import { FiPlus, FiFileMinus } from 'react-icons/fi'
 
-import CustomInput from 'components/Forms/CustomInput'
+import CustomTextarea from 'components/Forms/CustomTextarea'
 import CustomUploader from 'components/Forms/CustomUploader'
 import PreviewModal from './PreviewModal'
 
 import { fileToBase64 } from 'utils/mics'
 import { StepNineSchema } from './validations'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepNine = ({ setStep, setHealthMedical }) => {
   const [file, setFile] = React.useState(undefined)
@@ -145,33 +146,34 @@ const StepNine = ({ setStep, setHealthMedical }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '6xl' }}
     >
       {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
 
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Health and Medical
       </Heading>
 
       <Flex
         as='form'
-        mt={{ lg: 20 }}
+        mt={{ base: 5, lg: 20 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
-        <OrderedList spacing={8}>
+        <OrderedList spacing={{ base: 5, lg: 8 }} ml={0}>
           {lists.map(list => (
             <ListItem
               d='flex'
               key={list.id}
+              flexDir={{ base: 'column', lg: 'row' }}
               textAlign='left'
-              align='center'
+              alignItems={{ base: 'flex-end', lg: 'center' }}
               justifyContent='space-between'
             >
-              <Flex align='center' w='50%'>
+              <Flex align='center' w={{ base: '100%', lg: '50%' }}>
                 <Text mr={3} fontWeight='bold'>
                   {list.id}.
                 </Text>
@@ -188,9 +190,13 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                 </Text>
               </Flex>
 
-              <Box w='40%'>
+              <Box w={{ base: '93%', lg: '40%' }} mt={{ base: 1, lg: 0 }}>
                 {list.fields && (
-                  <Flex w='60%' flexWrap='wrap' justify='space-between'>
+                  <Flex
+                    w={{ lg: '60%' }}
+                    flexWrap={{ lg: 'wrap' }}
+                    justify='space-between'
+                  >
                     {list.fields.map(e => (
                       <Checkbox
                         key={e}
@@ -199,14 +205,13 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                         colorScheme='gcuButton'
                         textTransform='capitalize'
                       >
-                        {e}
+                        <Text fontSize={{ base: 'xs', lg: 'sm' }}>{e}</Text>
                       </Checkbox>
                     ))}
                   </Flex>
                 )}
                 {list.field && (
-                  <CustomInput
-                    type='text'
+                  <CustomTextarea
                     isRequired
                     name={list.field}
                     onBlur={handleBlur}
@@ -221,12 +226,12 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                   (values.immuneFile ? (
                     <>
                       <Flex
-                        mt={1}
+                        mt={{ lg: 1 }}
                         color='gcu.100'
                         pos='relative'
                         align='center'
                       >
-                        <Box mr={4}>
+                        <Box mr={4} d={{ base: 'none', lg: 'block' }}>
                           <Button
                             p={0}
                             bg='unset'
@@ -245,6 +250,8 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                             p={0}
                             bg='unset'
                             type='button'
+                            fontSize={{ base: 'sm', lg: 'inherit' }}
+                            rightIcon={<FiFileMinus />}
                             _hover={{ bg: 'unset' }}
                             onClick={e => {
                               e.preventDefault()
@@ -262,7 +269,12 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                       )}
                     </>
                   ) : (
-                    <Flex mt={1} color='gcu.100' pos='relative' align='center'>
+                    <Flex
+                      mt={{ lg: 1 }}
+                      color='gcu.100'
+                      pos='relative'
+                      align='center'
+                    >
                       <CustomUploader
                         left={0}
                         form={formik}
@@ -272,7 +284,11 @@ const StepNine = ({ setStep, setHealthMedical }) => {
                         accept='application/pdf, image/jpg, image/jpeg, image/png'
                       />
                       <FiPlus />
-                      <Text ml={1} fontSize='sm' fontWeight='600'>
+                      <Text
+                        ml={1}
+                        fontSize={{ base: 'xs', lg: 'sm' }}
+                        fontWeight='600'
+                      >
                         Attach a copy of immunisation history
                         <Text as='span' ml={1} fontSize='xs'>
                           (optional)
@@ -286,47 +302,26 @@ const StepNine = ({ setStep, setHealthMedical }) => {
         </OrderedList>
 
         <Flex
-          mt={{ lg: 16 }}
-          px={{ lg: 10 }}
-          flexDir='column'
-          align='flex-start'
+          mt={6}
+          mb={{ base: 12, lg: 0 }}
+          flexDir={{ base: 'column-reverse', lg: 'row' }}
+          justify={{ lg: 'space-between' }}
         >
-          <Flex w='100%' justify='space-between'>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='button'
-              color='gcu.100'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
-              variant='outline'
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
-              onClick={() => setStep(8.2)}
-            >
-              Previous
-            </Button>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='submit'
-              color='#fff'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
-              isLoading={isSubmitting}
-              isDisabled={isSubmitting}
-            >
-              Next
-            </Button>
-          </Flex>
+          <CustomButton
+            type='button'
+            variant='outline'
+            label='Previous'
+            color='gcu.100'
+            onClick={() => setStep(8.2)}
+          />
+          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+          <CustomButton
+            label='Next'
+            type='submit'
+            color='#fff'
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+          />
         </Flex>
       </Flex>
     </Container>

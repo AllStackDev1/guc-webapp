@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormLabel, FormControl, FormErrorMessage } from '@chakra-ui/react'
-
 import IntlTelInput from 'react-intl-tel-input'
 import 'react-intl-tel-input/dist/main.css'
 
-const PhoneInput = ({
+const CustomPhoneInput = ({
+  name,
   value,
   error,
   touched,
@@ -22,12 +22,8 @@ const PhoneInput = ({
       : {}
 
   return (
-    <FormControl
-      id='phoneNumber'
-      isRequired={isRequired}
-      isInvalid={error && touched}
-    >
-      <FormLabel fontSize='sm' fontWeight='400'>
+    <FormControl id={name} isRequired={isRequired} isInvalid={error && touched}>
+      <FormLabel fontSize={{ base: 'xs', lg: 'sm' }} fontWeight='400'>
         Phone Number
       </FormLabel>
 
@@ -41,20 +37,16 @@ const PhoneInput = ({
         defaultValue={value}
         onPhoneNumberBlur={(status, value, countryData) => {
           setFieldTouched('phoneNumber', true)
-          if (!status) {
-            setFieldValue('phoneNumber', '')
+          if (value.split('').includes('+')) {
+            setFieldValue('phoneNumber', value)
           } else {
-            if (value.split('').includes('+')) {
-              setFieldValue('phoneNumber', value)
-            } else {
-              const number = `+${countryData.dialCode}${value
-                .replace(/^0+/, '')
-                .replace(/\s/g, '')}`
-              setFieldValue('phoneNumber', number)
-            }
-            const name = countryData.name.split(' (', 1).toString()
-            name && setFieldValue('country', name)
+            const number = `+${countryData.dialCode}${value
+              .replace(/^0+/, '')
+              .replace(/\s/g, '')}`
+            setFieldValue('phoneNumber', number)
           }
+          const name = countryData.name.split(' (', 1).toString()
+          name && setFieldValue('country', name)
         }}
         onPhoneNumberChange={(status, value, countryData) => {
           setFieldTouched('phoneNumber', true)
@@ -76,12 +68,15 @@ const PhoneInput = ({
         }}
       />
 
-      <FormErrorMessage>{error}</FormErrorMessage>
+      <FormErrorMessage fontSize={{ base: 'xs', lg: 'sm' }}>
+        {error}
+      </FormErrorMessage>
     </FormControl>
   )
 }
 
-PhoneInput.propTypes = {
+CustomPhoneInput.propTypes = {
+  name: PropTypes.string,
   error: PropTypes.string,
   touched: PropTypes.bool,
   value: PropTypes.string,
@@ -89,4 +84,4 @@ PhoneInput.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
   setFieldTouched: PropTypes.func.isRequired
 }
-export default PhoneInput
+export default CustomPhoneInput

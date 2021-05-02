@@ -4,12 +4,12 @@ import {
   Box,
   Text,
   List,
-  Button,
   Heading,
   ListItem,
   ListIcon,
   Container
 } from '@chakra-ui/react'
+import CustomButton from 'components/Forms/CustomButton'
 
 const CircleCheckIcon = () => (
   <svg
@@ -60,11 +60,11 @@ const StepOne = ({ setStep }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={4}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '2xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Application Process
       </Heading>
 
@@ -95,31 +95,23 @@ const StepOne = ({ setStep }) => {
 
         <Text {...textStyle}>
           Applicants will undergo an online test according to their age
-          category, you would recieve an{' '}
+          category, you would receive an{' '}
           <Text as='span' fontWeight='700'>
             Application ID
           </Text>{' '}
-          in your registered email, use this code and your one time password
-          (OTP) to login and complete your application.
+          in your registered email, use this code and your one-time password
+          (OTP) to log in and complete your application.
         </Text>
       </Box>
 
-      <Box mt={8} align='center'>
-        <Button
+      <Box mt={8}>
+        <CustomButton
           w='100%'
-          rounded='0'
-          type='button'
           color='#fff'
-          fontSize='md'
-          boxShadow='lg'
-          fontWeight={400}
-          colorScheme='gcuButton'
-          h={{ base: '3.375rem' }}
+          type='button'
+          label='Apply Now !!'
           onClick={_ => setStep(2)}
-          _focus={{ outline: 'none' }}
-        >
-          Apply Now !!
-        </Button>
+        />
       </Box>
     </Container>
   )

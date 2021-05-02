@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
 import {
+  Box,
   Flex,
   Grid,
-  Button,
   Heading,
   useToast,
   GridItem,
@@ -15,6 +15,7 @@ import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 
 import { StepElevenSchema } from './validations'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepEleven = ({ setStep, setEmergenyContact }) => {
   const toast = useToast()
@@ -76,25 +77,25 @@ const StepEleven = ({ setStep, setEmergenyContact }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '4xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Emergency Contact
       </Heading>
 
       <Flex
         as='form'
-        mt={{ lg: 16 }}
+        mt={{ base: 5, lg: 20 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
         <Grid
-          templateRows='repeat(3, 1fr)'
-          templateColumns='repeat(2, 1fr)'
-          gap={6}
+          templateRows={{ lg: 'repeat(2, 1fr)' }}
+          templateColumns={{ lg: 'repeat(2, 1fr)' }}
+          gap={{ base: 3, lg: 6 }}
         >
           <GridItem>
             <CustomInput
@@ -133,7 +134,7 @@ const StepEleven = ({ setStep, setEmergenyContact }) => {
               defaultValue={values.relationship}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ lg: 2 }}>
             <CustomInput
               type='text'
               isRequired
@@ -149,39 +150,26 @@ const StepEleven = ({ setStep, setEmergenyContact }) => {
           </GridItem>
         </Grid>
 
-        <Flex w='100%' justify='space-between'>
-          <Button
-            w='200px'
-            rounded='0'
+        <Flex
+          mt={6}
+          flexDir={{ base: 'column-reverse', lg: 'row' }}
+          justify={{ lg: 'space-between' }}
+        >
+          <CustomButton
             type='button'
-            color='gcu.100'
-            fontSize='sm'
-            boxShadow='lg'
-            fontWeight={600}
             variant='outline'
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
+            label='Previous'
+            color='gcu.100'
             onClick={() => setStep(10)}
-          >
-            Previous
-          </Button>
-          <Button
-            w='200px'
-            rounded='0'
+          />
+          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+          <CustomButton
+            label='Next'
             type='submit'
             color='#fff'
-            fontSize='sm'
-            boxShadow='lg'
-            fontWeight={400}
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
-          >
-            Next
-          </Button>
+          />
         </Flex>
       </Flex>
     </Container>

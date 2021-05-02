@@ -7,31 +7,31 @@ const StepTwelve = () => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '2xl' }}
     >
       <Box
         mx='auto'
-        mb={{ lg: 16 }}
-        w={{ lg: '5.188em' }}
-        h={{ lg: '6.5rem' }}
+        mb={{ base: 5, lg: 16 }}
+        w={{ base: '4.188em', lg: '5.188em' }}
+        h={{ base: '4.8rem', lg: '6.5rem' }}
         as={TrophyIcon}
       />
 
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Hurray!
       </Heading>
 
       <Text
         mt={4}
-        w={110}
+        w={{ lg: 110 }}
         align='center'
-        fontWeight='400'
-        fontSize='lg'
-        lineHeight='30px'
+        fontWeight='300'
+        fontSize={{ base: 'sm', lg: 'lg' }}
+        lineHeight={{ base: '4', lg: '30px' }}
       >
-        You have sucessfully applied for the GCU
+        You have successfully applied for the GCU
         <Box as='br' />
         <Text as='span' fontWeight='700'>
           2020/2021 cohort

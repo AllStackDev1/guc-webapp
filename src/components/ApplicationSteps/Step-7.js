@@ -5,7 +5,6 @@ import {
   Box,
   Text,
   Flex,
-  Button,
   Heading,
   useToast,
   ListItem,
@@ -13,7 +12,8 @@ import {
   OrderedList
 } from '@chakra-ui/react'
 
-import CustomInput from 'components/Forms/CustomInput'
+import CustomTextarea from 'components/Forms/CustomTextarea'
+import CustomButton from 'components/Forms/CustomButton'
 
 import { StepSevenSchema } from './validations'
 
@@ -28,7 +28,7 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
     {
       id: 'enrollNetwork',
       text:
-        'What is the anticipated length of time you will have your childen enrolled at Network?'
+        'WWhat is the anticipated length of time you will have your child enrolled at Network?'
     }
   ]
 
@@ -88,31 +88,32 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '5xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Student Background
       </Heading>
 
       <Flex
         as='form'
-        mt={{ lg: 20 }}
+        mt={{ base: 6, lg: 16 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
-        <OrderedList spacing={3}>
+        <OrderedList spacing={{ base: 5, lg: 3 }} ml={0}>
           {lists.map((list, idx) => (
             <ListItem
               d='flex'
               key={list.id}
+              flexDir={{ base: 'column', lg: 'row' }}
               textAlign='left'
-              alignItems='center'
+              alignItems={{ base: 'flex-end', lg: 'center' }}
               justifyContent='space-between'
             >
-              <Flex w='45%' align='center'>
+              <Flex w={{ base: '100%', lg: '45%' }} align='center'>
                 <Text mr={4} fontWeight='bold'>
                   {idx + 1}.
                 </Text>
@@ -128,9 +129,8 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
                 </Text>
               </Flex>
 
-              <Box w='50%'>
-                <CustomInput
-                  type='text'
+              <Box w={{ base: '93%', lg: '50%' }} mt={{ base: 2, lg: 0 }}>
+                <CustomTextarea
                   isRequired
                   name={list.id}
                   onBlur={handleBlur}
@@ -151,41 +151,27 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
           flexDir='column'
           align='flex-start'
         >
-          <Flex w='100%' justify='space-between'>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='button'
+          <Flex
+            w='100%'
+            mt={8}
+            flexDir={{ base: 'column-reverse', lg: 'row' }}
+            justify='space-between'
+          >
+            <CustomButton
               color='gcu.100'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
               variant='outline'
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
+              label='Previous'
+              type='button'
               onClick={() => setStep(6.2)}
-            >
-              Previous
-            </Button>
-            <Button
-              mt={8}
-              w='200px'
-              rounded='0'
-              type='submit'
+            />
+
+            <CustomButton
+              label='Next'
               color='#fff'
-              fontSize='md'
-              boxShadow='lg'
-              fontWeight={600}
-              colorScheme='gcuButton'
-              h={{ base: '3.375rem' }}
-              _focus={{ outline: 'none' }}
+              type='submit'
               isLoading={isSubmitting}
               isDisabled={isSubmitting}
-            >
-              Next
-            </Button>
+            />
           </Flex>
         </Flex>
       </Flex>

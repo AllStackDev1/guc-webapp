@@ -29,7 +29,7 @@ const AuthNavbar = ({ value, step, setStep }) => {
           h={{ base: '3.063rem', lg: '5.688rem' }}
         />
         {step === 2 && (
-          <Flex pos='absolute' mt={10} right={20}>
+          <Flex pos='absolute' mt={{ lg: 10 }} right={{ base: 6, lg: 20 }}>
             <Text
               color='gcu.100'
               cursor='pointer'
@@ -39,11 +39,17 @@ const AuthNavbar = ({ value, step, setStep }) => {
             >
               Login
             </Text>
-            <Text ml={3}>to resume pending applications</Text>
+            <Text d={{ base: 'none', lg: 'block' }} ml={3}>
+              to resume pending applications
+            </Text>
           </Flex>
         )}
       </Flex>
-      <Progress colorScheme='gcuButton' value={value} h='11px' />
+      <Progress
+        colorScheme='gcuButton'
+        value={value}
+        h={{ base: '6px', lg: '11px' }}
+      />
     </>
   )
 }

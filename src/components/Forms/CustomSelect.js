@@ -25,18 +25,25 @@ const CustomSelect = ({
       isInvalid={error && touched}
     >
       {label && (
-        <FormLabel fontSize='sm' fontWeight='400'>
+        <FormLabel fontSize={{ base: 'xs', lg: 'sm' }} fontWeight='400'>
           {label}
         </FormLabel>
       )}
-      <Select h={16} bgColor='gray.50' {...rest}>
+      <Select
+        h={{ base: 12, lg: 16 }}
+        fontSize={{ base: 'xs', lg: 'sm' }}
+        bgColor='gray.50'
+        {...rest}
+      >
         {options?.map(e => (
           <option key={e[valueId] || e} value={e[valueId] || e}>
             {e[LabelId || valueId] || e}
           </option>
         ))}
       </Select>
-      <FormErrorMessage>{error}</FormErrorMessage>
+      <FormErrorMessage fontSize={{ base: 'xs', lg: 'sm' }}>
+        {error}
+      </FormErrorMessage>
     </FormControl>
   )
 }

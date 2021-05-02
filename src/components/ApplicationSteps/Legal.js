@@ -4,12 +4,12 @@ import { Text, Link } from '@chakra-ui/react'
 const Legal = () => {
   return (
     <Text
-      mt={4}
-      w={110}
+      mt={{ base: 2, lg: 4 }}
+      w={{ lg: 110 }}
       align='center'
       fontWeight='300'
-      fontSize='lg'
-      lineHeight='30px'
+      fontSize={{ base: 'sm', lg: 'lg' }}
+      lineHeight={{ base: '4', lg: '30px' }}
     >
       By appliying you agree to our
       <Link

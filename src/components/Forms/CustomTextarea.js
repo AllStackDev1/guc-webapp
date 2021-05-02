@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Input,
+  Textarea,
   FormLabel,
   FormControl,
   FormErrorMessage
 } from '@chakra-ui/react'
 
-const CustomInput = ({ id, isRequired, error, touched, label, ...rest }) => {
+const CustomTextarea = ({ id, isRequired, error, touched, label, ...rest }) => {
   return (
     <FormControl
       id={id || rest.name}
@@ -19,9 +19,9 @@ const CustomInput = ({ id, isRequired, error, touched, label, ...rest }) => {
           {label}
         </FormLabel>
       )}
-      <Input
+      <Textarea
         {...rest}
-        h={{ base: 12, lg: 16 }}
+        // mi={{ base: 16, lg: 16 }}
         fontSize={{ base: 'xs', lg: 'sm' }}
         bgColor='gray.50'
       />
@@ -32,7 +32,7 @@ const CustomInput = ({ id, isRequired, error, touched, label, ...rest }) => {
   )
 }
 
-CustomInput.propTypes = {
+CustomTextarea.propTypes = {
   label: PropTypes.string,
   error: PropTypes.string,
   touched: PropTypes.bool,
@@ -40,4 +40,4 @@ CustomInput.propTypes = {
   id: PropTypes.string
 }
 
-export default CustomInput
+export default CustomTextarea

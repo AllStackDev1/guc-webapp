@@ -7,7 +7,6 @@ import {
   Box,
   Flex,
   Grid,
-  Button,
   Heading,
   useToast,
   GridItem,
@@ -15,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
+import CustomButton from 'components/Forms/CustomButton'
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required!'),
@@ -88,20 +88,20 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '3xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Sibling
       </Heading>
 
       <Box as='form' onSubmit={handleSubmit}>
         <Grid
           mt={{ lg: 20 }}
-          templateRows='repeat(3, 1fr)'
-          templateColumns='repeat(2, 1fr)'
-          gap={6}
+          templateRows={{ lg: 'repeat(2, 1fr)' }}
+          templateColumns={{ lg: 'repeat(2, 1fr)' }}
+          gap={{ base: 3, lg: 6 }}
         >
           <GridItem>
             <CustomInput
@@ -129,7 +129,7 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
               defaultValue={values.gender}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ lg: 2 }}>
             <CustomInput
               type='date'
               label='Date of Birth'
@@ -142,19 +142,16 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
             />
           </GridItem>
         </Grid>
-        <Flex justify='flex-end'>
-          <Button
-            w='200px'
-            rounded='0'
+        <Flex
+          mt={6}
+          flexDir={{ base: 'column-reverse', lg: 'row' }}
+          justify={{ lg: 'flex-end' }}
+        >
+          <CustomButton
             type='button'
-            color='gcu.100'
-            fontSize='md'
-            boxShadow='lg'
-            fontWeight={600}
             variant='outline'
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
+            label={editData ? 'Cancel' : 'Skip'}
+            color='gcu.100'
             onClick={() => {
               if (editData) {
                 setStep(8.2)
@@ -162,26 +159,15 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
                 setStep(9)
               }
             }}
-          >
-            {editData ? 'Cancel' : 'Skip'}
-          </Button>
-          <Box mx={3} />
-          <Button
-            w='200px'
-            rounded='0'
+          />
+          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+          <CustomButton
+            label='Save'
             type='submit'
             color='#fff'
-            fontSize='md'
-            boxShadow='lg'
-            fontWeight={600}
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
-          >
-            Save
-          </Button>
+          />
         </Flex>
       </Box>
     </Container>

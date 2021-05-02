@@ -19,7 +19,7 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
 
   const config = {
     reference: new Date().getTime(),
-    email: user.email,
+    email: user?.email,
     amount: 1000000,
     publicKey: configs().PAYSTACK_PUBLIC_KEY
   }
@@ -80,31 +80,31 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
     <>
       <Container
         align='center'
-        mt={{ lg: 4 }}
-        px={{ lg: 10 }}
+        mt={{ base: 8, lg: 4 }}
+        px={{ base: 5, lg: 10 }}
         minW={{ lg: '2xl' }}
       >
         <Box
           mx='auto'
-          mb={{ lg: 16 }}
-          w={{ lg: '5.188em' }}
-          h={{ lg: '6.5rem' }}
+          mb={{ base: 5, lg: 16 }}
+          w={{ base: '4.188em', lg: '5.188em' }}
+          h={{ base: '4.8rem', lg: '6.5rem' }}
           as={TrophyIcon}
         />
 
-        <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+        <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
           OTP Verified
         </Heading>
 
         <Text
           mt={4}
-          w={110}
+          w={{ lg: 110 }}
           align='center'
           fontWeight='300'
-          fontSize='lg'
-          lineHeight='30px'
+          fontSize={{ base: 'sm', lg: 'lg' }}
+          lineHeight={{ base: '4', lg: '30px' }}
         >
-          Awesome your account have been verified click the button below to
+          Awesome your account has been verified click the button below to
           purchase your application form.
         </Text>
         {config.email && (

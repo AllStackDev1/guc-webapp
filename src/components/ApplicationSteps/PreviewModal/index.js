@@ -20,7 +20,7 @@ const PreviewModal = ({ data, isOpen, onClose }) => {
         <ModalContent>
           <ModalHeader>Preview</ModalHeader>
           <ModalCloseButton />
-          <ModalBody minH={130}>
+          <ModalBody minH={{ base: 80, lg: 130 }}>
             <FilePreview fileData={data} />
           </ModalBody>
         </ModalContent>

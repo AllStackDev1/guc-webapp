@@ -3,21 +3,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import jwt_decode from 'jwt-decode'
-import {
-  Box,
-  Flex,
-  Text,
-  Alert,
-  Button,
-  Heading,
-  Container,
-  AlertIcon,
-  AlertTitle
-} from '@chakra-ui/react'
+import { Box, Flex, Text, Button, Heading, Container } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 
 import Legal from './Legal'
 import CustomOTPInput from 'components/Forms/CustomOTPInput'
+import CustomAlert from './CustomAlert'
 
 const validationSchema = yup.object().shape({
   pin_id: yup.string(),
@@ -120,18 +111,23 @@ const StepFour = ({
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '2xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         OTP Verification
       </Heading>
 
       <Legal />
 
-      <Flex as='form' flexDir='column' onSubmit={formik.handleSubmit}>
-        <Box my={{ lg: 8 }}>
+      <Flex
+        as='form'
+        mt={{ base: 4, lg: 'unset' }}
+        flexDir='column'
+        onSubmit={formik.handleSubmit}
+      >
+        <Box my={{ base: 4, lg: 8 }}>
           <Text ml={{ lg: 4 }} fontSize='13px' align='left' mb={3}>
             Enter the one time password (OTP) sent to{' '}
             <Text as='span' fontWeight='bold'>
@@ -146,7 +142,7 @@ const StepFour = ({
           />
         </Box>
 
-        <Box mx='auto' w={{ lg: 120 }}>
+        <Box mx='auto' w={{ base: '100%', lg: 120 }}>
           <Button
             w='100%'
             rounded='0'
@@ -164,36 +160,32 @@ const StepFour = ({
             Verify Code
           </Button>
         </Box>
-      </Flex>
 
-      <Box mt={{ lg: 8 }}>
-        <Text>Didn't receive OTP ({count}s)</Text>
+        <Box fontSize={{ base: 'sm', lg: 'md' }} mt={{ base: 2, lg: 8 }}>
+          <Text>Didn't receive OTP ({count}s)</Text>
 
-        {!count && (
-          <Button
-            px={0}
-            bg='unset'
-            color='gcu.100'
-            isLoading={loading}
-            isDisabled={loading}
-            _hover={{ bg: 'unset' }}
-            onClick={() => handleResendOTP()}
-          >
-            Resend OTP
-          </Button>
-        )}
-      </Box>
-
-      {(successMessage || errorMessage) && (
-        <Box mt={{ lg: 8 }}>
-          <Alert px={5} py={6} status={errorMessage ? 'error' : 'success'}>
-            <AlertIcon />
-            <AlertTitle color={errorMessage ? 'red.600' : 'green.600'} mr={2}>
-              {successMessage || errorMessage}
-            </AlertTitle>
-          </Alert>
+          {!count && (
+            <Button
+              px={0}
+              bg='unset'
+              color='gcu.100'
+              isLoading={loading}
+              isDisabled={loading}
+              _hover={{ bg: 'unset' }}
+              onClick={() => handleResendOTP()}
+            >
+              Resend OTP
+            </Button>
+          )}
         </Box>
-      )}
+
+        {(successMessage || errorMessage) && (
+          <CustomAlert
+            successMessage={successMessage}
+            errorMessage={errorMessage}
+          />
+        )}
+      </Flex>
     </Container>
   )
 }

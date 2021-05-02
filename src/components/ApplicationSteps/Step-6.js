@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
@@ -30,6 +29,7 @@ import PreviewModal from './PreviewModal'
 
 import { StepSixSchema } from './validations'
 import { fileToBase64 } from 'utils/mics'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepSixOne = ({ setStep, setInitialEnquiry }) => {
   const [docOne, setDocOne] = useState(false)
@@ -135,7 +135,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
   } = formik
 
   const tabBtnStyle = {
-    fontSize: 'md',
+    fontSize: { base: 'xs', lg: 'md' },
     color: 'gray.400',
     fontWeight: '600',
     _focus: { outline: 'none' },
@@ -176,8 +176,8 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       isRequired: true
     },
     {
-      id: 'surname',
-      text: 'Surname',
+      id: 'familyName',
+      text: 'Family Name',
       isRequired: true
     },
     {
@@ -249,28 +249,43 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
   }
 
   return (
-    <Container align='center' mt={{ lg: 4 }} minW={{ lg: '4xl' }}>
+    <Container
+      align='center'
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
+      minW={{ lg: '4xl' }}
+    >
       {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
 
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Initial Enquiry
       </Heading>
 
       <Box as='form' onSubmit={handleSubmit} noValidate>
-        <Tabs mt={8} isFitted>
-          <TabList w='70%'>
+        <Tabs mt={{ base: 4, lg: 8 }} isFitted>
+          <TabList w={{ lg: '70%' }}>
             <Tab {...tabBtnStyle}>Document Upload</Tab>
             <Tab ref={tabRef} {...tabBtnStyle}>
               Student Information
             </Tab>
           </TabList>
 
-          <TabPanels mt={8}>
+          <TabPanels mt={{ lg: 8 }}>
             <TabPanel>
               {tabOne.map(e => (
-                <Flex py={2} key={e.id} align='center' justify='space-between'>
+                <Flex
+                  py={2}
+                  key={e.id}
+                  flexDir={{ base: 'column', lg: 'row' }}
+                  align={{ lg: 'center' }}
+                  justify='space-between'
+                >
                   <Box textAlign='left'>
-                    <Text color='gray.500' fontWeight='500' fontSize='lg'>
+                    <Text
+                      color='gray.500'
+                      fontWeight='500'
+                      fontSize={{ base: 'sm', lg: 'lg' }}
+                    >
                       {e.title}{' '}
                       <Text as='span' color='gcu.100'>
                         *
@@ -285,7 +300,6 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
 
                   <Flex>
                     <Checkbox
-                      fontSize='lg'
                       color='gray.500'
                       fontWeight='500'
                       colorScheme='green'
@@ -296,14 +310,16 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                     {e.checked &&
                       (values.documents[e.name] ? (
                         <>
-                          <Box mx={4}>
+                          <Box mx={2} d={{ base: 'none', lg: 'block' }}>
                             <Button
                               p={0}
                               bg='unset'
                               type='button'
                               color='gcu.100'
                               _hover={{ bg: 'unset' }}
-                              onClick={() => {
+                              fontSize={{ base: 'xs', lg: 'inherit' }}
+                              onClick={_ => {
+                                _.preventDefault()
                                 handlePreview(values.documents[e.name])
                               }}
                             >
@@ -311,14 +327,16 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                             </Button>
                           </Box>
 
-                          <Box>
+                          <Box ml={{ base: 2, lg: 0 }}>
                             <Button
                               p={0}
                               bg='unset'
                               type='button'
                               color='gcu.100'
                               _hover={{ bg: 'unset' }}
-                              onClick={() => {
+                              fontSize={{ base: 'xs', lg: 'inherit' }}
+                              onClick={_ => {
+                                _.preventDefault()
                                 return setFieldValue(
                                   `documents.${e.name}`,
                                   undefined
@@ -330,7 +348,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                           </Box>
                         </>
                       ) : (
-                        <Flex ml={4} pos='relative' align='center'>
+                        <Flex ml={2} pos='relative' align='center'>
                           <CustomUploader
                             left={0}
                             form={formik}
@@ -339,7 +357,11 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                             field={{ name: `documents.${e.name}` }}
                             accept={e.accept}
                           />
-                          <Text color='gcu.100' fontWeight='600'>
+                          <Text
+                            color='gcu.100'
+                            fontSize={{ base: 'xs', lg: 'inherit' }}
+                            fontWeight='600'
+                          >
                             Click to upload
                           </Text>
                         </Flex>
@@ -349,7 +371,13 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
               ))}
             </TabPanel>
             <TabPanel>
-              <Grid templateColumns='repeat(2, 1fr)' gap={6}>
+              <Grid
+                templateColumns={{
+                  base: 'repeat(1, 1fr)',
+                  lg: 'repeat(2, 1fr)'
+                }}
+                gap={{ base: 3, lg: 6 }}
+              >
                 {tabTwo.map((list, idx) => (
                   <GridItem
                     key={list.id}
@@ -371,6 +399,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                     ) : (
                       <CustomInput
                         label={list.text}
+                        placeholder={list.text}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         isRequired={list.isRequired}
@@ -388,30 +417,26 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
           </TabPanels>
         </Tabs>
 
-        <Flex mt={8} w='100%' px={4} justify='flex-end'>
-          <Button
-            mt={8}
-            w='200px'
-            rounded='0'
-            type={isValid && dirty ? 'submit' : 'button'}
+        <Flex
+          px={4}
+          w='100%'
+          mt={{ base: 4, lg: 8 }}
+          mb={{ base: 4, lg: 0 }}
+          justify={{ base: 'center', lg: 'flex-end' }}
+        >
+          <CustomButton
+            label='Next'
             color='#fff'
-            fontSize='sm'
-            boxShadow='lg'
-            fontWeight={400}
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
+            type={isValid && dirty ? 'submit' : 'button'}
             onClick={e => {
               if (!(isValid && dirty)) {
                 e.preventDefault()
                 handleNext()
               }
             }}
-          >
-            Next
-          </Button>
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+          />
         </Flex>
       </Box>
     </Container>

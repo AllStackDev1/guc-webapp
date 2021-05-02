@@ -3,20 +3,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import {
-  Box,
-  Text,
-  Flex,
-  Alert,
-  Button,
-  Heading,
-  Container,
-  AlertIcon,
-  AlertTitle
-} from '@chakra-ui/react'
+import { Box, Text, Flex, Button, Heading, Container } from '@chakra-ui/react'
 
 import Legal from './Legal'
 import CustomOTPInput from 'components/Forms/CustomOTPInput'
+import CustomAlert from './CustomAlert'
+import CustomButton from 'components/Forms/CustomButton'
 
 const validationSchema = yup.object().shape({
   code: yup
@@ -107,72 +99,68 @@ const StepThree = ({
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '2xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Application Code
       </Heading>
+
       <Legal />
-      <Flex as='form' flexDir='column' onSubmit={formik.handleSubmit}>
+
+      <Flex
+        as='form'
+        mt={{ base: 4, lg: 'unset' }}
+        flexDir='column'
+        onSubmit={formik.handleSubmit}
+      >
         <CustomOTPInput
-          mt={{ lg: 12 }}
+          mt={{ base: 8, lg: 12 }}
           value={formik.values.code}
           error={formik.errors.code}
           isDisabled={formik.isSubmitting}
           onChange={code => formik.setFieldValue('code', code)}
         />
-        <Box mx='auto' w={{ lg: 120 }}>
-          <Button
+
+        <Box mx='auto' w={{ base: '100%', lg: 120 }}>
+          <CustomButton
             w='100%'
-            rounded='0'
-            type='submit'
             color='#fff'
-            fontSize='md'
-            boxShadow='lg'
-            fontWeight={400}
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
+            type='submit'
+            label='Next'
             isLoading={formik.isSubmitting}
             isDisabled={formik.isSubmitting}
-          >
-            Next
-          </Button>
+          />
         </Box>
+
+        {phoneNumber && (
+          <Box mt={{ lg: 8 }}>
+            <Text>Didn't receive code ({count}s)</Text>
+
+            {!count && (
+              <Button
+                px={0}
+                bg='unset'
+                color='gcu.100'
+                isLoading={loading}
+                isDisabled={loading}
+                _hover={{ bg: 'unset' }}
+                onClick={() => handleResendCode()}
+              >
+                Resend code
+              </Button>
+            )}
+          </Box>
+        )}
+
+        {(successMessage || errorMessage) && (
+          <CustomAlert
+            successMessage={successMessage}
+            errorMessage={errorMessage}
+          />
+        )}
       </Flex>
-
-      {phoneNumber && (
-        <Box mt={{ lg: 8 }}>
-          <Text>Didn't receive code ({count}s)</Text>
-
-          {!count && (
-            <Button
-              px={0}
-              bg='unset'
-              color='gcu.100'
-              isLoading={loading}
-              isDisabled={loading}
-              _hover={{ bg: 'unset' }}
-              onClick={() => handleResendCode()}
-            >
-              Resend code
-            </Button>
-          )}
-        </Box>
-      )}
-
-      {(successMessage || errorMessage) && (
-        <Box mt={{ lg: 8 }}>
-          <Alert px={5} py={6} status={errorMessage ? 'error' : 'success'}>
-            <AlertIcon />
-            <AlertTitle color={errorMessage ? 'red.600' : 'green.600'} mr={2}>
-              {successMessage || errorMessage}
-            </AlertTitle>
-          </Alert>
-        </Box>
-      )}
     </Container>
   )
 }

@@ -1,14 +1,17 @@
+/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import validator from 'validator'
 import { useFormik } from 'formik'
-import { Box, Flex, Text, Button, Heading, Container } from '@chakra-ui/react'
+import { Box, Flex, Text, Heading, Container } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomPhoneInput from 'components/Forms/CustomPhoneInput'
+import CustomButton from 'components/Forms/CustomButton'
 
 import Legal from './Legal'
+import CustomAlert from './CustomAlert'
 
 const validationSchema = yup.object().shape({
   firstName: yup.string().required('First name is required!'),
@@ -28,6 +31,7 @@ const validationSchema = yup.object().shape({
 const StepTwo = ({
   enroll,
   setStep,
+  errorMessage,
   setPhoneNumber,
   setErrorMessage,
   setSuccessMessage
@@ -48,7 +52,7 @@ const StepTwo = ({
         setErrorMessage(null)
         setPhoneNumber(res.data.phoneNumber)
         setSuccessMessage(
-          'An application code has been sent to your email address'
+          'An Application code has been sent to your email address'
         )
         setStep(3)
       } catch (error) {
@@ -83,11 +87,11 @@ const StepTwo = ({
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '3xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Online Application
       </Heading>
 
@@ -95,20 +99,45 @@ const StepTwo = ({
 
       <Flex
         as='form'
-        mt={{ lg: 4 }}
+        mt={{ base: 4, lg: 4 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
-        <Flex flexDir='column' mb={{ lg: 6 }}>
-          <Text as='label' align='left' id='firstName' fontSize='sm' mb={2}>
+        <Flex flexDir='column' mb={{ base: 3, lg: 6 }}>
+          <Text
+            as='label'
+            align='left'
+            id='firstName'
+            d={{ base: 'none', lg: 'block' }}
+            fontSize='sm'
+            mb={2}
+          >
             Full Name
             <Text as='span' color='red.500'>
               {' *'}
             </Text>
           </Text>
-          <Flex justify='space-between'>
-            <Box w={{ lg: '48%' }} mr={{ lg: 2 }}>
+          <Flex flexDir={{ base: 'column', lg: 'row' }} justify='space-between'>
+            <Box
+              textAlign='left'
+              w={{ lg: '48%' }}
+              mb={{ base: 2, lg: 0 }}
+              mr={{ lg: 2 }}
+            >
+              <Text
+                as='label'
+                align='left'
+                id='firstName'
+                d={{ lg: 'none' }}
+                fontSize='xs'
+                mb={2}
+              >
+                First Name
+                <Text as='span' color='red.500'>
+                  {' *'}
+                </Text>
+              </Text>
               <CustomInput
                 type='text'
                 isRequired
@@ -121,7 +150,20 @@ const StepTwo = ({
                 defaultValue={values.firstName}
               />
             </Box>
-            <Box w={{ lg: '48%' }} ml={{ lg: 2 }}>
+            <Box textAlign='left' w={{ lg: '48%' }} ml={{ lg: 2 }}>
+              <Text
+                as='label'
+                align='left'
+                id='firstName'
+                d={{ lg: 'none' }}
+                fontSize='xs'
+                mb={2}
+              >
+                Last Name
+                <Text as='span' color='red.500'>
+                  {' *'}
+                </Text>
+              </Text>
               <CustomInput
                 type='text'
                 isRequired
@@ -136,7 +178,7 @@ const StepTwo = ({
             </Box>
           </Flex>
         </Flex>
-        <Box mb={{ lg: 6 }}>
+        <Box mb={{ base: 3, lg: 6 }}>
           <CustomInput
             type='text'
             isRequired
@@ -159,33 +201,26 @@ const StepTwo = ({
             touched={touched.phoneNumber}
             setFieldValue={setFieldValue}
             setFieldTouched={setFieldTouched}
-            placeholder='Enter your Phone Number eg; 08012345678'
           />
         </Box>
 
-        <Button
-          mt={10}
+        <CustomButton
           w='100%'
-          rounded='0'
-          type='submit'
           color='#fff'
-          fontSize='md'
-          boxShadow='lg'
-          fontWeight={600}
-          colorScheme='gcuButton'
-          h={{ base: '3.375rem' }}
-          _focus={{ outline: 'none' }}
+          type='submit'
+          label='Continue'
           isLoading={isSubmitting}
           isDisabled={isSubmitting}
-        >
-          Continue
-        </Button>
+        />
+
+        {errorMessage && <CustomAlert errorMessage={errorMessage} />}
       </Flex>
     </Container>
   )
 }
 
 StepTwo.propTypes = {
+  errorMessage: PropTypes.any,
   enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
   setPhoneNumber: PropTypes.func.isRequired,

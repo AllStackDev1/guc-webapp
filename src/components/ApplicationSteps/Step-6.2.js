@@ -90,17 +90,17 @@ const StepSixTwo = ({
       {isSubmitting && <Overlay text='Deleting record' />}
       <Container
         align='center'
-        mt={{ lg: 4 }}
-        px={{ lg: 10 }}
+        mt={{ base: 8, lg: 4 }}
+        px={{ base: 5, lg: 10 }}
         minW={{ lg: '3xl' }}
       >
-        <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+        <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
           Previous Schools
         </Heading>
 
         {isLoading || error ? (
           <FetchCard
-            mx='auto'
+            h='60vh'
             align='center'
             justify='center'
             direction='column'

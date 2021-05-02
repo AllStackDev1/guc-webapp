@@ -6,14 +6,14 @@ import { useFormik } from 'formik'
 import {
   Flex,
   Grid,
-  GridItem,
-  Button,
   Heading,
-  Container,
-  useToast
+  useToast,
+  GridItem,
+  Container
 } from '@chakra-ui/react'
 
 import CustomInput from 'components/Forms/CustomInput'
+import CustomButton from 'components/Forms/CustomButton'
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('This field is required!'),
@@ -97,25 +97,25 @@ const StepSixOne = ({
   return (
     <Container
       align='center'
-      mt={{ lg: 4 }}
-      px={{ lg: 10 }}
+      mt={{ base: 8, lg: 4 }}
+      px={{ base: 5, lg: 10 }}
       minW={{ lg: '3xl' }}
     >
-      <Heading fontWeight='bold' fontSize={{ base: '', lg: '2.625rem' }}>
+      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         Previous Schools
       </Heading>
 
       <Flex
         as='form'
-        mt={{ lg: 16 }}
+        mt={{ base: 6, lg: 16 }}
         px={{ lg: 10 }}
         flexDir='column'
         onSubmit={handleSubmit}
       >
         <Grid
-          templateRows='repeat(3, 1fr)'
-          templateColumns='repeat(2, 1fr)'
-          gap={6}
+          templateRows={{ lg: 'repeat(3, 1fr)' }}
+          templateColumns={{ lg: 'repeat(2, 1fr)' }}
+          gap={{ base: 3, lg: 6 }}
         >
           <GridItem>
             <CustomInput
@@ -172,7 +172,7 @@ const StepSixOne = ({
               defaultValue={moment(values.dateOfArrival).format('YYYY-MM-DD')}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ lg: 2 }}>
             <CustomInput
               type='date'
               isRequired
@@ -187,42 +187,27 @@ const StepSixOne = ({
           </GridItem>
         </Grid>
 
-        <Flex w='100%' justify='flex-end'>
-          <Button
-            mt={8}
-            w='200px'
-            mr={3}
-            rounded='0'
-            type='button'
+        <Flex
+          w='100%'
+          mt={8}
+          flexDir={{ base: 'column-reverse', lg: 'row' }}
+          justify={{ lg: 'flex-end' }}
+        >
+          <CustomButton
             color='gcu.100'
-            fontSize='sm'
-            boxShadow='lg'
-            fontWeight={600}
             variant='outline'
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
+            label='Cancel'
+            type='button'
             onClick={() => setStep(6.2)}
-          >
-            Cancel
-          </Button>
-          <Button
-            mt={8}
-            w='200px'
-            rounded='0'
-            type='submit'
+          />
+
+          <CustomButton
+            label='Next'
             color='#fff'
-            fontSize='sm'
-            boxShadow='lg'
-            fontWeight={400}
-            colorScheme='gcuButton'
-            h={{ base: '3.375rem' }}
-            _focus={{ outline: 'none' }}
+            type='submit'
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
-          >
-            Next
-          </Button>
+          />
         </Flex>
       </Flex>
     </Container>
