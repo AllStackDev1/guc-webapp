@@ -18,6 +18,7 @@ import useFetch from 'hooks/useFetch'
 import FetchCard from 'components/FetchCard'
 import Overlay from 'components/Loading/Overlay'
 import { getformattedDate } from 'utils/mics'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
   const [reload, setReload] = React.useState(0)
@@ -83,8 +84,8 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
       {isSubmitting && <Overlay text='Deleting record' />}
       <Container
         align='center'
-        mt={{ lg: 4 }}
-        px={{ lg: 10 }}
+        mt={{ base: 8, lg: 4 }}
+        px={{ base: 5, lg: 10 }}
         minW={{ lg: '3xl' }}
       >
         <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
@@ -103,19 +104,19 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
           />
         ) : (
           <Flex
-            mt={{ lg: 16 }}
+            mt={{ base: 5, lg: 16 }}
             px={{ lg: 10 }}
             flexDir='column'
             align='flex-start'
           >
             {data?.map(e => (
               <Flex
+                py={5}
                 w='100%'
                 key={e._id}
                 border='1px'
                 rounded='md'
-                py={{ lg: 5 }}
-                px={{ lg: 5 }}
+                px={{ base: 3, lg: 5 }}
                 pos='relative'
                 textAlign='left'
                 bgColor='gcu.600'
@@ -125,17 +126,19 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
                   <Icon mx='auto' as={CalendarIcon} />
                 </Flex>
 
-                <Box ml={5}>
+                <Box ml={5} fontSize={{ base: 'sm', lg: 'md' }}>
                   <Heading
                     lineHeight='2'
                     as='h6'
-                    fontSize='md'
+                    fontSize={{ base: 'sm', lg: 'md' }}
                     fontFamily='body'
                   >
                     {e.name}
                   </Heading>
-                  <Text lineHeight='2'>{e.gender}</Text>
-                  <Text lineHeight='2'>{getformattedDate(e.dob)}</Text>
+                  <Text lineHeight={{ lg: '2' }}>{e.gender}</Text>
+                  <Text lineHeight={{ lg: '2' }}>
+                    {getformattedDate(e.dob)}
+                  </Text>
                 </Box>
 
                 <Flex pos='absolute' top={0} right={0}>
@@ -174,40 +177,26 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
               Add other siblings
             </Button>
 
-            <Flex w='100%' justify='space-between'>
-              <Button
-                mt={8}
-                w='200px'
-                rounded='0'
-                type='submit'
+            <Flex
+              w='100%'
+              mt={5}
+              flexDir={{ base: 'column-reverse', lg: 'row' }}
+              justify={{ lg: 'space-between' }}
+            >
+              <CustomButton
                 color='gcu.100'
-                fontSize='sm'
-                boxShadow='lg'
-                fontWeight={600}
                 variant='outline'
-                colorScheme='gcuButton'
-                h={{ base: '3.375rem' }}
-                _focus={{ outline: 'none' }}
+                label='Previous'
+                type='button'
                 onClick={() => setStep(7)}
-              >
-                Previous
-              </Button>
-              <Button
-                mt={8}
-                w='200px'
-                rounded='0'
-                type='submit'
+              />
+
+              <CustomButton
+                label='Next'
                 color='#fff'
-                fontSize='sm'
-                boxShadow='lg'
-                fontWeight={400}
-                colorScheme='gcuButton'
-                h={{ base: '3.375rem' }}
-                _focus={{ outline: 'none' }}
+                type='button'
                 onClick={() => setStep(9)}
-              >
-                Next
-              </Button>
+              />
             </Flex>
           </Flex>
         )}

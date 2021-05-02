@@ -4,18 +4,19 @@ import {
   Box,
   Text,
   Flex,
-  IconButton,
   Button,
-  Heading,
   Avatar,
+  Heading,
+  useToast,
   Container,
-  useToast
+  IconButton
 } from '@chakra-ui/react'
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi'
 import useFetch from 'hooks/useFetch'
 import FetchCard from 'components/FetchCard'
 import Overlay from 'components/Loading/Overlay'
 import { getformattedDate } from 'utils/mics'
+import CustomButton from 'components/Forms/CustomButton'
 
 const StepSixTwo = ({
   setStep,
@@ -111,7 +112,7 @@ const StepSixTwo = ({
           />
         ) : (
           <Flex
-            mt={{ lg: 16 }}
+            mt={{ base: 8, lg: 16 }}
             px={{ lg: 10 }}
             flexDir='column'
             align='flex-start'
@@ -123,8 +124,8 @@ const StepSixTwo = ({
                 key={e._id}
                 border='1px'
                 rounded='md'
-                py={{ lg: 10 }}
-                px={{ lg: 5 }}
+                py={{ base: 5, lg: 10 }}
+                px={{ base: 3, lg: 5 }}
                 pos='relative'
                 textAlign='left'
                 align='flex-start'
@@ -133,11 +134,11 @@ const StepSixTwo = ({
               >
                 <Avatar bg='gcu.100' color='white' name={e.name} />
 
-                <Box ml={8}>
+                <Box ml={8} fontSize={{ base: 'sm', lg: 'md' }}>
                   <Heading
-                    lineHeight='2'
                     as='h6'
-                    fontSize='md'
+                    lineHeight={{ lg: '2' }}
+                    fontSize={{ base: 'sm', lg: 'md' }}
                     fontFamily='body'
                   >
                     {e.name}
@@ -187,40 +188,26 @@ const StepSixTwo = ({
               Add Another School
             </Button>
 
-            <Flex w='100%' justify='space-between'>
-              <Button
-                mt={8}
-                w='200px'
-                rounded='0'
-                type='button'
+            <Flex
+              w='100%'
+              mt={5}
+              flexDir={{ base: 'column-reverse', lg: 'row' }}
+              justify={{ lg: 'space-between' }}
+            >
+              <CustomButton
                 color='gcu.100'
-                fontSize='sm'
-                boxShadow='lg'
-                fontWeight={600}
                 variant='outline'
-                colorScheme='gcuButton'
-                h={{ base: '3.375rem' }}
-                _focus={{ outline: 'none' }}
-                onClick={() => setStep(6)}
-              >
-                Previous
-              </Button>
-              <Button
-                mt={8}
-                w='200px'
-                rounded='0'
+                label='Previous'
                 type='button'
+                onClick={() => setStep(6)}
+              />
+
+              <CustomButton
+                label='Next'
                 color='#fff'
-                fontSize='sm'
-                boxShadow='lg'
-                fontWeight={400}
-                colorScheme='gcuButton'
-                h={{ base: '3.375rem' }}
-                _focus={{ outline: 'none' }}
+                type='button'
                 onClick={() => setStep(7)}
-              >
-                Next
-              </Button>
+              />
             </Flex>
           </Flex>
         )}
