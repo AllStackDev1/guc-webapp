@@ -1,6 +1,8 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 import React from 'react'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
+import Confetti from 'react-confetti'
+import useWindowSize from 'react-use/lib/useWindowSize'
 
 import AuthNavbar from 'container/AuthNavbar'
 import {
@@ -32,6 +34,8 @@ const Auth = () => {
   const apis = useApi()
   const auth = useAuth()
   const app = useApp()
+
+  const { width, height } = useWindowSize()
 
   const getStep = key => {
     switch (key) {
@@ -71,7 +75,6 @@ const Auth = () => {
   }
 
   const display = getStep(app.step)
-
   const user = auth.isAuthenticated()?.user
 
   return (
@@ -82,6 +85,14 @@ const Auth = () => {
           step={app.step}
           setStep={app.setStep}
         />
+        {[5, 12].includes(app.step) && (
+          <Confetti
+            width={width}
+            numberOfPieces={500}
+            height={height}
+            recycle={false}
+          />
+        )}
         <Flex
           w='100%'
           as='main'
