@@ -77,6 +77,19 @@ const Auth = () => {
   const display = getStep(app.step)
   const user = auth.isAuthenticated()?.user
 
+  React.useEffect(() => {
+    if (app.step >= 5) {
+      if (!user) {
+        app.setStep(3)
+      }
+    }
+    if (user) {
+      if (app.step < 5) {
+        app.setStep(user.stage)
+      }
+    }
+  }, [app, auth, user])
+
   return (
     display && (
       <Box bg='white'>

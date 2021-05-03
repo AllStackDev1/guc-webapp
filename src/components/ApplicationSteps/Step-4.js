@@ -52,8 +52,10 @@ const StepFour = ({
         const user = jwt_decode(res.data)
         if (user.status === 'PENDING') {
           setStep(5)
+          sessionStorage.setItem('step', 5)
         } else {
           setStep(user.stage)
+          sessionStorage.setItem('step', 5)
         }
       } catch (error) {
         setSuccessMessage(null)

@@ -10,11 +10,13 @@ import {
   Container
 } from '@chakra-ui/react'
 import { PaystackButton } from 'react-paystack'
+import Overlay from 'components/Loading/Overlay'
 
 import { TrophyIcon } from 'theme/Icons'
 import configs from 'utils/configs'
 
 const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
+  const [isLoading, setLoading] = React.useState(false)
   const toast = useToast()
 
   const config = {
@@ -25,8 +27,9 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
   }
 
   const handlePaystackSuccessAction = async resp => {
-    try {
-      if (resp.status === 'success') {
+    if (resp.status === 'success') {
+      try {
+        setLoading(true)
         await applicantUpdateProfile({ status: 'PAID', stage: 6 })
         toast({
           duration: 5000,
@@ -34,27 +37,32 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
           status: 'success',
           position: 'top-right',
           title: 'Success',
-          description: 'Payment successful'
+          description: 'Payment successful, please login again.'
         })
-        setStep(6)
-        window.sessionStorage.setItem('step', 6)
+        window.sessionStorage.removeItem('_gcut')
+        window.sessionStorage.setItem('step', 3)
+        setStep(3)
+      } catch (error) {
+        let eMgs
+        if (error?.data?.message === 'celebrate request validation failed') {
+          eMgs = 'Invalid data, please check form.'
+        } else {
+          eMgs =
+            error?.message ||
+            error?.data?.message ||
+            'Unexpected network error.'
+        }
+        toast({
+          duration: 9000,
+          status: 'error',
+          isClosable: true,
+          position: 'top-right',
+          title: 'Error',
+          description: eMgs
+        })
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      let eMgs
-      if (error?.data?.message === 'celebrate request validation failed') {
-        eMgs = 'Invalid data, please check form.'
-      } else {
-        eMgs =
-          error?.message || error?.data?.message || 'Unexpected network error.'
-      }
-      toast({
-        duration: 9000,
-        status: 'error',
-        isClosable: true,
-        position: 'top-right',
-        title: 'Error',
-        description: eMgs
-      })
     }
   }
 
@@ -78,6 +86,7 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
 
   return (
     <>
+      {isLoading && <Overlay text='verfying payment' />}
       <Container
         align='center'
         mt={{ base: 8, lg: 4 }}

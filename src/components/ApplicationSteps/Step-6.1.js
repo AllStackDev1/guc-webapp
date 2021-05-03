@@ -44,7 +44,7 @@ const StepSixOne = ({
     onSubmit: async (values, { setSubmitting }) => {
       try {
         setSubmitting(true)
-        if (editData._id) {
+        if (editData?._id) {
           await updatePreviousSchool(editData._id, values)
         } else {
           await setPreviousSchool(values)

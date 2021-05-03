@@ -113,6 +113,7 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
               <Flex
                 py={5}
                 w='100%'
+                mb={4}
                 key={e._id}
                 border='1px'
                 rounded='md'

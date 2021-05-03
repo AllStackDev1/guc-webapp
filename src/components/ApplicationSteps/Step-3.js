@@ -79,6 +79,7 @@ const StepThree = ({
   }
 
   React.useEffect(() => {
+    setErrorMessage(null)
     let idi, idt
     if (phoneNumber) {
       idi = setInterval(() => {
@@ -94,7 +95,7 @@ const StepThree = ({
         clearTimeout(idt)
       }
     }
-  }, [setCount, phoneNumber])
+  }, [setCount, phoneNumber, setErrorMessage])
 
   return (
     <Container

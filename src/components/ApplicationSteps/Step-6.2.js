@@ -120,7 +120,7 @@ const StepSixTwo = ({
             {data?.map(e => (
               <Flex
                 w='100%'
-                mb={5}
+                mb={4}
                 key={e._id}
                 border='1px'
                 rounded='md'

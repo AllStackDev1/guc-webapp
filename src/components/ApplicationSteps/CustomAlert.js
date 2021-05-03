@@ -16,7 +16,7 @@ const CustomAlert = ({ errorMessage, successMessage }) => {
       <Alert
         px={5}
         py={6}
-        mt={{ lg: 8 }}
+        mt={{ base: 4, lg: 8 }}
         status={errorMessage ? 'error' : 'success'}
       >
         <AlertIcon />

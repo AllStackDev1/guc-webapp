@@ -30,11 +30,16 @@ export const StepSixSchema = yup.object().shape({
       'image/jpeg',
       'image/png'
     ]),
-    passportPhoto: fileValidation(2, ['image/jpg', 'image/jpeg', 'image/png'])
+    passportPhoto: fileValidation(2, [
+      'application/pdf',
+      'image/jpg',
+      'image/jpeg',
+      'image/png'
+    ])
   }),
   studentInfo: yup.object().shape({
     firstName: yup.string().required('This field is required!'),
-    surname: yup.string().required('This field is required!'),
+    familyName: yup.string().required('This field is required!'),
     middleName: yup.string().required('This field is required!'),
     preferedName: yup.string().required('This field is required!'),
     dob: yup.string().required('This field is required!'),

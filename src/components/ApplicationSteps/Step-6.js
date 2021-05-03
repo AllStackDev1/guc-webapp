@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import React, { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
+import isEmpty from 'lodash/isEmpty'
 import {
   Box,
   Tab,
@@ -24,12 +26,12 @@ import countryList from 'react-select-country-list'
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 import CustomUploader from 'components/Forms/CustomUploader'
+import CustomButton from 'components/Forms/CustomButton'
 
 import PreviewModal from './PreviewModal'
 
 import { StepSixSchema } from './validations'
 import { fileToBase64 } from 'utils/mics'
-import CustomButton from 'components/Forms/CustomButton'
 
 const StepSixOne = ({ setStep, setInitialEnquiry }) => {
   const [docOne, setDocOne] = useState(false)
@@ -60,7 +62,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       studentInfo: {
         dob: '',
         gender: '',
-        surname: '',
+        familyName: '',
         religion: '',
         firstName: '',
         middleName: '',
@@ -130,6 +132,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
     handleBlur,
     handleChange,
     setFieldValue,
+    setFieldTouched,
     isSubmitting,
     handleSubmit
   } = formik
@@ -148,24 +151,21 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       checked: docOne,
       name: 'birthCertOrPassport',
       toggle: () => setDocOne(!docOne),
-      title: 'Birth Certificate / Passport',
-      accept: 'application/pdf, image/jpg, image/jpeg, image/png'
+      title: 'Birth Certificate / Passport'
     },
     {
       id: 2,
       checked: docTwo,
       name: 'schoolReport',
       toggle: () => setDocTwo(!docTwo),
-      title: 'Most recent school report',
-      accept: 'application/pdf, image/jpg, image/jpeg, image/png'
+      title: 'Most recent school report'
     },
     {
       id: 3,
       checked: docThree,
       name: 'passportPhoto',
       title: 'Passport Photo',
-      toggle: () => setDocThree(!docThree),
-      accept: 'image/jpg, image/jpeg, image/png'
+      toggle: () => setDocThree(!docThree)
     }
   ]
 
@@ -241,8 +241,12 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
     onOpen()
   }
 
-  const handleNext = () => {
-    if (tabRef.current) {
+  const handleNext = e => {
+    e.preventDefault()
+    setFieldTouched('documents.schoolReport', true)
+    setFieldTouched('documents.passportPhoto', true)
+    setFieldTouched('documents.birthCertOrPassport', true)
+    if (tabRef.current && dirty && isEmpty(errors.documents)) {
       tabRef.current.focus()
       tabRef.current.click()
     }
@@ -262,7 +266,10 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
       </Heading>
 
       <Box as='form' onSubmit={handleSubmit} noValidate>
-        <Tabs mt={{ base: 4, lg: 8 }} isFitted>
+        <Text my={{ base: 4, lg: 8 }} fontSize={{ base: 'sm', lg: 'inherit' }}>
+          only upload <b>jpg, png</b> and <b>pdf</b> files.
+        </Text>
+        <Tabs isFitted>
           <TabList w={{ lg: '70%' }}>
             <Tab {...tabBtnStyle}>Document Upload</Tab>
             <Tab ref={tabRef} {...tabBtnStyle}>
@@ -355,7 +362,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
                             pos='absolute'
                             cursor='pointer'
                             field={{ name: `documents.${e.name}` }}
-                            accept={e.accept}
+                            accept='application/pdf, image/jpg, image/jpeg, image/png'
                           />
                           <Text
                             color='gcu.100'
@@ -428,10 +435,9 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
             label='Next'
             color='#fff'
             type={isValid && dirty ? 'submit' : 'button'}
-            onClick={e => {
+            onClick={async e => {
               if (!(isValid && dirty)) {
-                e.preventDefault()
-                handleNext()
+                handleNext(e)
               }
             }}
             isLoading={isSubmitting}
