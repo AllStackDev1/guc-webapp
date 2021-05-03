@@ -55,7 +55,7 @@ const StepFour = ({
           sessionStorage.setItem('step', 5)
         } else {
           setStep(user.stage)
-          sessionStorage.setItem('step', 5)
+          sessionStorage.setItem('step', user.stage)
         }
       } catch (error) {
         setSuccessMessage(null)

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -15,7 +14,16 @@ import Overlay from 'components/Loading/Overlay'
 import { TrophyIcon } from 'theme/Icons'
 import configs from 'utils/configs'
 
-const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
+const StepFive = ({
+  auth,
+  user,
+  setStep,
+  setCode,
+  setOtpId,
+  setPhoneNumber,
+  setSuccessMessage,
+  applicantUpdateProfile
+}) => {
   const [isLoading, setLoading] = React.useState(false)
   const toast = useToast()
 
@@ -30,18 +38,22 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
     if (resp.status === 'success') {
       try {
         setLoading(true)
-        await applicantUpdateProfile({ status: 'PAID', stage: 6 })
+        const res1 = await applicantUpdateProfile({ status: 'PAID', stage: 6 })
         toast({
           duration: 5000,
           isClosable: true,
           status: 'success',
           position: 'top-right',
           title: 'Success',
-          description: 'Payment successful, please login again.'
+          description: 'Payment successful'
         })
+        const res2 = await auth({ code: res1.data.code })
         window.sessionStorage.removeItem('_gcut')
-        window.sessionStorage.setItem('step', 3)
-        setStep(3)
+        setOtpId(res2.data.pinId)
+        setPhoneNumber(res2.data.to)
+        setCode(res2.data.code)
+        setSuccessMessage(res2.message)
+        setStep(4)
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -140,8 +152,14 @@ const StepFive = ({ user, setStep, applicantUpdateProfile }) => {
 }
 
 StepFive.propTypes = {
+  auth: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   setStep: PropTypes.func.isRequired,
+  setCode: PropTypes.func.isRequired,
+  setOtpId: PropTypes.func.isRequired,
+  setPhoneNumber: PropTypes.func.isRequired,
+  setErrorMessage: PropTypes.func.isRequired,
+  setSuccessMessage: PropTypes.func.isRequired,
   applicantUpdateProfile: PropTypes.func.isRequired
 }
 

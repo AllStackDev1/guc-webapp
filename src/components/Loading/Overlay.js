@@ -9,7 +9,11 @@ const Overlay = ({ text }) => {
         <Flex direction='column' align='center' justify='center' h='100vh'>
           <Spinner size='lg' color='gcu.100' />
           {text && (
-            <Text textAlign='center' className='loading-text loading-text-b'>
+            <Text
+              color='white'
+              textAlign='center'
+              className='loading-text loading-text-b'
+            >
               {text}
             </Text>
           )}
