@@ -4,6 +4,7 @@ import * as yup from 'yup'
 import moment from 'moment'
 import { useFormik } from 'formik'
 import {
+  Box,
   Flex,
   Grid,
   Heading,
@@ -200,7 +201,7 @@ const StepSixOne = ({
             type='button'
             onClick={() => setStep(6.2)}
           />
-
+          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
           <CustomButton
             label='Next'
             color='#fff'

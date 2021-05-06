@@ -47,7 +47,7 @@ const PasswordInput = ({ id, isRequired, error, touched, label, ...rest }) => {
               e.preventDefault()
               handleClick()
             }}
-            icon={show ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+            icon={show ? <FiEye size={20} /> : <FiEyeOff size={20} />}
           />
         </InputRightElement>
       </InputGroup>

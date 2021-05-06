@@ -11,7 +11,7 @@ const Legal = () => {
       fontSize={{ base: 'sm', lg: 'lg' }}
       lineHeight={{ base: '4', lg: '30px' }}
     >
-      By appliying you agree to our
+      By applying you agree to our
       <Link
         href='#'
         color='gcu.100'

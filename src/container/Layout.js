@@ -17,7 +17,7 @@ const Layout = ({ children, height, ...rest }) => {
         fontFamily='body'
         overflowX='hidden'
         w={{ lg: '100%' }}
-        mt={{ md: 20, xl: 24 }}
+        mt={{ base: 14, md: 20 }}
       >
         {children}
       </Box>

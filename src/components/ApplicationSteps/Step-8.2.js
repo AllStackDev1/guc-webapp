@@ -89,7 +89,7 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
         minW={{ lg: '3xl' }}
       >
         <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
-          Sibling
+          Sibling(s)
         </Heading>
         {isLoading || error ? (
           <FetchCard

@@ -11,8 +11,8 @@ const CustomSelect = ({
   id,
   label,
   error,
-  valueId,
-  LabelId,
+  valueKey,
+  labelKey,
   touched,
   options,
   isRequired,
@@ -36,8 +36,8 @@ const CustomSelect = ({
         {...rest}
       >
         {options?.map(e => (
-          <option key={e[valueId] || e} value={e[valueId] || e}>
-            {e[LabelId || valueId] || e}
+          <option key={e[valueKey] || e} value={e[valueKey] || e}>
+            {e[labelKey] || e}
           </option>
         ))}
       </Select>
@@ -53,9 +53,9 @@ CustomSelect.propTypes = {
   label: PropTypes.string,
   error: PropTypes.string,
   touched: PropTypes.bool,
-  LabelId: PropTypes.string,
+  labelKey: PropTypes.string,
   isRequired: PropTypes.bool,
-  valueId: PropTypes.string,
+  valueKey: PropTypes.string,
   options: PropTypes.array.isRequired
 }
 

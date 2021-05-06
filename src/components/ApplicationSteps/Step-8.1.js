@@ -93,7 +93,7 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
       minW={{ lg: '3xl' }}
     >
       <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
-        Sibling
+        Sibling(s)
       </Heading>
 
       <Box as='form' onSubmit={handleSubmit}>

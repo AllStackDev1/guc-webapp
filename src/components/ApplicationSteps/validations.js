@@ -49,13 +49,8 @@ export const StepSixSchema = yup.object().shape({
     dualNationality: yup.string(),
     firstLanguage: yup.string().required('This field is required!'),
     homeLanguage: yup.string().required('This field is required!'),
-    religion: yup.string().required('This field is required!')
+    religion: yup.string()
   })
-})
-
-export const StepSevenSchema = yup.object().shape({
-  enrollNetwork: yup.string().required('This field is required!'),
-  specialNeeds: yup.string().required('This field is required!')
 })
 
 export const StepNineSchema = yup.object().shape({

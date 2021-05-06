@@ -232,7 +232,7 @@ const StepSixOne = ({ setStep, setInitialEnquiry }) => {
     {
       id: 'religion',
       text: 'Religion',
-      isRequired: true
+      isRequired: false
     }
   ]
 

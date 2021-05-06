@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
-import { Avatar, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
+import { Avatar, Badge, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu } from '@headlessui/react'
 import { FiChevronDown, FiChevronUp, FiUser } from 'react-icons/fi'
@@ -20,8 +21,11 @@ const menuLinks = [
 const MotionBox = motion(Box)
 
 const Navbar = () => {
+  const [count, setCount] = React.useState(0)
   const { isAuthenticated } = useAuth()
   const { user } = isAuthenticated()
+
+  const countLen = ('' + count).length
 
   return (
     <Flex
@@ -30,14 +34,13 @@ const Navbar = () => {
       as='header'
       pos='fixed'
       zIndex={100}
+      color='white'
       align='center'
-      bgColor='white'
-      h={{ base: 14, md: 20, xl: 24 }}
+      bgColor='#1E1F20'
       gridArea='header'
       justify='space-between'
-      borderBottomWidth={1}
-      borderBottomColor='gray.300'
       px={{ base: 4, md: 36 }}
+      h={{ base: 14, md: 20 }}
       overflowX={{ base: 'hidden', md: 'visible' }}
     >
       <Link as={ReachRouter} to='/dashboard' _hover={{ textDecor: 'none' }}>
@@ -49,14 +52,37 @@ const Navbar = () => {
           bgSize='cover'
           bgPos='center'
           bgRepeat='no-repeat'
-          w={{ base: '3.125rem', lg: '5.875rem' }}
-          h={{ base: '3.063rem', lg: '5.688rem' }}
+          w={{ base: '3.125rem', lg: '2.625rem' }}
+          h={{ base: '3.063rem', lg: '2.5rem' }}
         />
       </Link>
 
       <Flex align='center'>
         <Flex align='center' mr={{ base: 4, md: 10 }}>
-          <Box as='button' role='button' aria-label='Notification' ml={6}>
+          <Box
+            as='button'
+            role='button'
+            pos='relative'
+            aria-label='Notification'
+          >
+            <Badge
+              py={0}
+              d='flex'
+              fontSize='xs'
+              pos='absolute'
+              rounded='full'
+              variant='solid'
+              colorScheme='red'
+              alignItems='center'
+              justifyContent='center'
+              px={countLen > 1 ? 1 : 0}
+              top={countLen > 1 ? -1 : 0}
+              minW={countLen > 1 ? 5 : 3}
+              minH={countLen > 1 ? 5 : 3}
+              left={countLen > 1 ? 2 : 2}
+            >
+              {count ? count : ''}
+            </Badge>
             <Icon as={BsBell} boxSize={5} />
           </Box>
         </Flex>
@@ -70,7 +96,7 @@ const Navbar = () => {
                 cursor='pointer'
               >
                 <Flex align='center'>
-                  <Avatar size='sm' src={user?.avatar} name={user?.firstName} />
+                  <Avatar size='md' src={user?.avatar} name={user?.firstName} />
                   <Text ml={2}>Hi {user?.firstName}</Text>
                   <Box>
                     <Icon

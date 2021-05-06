@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
+import * as yup from 'yup'
 import {
   Box,
   Text,
@@ -14,8 +16,12 @@ import {
 
 import CustomTextarea from 'components/Forms/CustomTextarea'
 import CustomButton from 'components/Forms/CustomButton'
+import CustomRadio from 'components/Forms/CustomRadio'
 
-import { StepSevenSchema } from './validations'
+export const StepSevenSchema = yup.object().shape({
+  specialNeeds: yup.string().required('This field is required!'),
+  details: yup.string()
+})
 
 const StepSeven = ({ setStep, setStudentBackground }) => {
   const toast = useToast()
@@ -23,19 +29,22 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
   const lists = [
     {
       id: 'specialNeeds',
-      text: 'Does your child have special needs, either emotional or physical?'
+      text: 'Does your child have special needs, either emotional or physical?',
+      options: ['yes', 'no'],
+      isRequired: true
     },
     {
-      id: 'enrollNetwork',
-      text:
-        'WWhat is the anticipated length of time you will have your child enrolled at Network?'
+      id: 'details',
+      text: 'If yes provide more information',
+      isRequired: false
     }
   ]
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      specialNeeds: '',
-      enrollNetwork: ''
+      specialNeeds: 'no',
+      details: ''
     },
     validationSchema: StepSevenSchema,
     onSubmit: async (values, { setSubmitting }) => {
@@ -123,23 +132,36 @@ const StepSeven = ({ setStep, setStudentBackground }) => {
                   fontSize={{ base: 'xs', lg: 'sm' }}
                 >
                   {list.text}{' '}
-                  <Text as='span' color='red.500'>
-                    *
-                  </Text>
+                  {list.isRequired && (
+                    <Text as='span' color='red.500'>
+                      *
+                    </Text>
+                  )}
                 </Text>
               </Flex>
 
               <Box w={{ base: '93%', lg: '50%' }} mt={{ base: 2, lg: 0 }}>
-                <CustomTextarea
-                  isRequired
-                  name={list.id}
-                  onBlur={handleBlur}
-                  placeholder='Please enter yes(with more details) or no'
-                  error={errors[list.id]}
-                  touched={touched[list.id]}
-                  onChange={handleChange}
-                  defaultValue={values[list.id]}
-                />
+                {list.options ? (
+                  <CustomRadio
+                    name={list.id}
+                    direction='row'
+                    options={list.options}
+                    error={errors[list.id]}
+                    setFieldValue={handleChange}
+                    value={values[list.id]}
+                  />
+                ) : (
+                  <CustomTextarea
+                    isRequired={list.isRequired}
+                    name={list.id}
+                    onBlur={handleBlur}
+                    placeholder='If yes provide more information'
+                    error={errors[list.id]}
+                    touched={touched[list.id]}
+                    onChange={handleChange}
+                    defaultValue={values[list.id]}
+                  />
+                )}
               </Box>
             </ListItem>
           ))}

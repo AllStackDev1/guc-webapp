@@ -109,7 +109,7 @@ const StepOne = ({ setStep }) => {
           w='100%'
           color='#fff'
           type='button'
-          label='Apply Now !!'
+          label='Apply Now'
           onClick={_ => setStep(2)}
         />
       </Box>
