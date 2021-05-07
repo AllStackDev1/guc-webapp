@@ -26,6 +26,7 @@ const CustomTable = ({ _columns = [], _data = [], variant = '' }) => {
           <Tr key={getkey(index)} {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column, index) => (
               <Th
+                py={5}
                 fontSize='xs'
                 fontFamily='body'
                 fontWeight={300}

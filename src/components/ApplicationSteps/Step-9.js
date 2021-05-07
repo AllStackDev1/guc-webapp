@@ -18,7 +18,7 @@ import { FiPlus, FiFileMinus } from 'react-icons/fi'
 
 import CustomTextarea from 'components/Forms/CustomTextarea'
 import CustomUploader from 'components/Forms/CustomUploader'
-import PreviewModal from './PreviewModal'
+import PreviewModal from 'components/PreviewModal'
 
 import { fileToBase64 } from 'utils/mics'
 import { StepNineSchema } from './validations'

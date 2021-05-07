@@ -31,7 +31,7 @@ function fetchReducer(state, action) {
   }
 }
 
-const INIT_STATE = { data: null, error: null, isLoading: true }
+const INIT_STATE = { data: null, error: null, message:null, isLoading: true }
 
 const useFetch = (key, func, reload, ...rest) => {
   const { setSession } = useAuth()

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Image, Box } from '@chakra-ui/react'
@@ -15,7 +14,7 @@ const FilePreview = ({ src, alt, fileData }) => {
     <SmallSpinner />
   ) : (
     <>
-      {fileData.type?.match('image.*') ? (
+      {fileData?.type?.match('image.*') ? (
         <Image
           w='60%'
           h='60%'

@@ -7,7 +7,7 @@ import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 
 const MotionBox = motion(Box)
 
-const DropdownActions = ({ id, options, ...rest }) => {
+const DropdownActions = ({ data, options }) => {
   return (
     <Menu as={Box} ml={2} userSelect='none'>
       {({ open }) => (
@@ -90,7 +90,7 @@ const DropdownActions = ({ id, options, ...rest }) => {
                         onClick={e => {
                           if (item.action) {
                             e.preventDefault()
-                            item.action()
+                            item.action(data)
                           }
                         }}
                       >
@@ -112,7 +112,7 @@ const DropdownActions = ({ id, options, ...rest }) => {
 }
 
 DropdownActions.propTypes = {
-  id: PropTypes.any.isRequired,
+  data: PropTypes.any.isRequired,
   options: PropTypes.any.isRequired
 }
 

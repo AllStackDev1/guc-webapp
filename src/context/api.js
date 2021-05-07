@@ -44,7 +44,6 @@ export const ApiContextProvider = ({ children }) => {
       body: JSON.stringify(payload)
     })
   }
-
   //#endregion
 
   //#region ADMIN API
@@ -84,6 +83,19 @@ export const ApiContextProvider = ({ children }) => {
   const updateApplicant = async (id, payload) => {
     return await http.patch({
       url: `${BASE_URL}/applicants/${id}`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const deleteApplicant = async id => {
+    return await http.delete({
+      url: `${BASE_URL}/applicants/${id}`
+    })
+  }
+
+  const deleteApplicants = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/applicants/bulk-delete`,
       body: JSON.stringify(payload)
     })
   }
@@ -283,6 +295,40 @@ export const ApiContextProvider = ({ children }) => {
   }
   //#endregion
 
+  //#region DOWNLOAD LIST API
+  const setDownloadList = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/download-lists`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getDownloadLists = async () => {
+    return await http.get({
+      url: `${BASE_URL}/download-lists`
+    })
+  }
+
+  const deleteDownloadList = async id => {
+    return await http.delete({
+      url: `${BASE_URL}/download-lists/${id}`
+    })
+  }
+
+  const deleteDownloadLists = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/download-lists/bulk-delete`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const clearDownloadLists = async () => {
+    return await http.delete({
+      url: `${BASE_URL}/download-lists/drop`
+    })
+  }
+  //#endregion
+
   return (
     <ApiContext.Provider
       value={{
@@ -300,11 +346,17 @@ export const ApiContextProvider = ({ children }) => {
         deleteSibling,
         getApplicants,
         updateApplicant,
+        setDownloadList,
+        deleteApplicant,
+        deleteApplicants,
+        getDownloadLists,
         setHealthMedical,
         getHealthMedical,
         setInitialEnquiry,
         getInitialEnquiry,
         setPreviousSchool,
+        deleteDownloadList,
+        clearDownloadLists,
         adminUpdateProfile,
         getPreviousSchools,
         setguardianContact,
@@ -312,6 +364,7 @@ export const ApiContextProvider = ({ children }) => {
         setEmergenyContact,
         getEmergenyContact,
         updateHealthMedical,
+        deleteDownloadLists,
         deleteHealthMedical,
         setStudentBackground,
         getStudentBackground,

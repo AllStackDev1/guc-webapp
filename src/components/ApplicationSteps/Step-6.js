@@ -28,7 +28,7 @@ import CustomSelect from 'components/Forms/CustomSelect'
 import CustomUploader from 'components/Forms/CustomUploader'
 import CustomButton from 'components/Forms/CustomButton'
 
-import PreviewModal from './PreviewModal'
+import PreviewModal from 'components/PreviewModal'
 
 import { StepSixSchema } from './validations'
 import { fileToBase64 } from 'utils/mics'

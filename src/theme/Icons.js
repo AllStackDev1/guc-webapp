@@ -183,3 +183,33 @@ export const TrashIcon = createIcon({
     </>
   )
 })
+
+export const ArrowLeftIcon = createIcon({
+  displayName: 'ArrowLeftIcon',
+  viewBox: '0 0 28 12',
+  path: (
+    <>
+      <path
+        d='M1 6H27'
+        stroke='black'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <path
+        d='M1 6L5 1'
+        stroke='black'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <path
+        d='M1 6L5 11'
+        stroke='black'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </>
+  )
+})

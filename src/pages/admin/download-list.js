@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -9,44 +9,44 @@ import {
   Icon,
   Flex,
   Heading,
-  useToast,
   Checkbox,
-  useDisclosure
+  useToast,
+  useDisclosure,
+  IconButton
 } from '@chakra-ui/react'
+import { FiTrash2, FiFileText } from 'react-icons/fi'
 
 import Layout from 'container/Layout'
-import { DashboardIcon, TrashIcon } from 'theme/Icons'
+import { ArrowLeftIcon, DashboardIcon, TrashIcon } from 'theme/Icons'
 import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
 import DropdownActions from 'components/DropdownActions'
 
-import { FiTrash2, FiFileText } from 'react-icons/fi'
-import UserDetailModal from 'components/UserDetailModal'
-
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
 import FetchCard from 'components/FetchCard'
+import UserDetailModal from 'components/UserDetailModal'
 import Overlay from 'components/Loading/Overlay'
 import PreviewModal from 'components/PreviewModal'
 
 import { getformattedDate } from 'utils/mics'
 
-const Dashboard = ({ history }) => {
+const DownloadList = ({ history }) => {
   document.title = 'Dashboard | The GCU Application Portal'
   const [selectItem, setSelectItem] = React.useState(null)
-  const [checkedItems, setCheckedItems] = React.useState(null)
   const [isLoading, setLoading] = React.useState(false)
-  const [reload, setReload] = React.useState(0)
+  const [checkedItems, setCheckedItems] = React.useState(null)
   const [file, setFile] = React.useState(undefined)
+  const [reload, setReload] = React.useState(0)
 
   const btnRef = React.useRef()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
-    getApplicants,
-    setDownloadList,
-    deleteApplicant,
-    deleteApplicants
+    getDownloadLists,
+    deleteDownloadLists,
+    clearDownloadLists,
+    deleteDownloadList
   } = useApi()
 
   const toast = useToast()
@@ -54,8 +54,8 @@ const Dashboard = ({ history }) => {
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, error, isLoading: fetchLoading } = useFetch(
-    'applicants',
-    getApplicants,
+    null,
+    getDownloadLists,
     reload
   )
 
@@ -63,45 +63,17 @@ const Dashboard = ({ history }) => {
   const isIndeterminate =
     checkedItems?.some(e => e.checked === true) && !allChecked
 
-  const handleAddToList = async () => {
-    try {
-      setLoading(true)
-      const data = selectedItems.map(e => ({ applicant: e._id }))
-      await setDownloadList(data)
-      toast({
-        duration: 5000,
-        isClosable: true,
-        status: 'success',
-        position: 'top-right',
-        title: 'Download List',
-        description: 'Item(s) added to download list'
-      })
-    } catch (error) {
-      let eMgs
-      if (error?.data?.message === 'celebrate request validation failed') {
-        eMgs = 'Invalid data, please check form.'
-      } else {
-        eMgs =
-          error?.message || error?.data?.message || 'Unexpected network error.'
-      }
-      toast({
-        duration: 9000,
-        status: 'error',
-        isClosable: true,
-        position: 'top-right',
-        title: 'Error',
-        description: eMgs
-      })
-    } finally {
-      setLoading(false)
-    }
+  const handlePreview = file => {
+    setFile(file)
+    setSelectItem(null)
+    onOpen()
   }
 
-  const handleDelete = async id => {
+  const handleClear = async () => {
     try {
       setLoading(true)
-      const res = await deleteApplicant(id)
-      window.sessionStorage.removeItem('applicants')
+      const res = await clearDownloadLists()
+      window.sessionStorage.removeItem('download-lists')
       toast({
         duration: 5000,
         isClosable: true,
@@ -136,8 +108,8 @@ const Dashboard = ({ history }) => {
     try {
       setLoading(true)
       const data = selectedItems.map(e => ({ _id: e._id }))
-      const res = await deleteApplicants(data)
-      window.sessionStorage.removeItem('applicants')
+      const res = await deleteDownloadLists(data)
+      window.sessionStorage.removeItem('download-lists')
       toast({
         duration: 5000,
         isClosable: true,
@@ -168,11 +140,54 @@ const Dashboard = ({ history }) => {
     }
   }
 
-  const handlePreview = file => {
-    setFile(file)
-    setSelectItem(null)
-    onOpen()
+  const handleDelete = async id => {
+    try {
+      setLoading(true)
+      const res = await deleteDownloadList(id)
+      window.sessionStorage.removeItem('download-lists')
+      toast({
+        duration: 5000,
+        isClosable: true,
+        status: 'success',
+        position: 'top-right',
+        title: 'Success',
+        description: res.message
+      })
+      triggerReload()
+    } catch (error) {
+      let eMgs
+      if (error?.data?.message === 'celebrate request validation failed') {
+        eMgs = 'Invalid data, please check form.'
+      } else {
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
+      }
+      toast({
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+        title: 'Error',
+        description: eMgs
+      })
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const actions = [
+    {
+      name: 'View Application',
+      icon: FiFileText,
+      action: e => {
+        setSelectItem(e.applicant)
+        onOpen()
+      }
+    },
+    { name: 'Delete', icon: FiTrash2, action: e => handleDelete(e.id) }
+  ]
+
+  const selectedItems = checkedItems?.filter(e => e.checked === true)
 
   React.useEffect(() => {
     if (data?.length) {
@@ -183,26 +198,6 @@ const Dashboard = ({ history }) => {
       setCheckedItems(checked)
     }
   }, [data])
-
-  const actions = [
-    {
-      name: 'View Application',
-      icon: FiFileText,
-      action: e => {
-        setSelectItem(e.id)
-        onOpen()
-      }
-    },
-    // { name: 'Upload Test Result', icon: FiUpload, action: () => {} },
-    // { name: 'View Test Result', icon: FiNavigation, action: () => {} },
-    {
-      name: 'Delete',
-      icon: FiTrash2,
-      action: e => handleDelete(e.id)
-    }
-  ]
-
-  const selectedItems = checkedItems?.filter(e => e.checked === true)
 
   const _columns = [
     {
@@ -274,7 +269,10 @@ const Dashboard = ({ history }) => {
       Header: '',
       accessor: 'action',
       Cell: ({ row }) => (
-        <DropdownActions data={{ id: row.original?._id }} options={actions} />
+        <DropdownActions
+          data={{ id: row.original?._id, applicant: row.original?.applicant }}
+          options={actions}
+        />
       )
     }
   ]
@@ -303,16 +301,40 @@ const Dashboard = ({ history }) => {
         />
       )}
       <Flex w='100%' justify='space-between'>
-        <Flex>
+        <Flex align='center'>
+          <IconButton
+            as={ArrowLeftIcon}
+            boxSize={8}
+            bg='unset'
+            _hover={{
+              bg: 'unset'
+            }}
+            _focus={{
+              bg: 'unset'
+            }}
+            cursor='pointer'
+            onClick={() => history.push('/admin/dashboard')}
+          />
+          <Box mr={14} />
           <Icon as={DashboardIcon} boxSize={49} />
           <Box ml={4}>
-            <Heading fontSize='2xl'>Application List</Heading>
+            <Heading fontSize='2xl'>CSV Download List</Heading>
             <Text fontWeight={300} fontSize='sm'>
-              List of all applicants
+              CSV download list
             </Text>
           </Box>
         </Flex>
         <Flex>
+          <ActionButton
+            bg='#F2F2F2'
+            fontSize='sm'
+            fontWeight={300}
+            title='Clear List'
+            rightIcon={<TrashIcon />}
+            isDisabled={!data?.length}
+            onClick={handleClear}
+          />
+          <Box mx={2} />
           <ActionButton
             bg='#F2F2F2'
             fontSize='sm'
@@ -327,17 +349,8 @@ const Dashboard = ({ history }) => {
             bg='#F2F2F2'
             fontSize='sm'
             fontWeight={300}
-            title='Add to CSV Download List'
             isDisabled={!selectedItems?.length}
-            onClick={handleAddToList}
-          />
-          <Box mx={2} />
-          <ActionButton
-            bg='#F2F2F2'
-            fontSize='sm'
-            fontWeight={300}
-            title='View Download List'
-            onClick={() => history.push('/admin/download-lists')}
+            title='Export as CSV'
           />
         </Flex>
       </Flex>
@@ -372,8 +385,8 @@ const Dashboard = ({ history }) => {
   )
 }
 
-Dashboard.propTypes = {
+DownloadList.propTypes = {
   history: PropTypes.any.isRequired
 }
 
-export default Dashboard
+export default DownloadList

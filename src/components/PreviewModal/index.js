@@ -12,7 +12,7 @@ import {
 
 import FilePreview from 'components/FilePreview'
 
-const PreviewModal = ({ data, isOpen, onClose }) => {
+const PreviewModal = ({ data, src, isOpen, onClose }) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
@@ -21,7 +21,7 @@ const PreviewModal = ({ data, isOpen, onClose }) => {
           <ModalHeader>Preview</ModalHeader>
           <ModalCloseButton />
           <ModalBody minH={{ base: 80, lg: 130 }}>
-            <FilePreview fileData={data} />
+            <FilePreview fileData={data} src={src} />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -31,6 +31,7 @@ const PreviewModal = ({ data, isOpen, onClose }) => {
 
 PreviewModal.propTypes = {
   data: PropTypes.any,
+  src: PropTypes.any,
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 }

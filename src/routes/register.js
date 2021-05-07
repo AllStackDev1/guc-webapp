@@ -31,6 +31,11 @@ const Router = () => {
           path='/admin/dashboard'
           component={Admin.Dashboard}
         />
+        <PrivateRoute
+          exact
+          path='/admin/download-lists'
+          component={Admin.DownloadList}
+        />
         <Route path='/404' component={Index.NotFound} />
         <Redirect from='*' to='/404' />
       </Switch>
