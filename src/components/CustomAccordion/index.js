@@ -69,6 +69,7 @@ const CustomAccordion = ({ details, handlePreview }) => {
                             <Checkbox
                               key={ee}
                               name={ee}
+                              isDisabled
                               defaultChecked={_e.value[ee]}
                               colorScheme='gcuButton'
                               textTransform='capitalize'

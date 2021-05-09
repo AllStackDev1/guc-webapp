@@ -529,7 +529,10 @@ const UserDetailModal = ({
                       </Flex>
                     </GridItem>
                   </Grid>
-                  <CustomAccordion details={details} />
+                  <CustomAccordion
+                    details={details}
+                    handlePreview={handlePreview}
+                  />
                 </DrawerBody>
                 <DrawerFooter>
                   <ActionButton

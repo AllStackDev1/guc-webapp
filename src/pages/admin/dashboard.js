@@ -54,9 +54,11 @@ const Dashboard = ({ history }) => {
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, error, isLoading: fetchLoading } = useFetch(
-    'applicants',
+    // 'applicants',
+    null,
     getApplicants,
-    reload
+    reload,
+    { stage: 12 }
   )
 
   const allChecked = checkedItems?.every(e => e?.checked === true)
@@ -170,7 +172,6 @@ const Dashboard = ({ history }) => {
 
   const handlePreview = file => {
     setFile(file)
-    setSelectItem(null)
     onOpen()
   }
 
@@ -298,7 +299,6 @@ const Dashboard = ({ history }) => {
           isOpen={isOpen}
           onClose={() => {
             setFile(undefined)
-            onClose()
           }}
         />
       )}

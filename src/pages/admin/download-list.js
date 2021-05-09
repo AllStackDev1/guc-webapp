@@ -321,17 +321,24 @@ const DownloadList = ({ history }) => {
           {
             name: 'dob',
             label: 'Date of birth *',
-            filter: value => getformattedDate(value)
+            filter: value => {
+              var date = new Date(value)
+              return date.toLocaleDateString('en-GB')
+            }
           },
           {
             name: 'gender',
-            label: 'Gender',
+            label: 'Gender *',
             filter: value => upperFirst(value)
           },
           {
             name: 'group',
             label: 'Group *',
             filter: () => '2020/2021'
+          },
+          {
+            name: 'year',
+            label: 'Year'
           },
           {
             name: 'reference',
