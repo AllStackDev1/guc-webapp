@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -42,8 +40,8 @@ const UserDetailModal = ({
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, message, error, isLoading } = useFetch(
-    'applicant',
-    // null,
+    // 'applicant',
+    null,
     getApplicant,
     reload,
     id
@@ -355,37 +353,38 @@ const UserDetailModal = ({
         {
           id: 'submssionDate',
           title: 'Submssion Date',
-          value: data?.emergencyContact?.submssionDate
+          isDate: true,
+          value: data?.emergencyContact?.createdAt
         },
         {
           id: 'waitingList',
           title: 'Waiting List',
-          value: data?.emergencyContact?.waitingList
+          value: data?.officeUse?.waitingList || '---'
         },
         {
           id: 'class',
           title: 'Class',
-          value: data?.emergencyContact?.class
+          value: '2020/2021'
         },
         {
           id: 'academicYear',
           title: 'Academic Year',
-          value: data?.emergencyContact?.academicYear
+          value: '2020/2021'
         },
         {
           id: 'observationDate',
           title: 'Observation Date',
-          value: data?.emergencyContact?.observationDate
+          value: data?.officeUse?.observationDate || '---'
         },
         {
           id: 'observationResult',
           title: 'Observation Result',
-          value: data?.emergencyContact?.observationResult
+          value: data?.officeUse?.observationResult || '---'
         },
         {
           id: 'startDate',
           title: 'Start Date',
-          value: data?.emergencyContact?.startDate
+          value: data?.officeUse?.startDate || '---'
         },
         {
           id: 'schoolReport',
