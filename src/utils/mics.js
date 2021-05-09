@@ -14,3 +14,14 @@ export const getformattedDate = date => {
     year: 'numeric'
   })
 }
+
+export const getSelectedArrItems = (arr, selection) => {
+  const filteredArray = []
+  selection.forEach(o => {
+    const found = arr.find(a => a._id === o._id)
+    if (found) {
+      filteredArray.push(found)
+    }
+  })
+  return filteredArray
+}

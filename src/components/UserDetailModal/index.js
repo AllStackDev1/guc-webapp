@@ -27,7 +27,7 @@ import ActionButton from 'components/ActionButton'
 import { ArrowLeftIcon } from 'theme/Icons'
 import { FaFile } from 'react-icons/fa'
 
-import { getformattedDate } from 'utils/mics'
+import CustomAccordion from 'components/CustomAccordion'
 
 const UserDetailModal = ({
   id,
@@ -42,8 +42,8 @@ const UserDetailModal = ({
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, message, error, isLoading } = useFetch(
-    // 'applicant',
-    null,
+    'applicant',
+    // null,
     getApplicant,
     reload,
     id
@@ -56,6 +56,352 @@ const UserDetailModal = ({
   //     onClose()
   //   }
   // }, [id, onClose])
+
+  const details = [
+    {
+      id: 1,
+      title: 'Student Information',
+      layout: 'grid',
+      data: [
+        {
+          id: 'firstName',
+          title: 'First Name',
+          value: data?.initialEnquiry?.studentInfo?.firstName
+        },
+        {
+          id: 'familyName',
+          title: 'Family Name',
+          value: data?.initialEnquiry?.studentInfo?.familyName
+        },
+        {
+          id: 'middleName',
+          title: 'Middle Name',
+          value: data?.initialEnquiry?.studentInfo?.middleName
+        },
+        {
+          id: 'preferedName',
+          title: 'Prefered Name',
+          value: data?.initialEnquiry?.studentInfo?.preferedName
+        },
+        {
+          id: 'dob',
+          title: 'Date of Birth',
+          isDate: true,
+          value: data?.initialEnquiry?.studentInfo.dob
+        },
+        {
+          id: 'gender',
+          title: 'Gender',
+          value: data?.initialEnquiry?.studentInfo.gender
+        },
+        {
+          id: 'countryOfBirth',
+          title: 'Country of Birth',
+          value: data?.initialEnquiry?.studentInfo.countryOfBirth
+        },
+        {
+          id: 'nationality',
+          title: 'Nationality on Passport',
+          value: data?.initialEnquiry?.studentInfo.nationality
+        },
+        {
+          id: 'dualNationality',
+          title: 'Dual Nationality',
+          value: data?.initialEnquiry?.studentInfo.dualNationality
+        },
+        {
+          id: 'firstLanguage',
+          title: 'first Language',
+          value: data?.initialEnquiry?.studentInfo.firstLanguage
+        },
+        {
+          id: 'homeLanguage',
+          title: 'Language Spoken at home',
+          value: data?.initialEnquiry?.studentInfo.homeLanguage
+        },
+        {
+          id: 'religion',
+          title: 'Religion',
+          value: data?.initialEnquiry?.studentInfo.religion
+        }
+      ]
+    },
+    {
+      id: 2,
+      title: 'Previous School',
+      layout: 'grid-gray-bg',
+      data: data?.previousSchools,
+      keys: [
+        {
+          id: 'name',
+          title: 'School Name'
+        },
+        {
+          id: 'address',
+          title: 'Address'
+        },
+        {
+          id: 'email',
+          title: 'Email address'
+        },
+        {
+          id: 'dateOfArrival',
+          isDate: true,
+          title: 'Date of Arrival'
+        }
+      ]
+    },
+    {
+      id: 3,
+      title: 'Student Background',
+      layout: 'list',
+      data: [
+        {
+          id: 'specialNeeds',
+          title:
+            'Does your child have special needs, either emotional or physical?',
+          value: data?.studentBackground?.specialNeeds
+        },
+        {
+          id: 'details',
+          title: 'More information on  students medicals.',
+          value:
+            data?.studentBackground?.details ||
+            data?.studentBackground?.enrollNetwork
+        }
+      ]
+    },
+    {
+      id: 4,
+      title: 'Sibling(s)',
+      layout: 'grid-gray-bg',
+      data: data?.specialNeeds,
+      keys: [
+        {
+          id: 'name',
+          title: 'Name'
+        },
+        {
+          id: 'gender',
+          title: 'Gender'
+        },
+        {
+          id: 'dob',
+          isDate: true,
+          title: 'Date of Birth'
+        }
+      ]
+    },
+    {
+      id: 5,
+      title: 'Health & Medical',
+      layout: 'list',
+      data: [
+        {
+          id: 'diagnosed',
+          title:
+            'Has your child been diagnosed with any of the following: (please tick appropriate and provide details)',
+          value: data?.healthAndMedical,
+          checkboxes: ['asthma', 'allergies', 'epilepsy', 'diabiates']
+        },
+        {
+          id: 'requireMedicalPlan',
+          title: 'Does your child require a medical plan?',
+          value: data?.healthAndMedical?.requireMedicalPlan
+        },
+        {
+          id: 'takeRegularMedication',
+          title: 'Does your child take regular medication?',
+          value: data?.healthAndMedical?.takeRegularMedication
+        },
+        {
+          id: 'dietaryRestriction',
+          title: 'Are there any dietary restrictions?',
+          value: data?.healthAndMedical?.dietaryRestriction
+        },
+        {
+          id: 'physicalRestriction',
+          title: 'Does your child have any physical restriction?',
+          value: data?.healthAndMedical?.physicalRestriction
+        },
+        {
+          id: 'otherMedicalIssues',
+          title: 'Does your child have any other medical issues?',
+          value: data?.healthAndMedical?.otherMedicalIssues
+        },
+        {
+          id: 'isImmunised',
+          title: 'Is your child immunised?',
+          value: data?.healthAndMedical?.isImmunised,
+          immuneFile: data?.healthAndMedical?.immuneFile
+        }
+      ]
+    },
+    {
+      id: 6,
+      title: 'Contact Information',
+      layout: 'grid',
+      data: [
+        {
+          id: 'relation',
+          title: 'Relation to Student',
+          value: data?.guardianContactInformation?.relation
+        },
+        {
+          id: 'title',
+          title: 'Title',
+          value: data?.guardianContactInformation?.title
+        },
+        {
+          id: 'firstName',
+          title: 'First name',
+          value: data?.guardianContactInformation?.firstName
+        },
+        {
+          id: 'familyName',
+          title: 'Family Name',
+          value: data?.guardianContactInformation?.familyName
+        },
+        {
+          id: 'email',
+          title: 'Email address',
+          value: data?.guardianContactInformation?.email
+        },
+        {
+          id: 'occupation',
+          title: 'Occupation',
+          value: data?.guardianContactInformation?.occupation
+        },
+        {
+          id: 'addressOne',
+          title: 'Address 1',
+          value: data?.guardianContactInformation?.addressOne
+        },
+        {
+          id: 'addressTwo',
+          title: 'Address 2',
+          value: data?.guardianContactInformation?.addressTwo
+        },
+        {
+          id: 'state',
+          title: 'State',
+          value: data?.guardianContactInformation?.state
+        },
+        {
+          id: 'mobileNumber',
+          title: 'Mobile Number',
+          value: data?.guardianContactInformation?.mobileNumber
+        },
+        {
+          id: 'homeNumber',
+          title: 'Home Number',
+          value: data?.guardianContactInformation?.homeNumber
+        },
+        {
+          id: 'workNumber',
+          title: 'Work Number',
+          value: data?.guardianContactInformation?.workNumber
+        },
+        {
+          id: 'homeLanguage',
+          title: 'Language Spoken at home',
+          value: data?.guardianContactInformation?.homeLanguage
+        },
+        {
+          id: 'studentAddress',
+          title: 'Address of Student',
+          value: data?.guardianContactInformation?.studentAddress
+        },
+        {
+          id: 'hearAboutUs',
+          title: 'How did you hear about us',
+          value: data?.guardianContactInformation?.hearAboutUs
+        },
+        {
+          id: 'permissions',
+          title:
+            'I give permission for the students photo to appear on school portal',
+          value: data?.guardianContactInformation?.permissions
+        }
+      ]
+    },
+    {
+      id: 7,
+      title: 'Emergency Contact',
+      layout: 'grid',
+      data: [
+        {
+          id: 'name',
+          title: 'Name',
+          value: data?.emergencyContact?.name
+        },
+        {
+          id: 'relationship',
+          title: 'Relationship to Student',
+          value: data?.emergencyContact?.relationship
+        },
+        {
+          id: 'contactNumber',
+          title: 'Contact Number',
+          value: data?.emergencyContact?.contactNumber
+        }
+      ]
+    },
+    {
+      id: 8,
+      title: 'Office Use',
+      layout: 'grid',
+      data: [
+        {
+          id: 'submssionDate',
+          title: 'Submssion Date',
+          value: data?.emergencyContact?.submssionDate
+        },
+        {
+          id: 'waitingList',
+          title: 'Waiting List',
+          value: data?.emergencyContact?.waitingList
+        },
+        {
+          id: 'class',
+          title: 'Class',
+          value: data?.emergencyContact?.class
+        },
+        {
+          id: 'academicYear',
+          title: 'Academic Year',
+          value: data?.emergencyContact?.academicYear
+        },
+        {
+          id: 'observationDate',
+          title: 'Observation Date',
+          value: data?.emergencyContact?.observationDate
+        },
+        {
+          id: 'observationResult',
+          title: 'Observation Result',
+          value: data?.emergencyContact?.observationResult
+        },
+        {
+          id: 'startDate',
+          title: 'Start Date',
+          value: data?.emergencyContact?.startDate
+        },
+        {
+          id: 'schoolReport',
+          title: 'Most Resent School report',
+          value: data?.initialEnquiry?.documents?.schoolReport,
+          file: true
+        },
+        {
+          id: 'birthCertOrPassport',
+          title: 'Birth Cetificate',
+          value: data?.initialEnquiry?.documents?.birthCertOrPassport,
+          file: true
+        }
+      ]
+    }
+  ]
 
   return (
     <Drawer
@@ -115,6 +461,7 @@ const UserDetailModal = ({
                   <Grid
                     templateColumns='repeat(2, 1fr)'
                     gap={{ base: 3, lg: 6 }}
+                    mb={{ base: 5, lg: 16 }}
                   >
                     <GridItem>
                       <Image
@@ -126,9 +473,13 @@ const UserDetailModal = ({
                     </GridItem>
                     <GridItem d='flex' alignItems='center'>
                       <ActionButton
-                        bg='#F2F2F2'
+                        px={4}
+                        rounded='md'
+                        color='#fff'
                         fontSize='sm'
                         fontWeight={300}
+                        boxShadow='lg'
+                        colorScheme='gcuButton'
                         title='Add to CSV Download List'
                         // onClick={handleBulkDelete}
                       />
@@ -157,7 +508,7 @@ const UserDetailModal = ({
                       </Flex>
                     </GridItem>
                     <GridItem>
-                      <Text>Most Recent school report</Text>
+                      <Text fontSize='xs'>Most Recent school report</Text>
                       <Flex mt={2} align='center'>
                         <Icon as={FaFile} boxSize={8} />
                         <Box ml={2} />
@@ -178,38 +529,21 @@ const UserDetailModal = ({
                         </Button>
                       </Flex>
                     </GridItem>
-                    <GridItem>
-                      <Text fontSize='xs'>Date of Birth</Text>
-                      <Text fontSize='sm'>
-                        {getformattedDate(data.initialEnquiry?.studentInfo.dob)}
-                      </Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text fontSize='xs'>Gender</Text>
-                      <Text fontSize='sm'>
-                        {data.initialEnquiry?.studentInfo.gender}
-                      </Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text fontSize='xs'>Country of Birth</Text>
-                      <Text fontSize='sm'>
-                        {data.initialEnquiry?.studentInfo.countryOfBirth}
-                      </Text>
-                    </GridItem>
-                    <GridItem>
-                      <Text fontSize='xs'>Nationality on passport</Text>
-                      <Text fontSize='sm'>
-                        {data.initialEnquiry?.studentInfo.nationality}
-                      </Text>
-                    </GridItem>
                   </Grid>
+                  <CustomAccordion details={details} />
                 </DrawerBody>
-                <DrawerFooter mb={6}>
+                <DrawerFooter>
                   <ActionButton
-                    bg='#F2F2F2'
-                    fontWeight={300}
+                    px={4}
+                    rounded='md'
                     fontSize='sm'
+                    color='#fff'
+                    boxShadow='lg'
+                    colorScheme='gcuButton'
+                    fontWeight={300}
                     title='Add to CSV Download List'
+                    // isLoading={isSubmitting}
+                    // isDisabled={isSubmitting}
                   />
                 </DrawerFooter>
               </>

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -15,6 +13,9 @@ import {
   IconButton
 } from '@chakra-ui/react'
 import { FiTrash2, FiFileText } from 'react-icons/fi'
+import { saveAs } from 'file-saver'
+import upperFirst from 'lodash/upperFirst'
+import jsoncsv from 'json-csv'
 
 import Layout from 'container/Layout'
 import { ArrowLeftIcon, DashboardIcon, TrashIcon } from 'theme/Icons'
@@ -29,7 +30,7 @@ import UserDetailModal from 'components/UserDetailModal'
 import Overlay from 'components/Loading/Overlay'
 import PreviewModal from 'components/PreviewModal'
 
-import { getformattedDate } from 'utils/mics'
+import { getformattedDate, getSelectedArrItems } from 'utils/mics'
 
 const DownloadList = ({ history }) => {
   document.title = 'Dashboard | The GCU Application Portal'
@@ -37,16 +38,16 @@ const DownloadList = ({ history }) => {
   const [isLoading, setLoading] = React.useState(false)
   const [checkedItems, setCheckedItems] = React.useState(null)
   const [file, setFile] = React.useState(undefined)
+  const [message, setMessage] = React.useState(null)
   const [reload, setReload] = React.useState(0)
-
   const btnRef = React.useRef()
-
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     getDownloadLists,
     deleteDownloadLists,
     clearDownloadLists,
-    deleteDownloadList
+    deleteDownloadList,
+    getAllApplicantsDetails
   } = useApi()
 
   const toast = useToast()
@@ -71,6 +72,7 @@ const DownloadList = ({ history }) => {
 
   const handleClear = async () => {
     try {
+      setMessage('Clearing all record...')
       setLoading(true)
       const res = await clearDownloadLists()
       window.sessionStorage.removeItem('download-lists')
@@ -106,6 +108,7 @@ const DownloadList = ({ history }) => {
 
   const handleBulkDelete = async () => {
     try {
+      setMessage('Deleting some record...')
       setLoading(true)
       const data = selectedItems.map(e => ({ _id: e._id }))
       const res = await deleteDownloadLists(data)
@@ -142,6 +145,7 @@ const DownloadList = ({ history }) => {
 
   const handleDelete = async id => {
     try {
+      setMessage('Deleting a rocord...')
       setLoading(true)
       const res = await deleteDownloadList(id)
       window.sessionStorage.removeItem('download-lists')
@@ -277,9 +281,118 @@ const DownloadList = ({ history }) => {
     }
   ]
 
+  const JsontoCsv = async () => {
+    try {
+      setMessage('Fetching applicants details')
+      setLoading(true)
+      const selectedApplicants = getSelectedArrItems(
+        data,
+        selectedItems
+      ).map(e => ({ _id: e.applicant, code: e.code }))
+      const items = await getAllApplicantsDetails({
+        applicants: selectedApplicants,
+        export: true
+      })
+      toast({
+        duration: 5000,
+        isClosable: true,
+        status: 'info',
+        position: 'top-right',
+        title: 'Download started!',
+        description: 'Download list exported!'
+      })
+      const options = {
+        fields: [
+          {
+            name: 'firstName',
+            label: 'First Name *',
+            filter: value => upperFirst(value)
+          },
+          {
+            name: 'familyName',
+            label: 'Last Name *',
+            filter: value => upperFirst(value)
+          },
+          {
+            name: 'code',
+            label: 'Unique Identifier *',
+            filter: value => '#' + value
+          },
+          {
+            name: 'dob',
+            label: 'Date of birth *',
+            filter: value => getformattedDate(value)
+          },
+          {
+            name: 'gender',
+            label: 'Gender',
+            filter: value => upperFirst(value)
+          },
+          {
+            name: 'group',
+            label: 'Group *',
+            filter: () => '2020/2021'
+          },
+          {
+            name: 'reference',
+            label: 'External Reference'
+          },
+          {
+            name: 'freeSchoolMeals',
+            label: 'Free School Meals'
+          },
+          {
+            name: 'ethnicGroup',
+            label: 'Ethnic Group'
+          },
+          {
+            name: 'sen',
+            label: 'SEN'
+          },
+          {
+            name: 'secondLanguage',
+            label: 'English as a Second Language'
+          }
+        ]
+      }
+
+      jsoncsv.buffered(items.data, options, (err, csv) => {
+        if (!err) {
+          const BOM = '\uFEFF'
+          const csvData = BOM + csv
+          const blob = new Blob([csvData], {
+            type: 'text/csv;charset=utf-8'
+          })
+          saveAs(
+            blob,
+            `${(Date.now() / 1000) | 0}-${selectedItems.length}-applicants`
+          )
+        }
+      })
+    } catch (error) {
+      let eMgs
+      if (error?.data?.message === 'celebrate request validation failed') {
+        eMgs = 'Invalid data, please check form.'
+      } else {
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
+      }
+      toast({
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+        title: 'Error',
+        description: eMgs
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <Layout bg='#E5E5E5' px={20} py={10}>
-      {isLoading && <Overlay text='Adding to download list' />}
+      {isLoading && <Overlay text={message} />}
       {selectItem && (
         <UserDetailModal
           id={selectItem}
@@ -351,6 +464,7 @@ const DownloadList = ({ history }) => {
             fontWeight={300}
             isDisabled={!selectedItems?.length}
             title='Export as CSV'
+            onClick={JsontoCsv}
           />
         </Flex>
       </Flex>

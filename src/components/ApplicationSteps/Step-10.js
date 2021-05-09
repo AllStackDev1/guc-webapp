@@ -118,7 +118,8 @@ const StepTen = ({ setStep, setguardianContact }) => {
     },
     {
       id: 'permissions',
-      text: 'I give permission for the students photo to appear on:',
+      text:
+        'I give permission for the students photo to appear on school portal',
       isRequired: true,
       options: ['Yes', 'No']
     }

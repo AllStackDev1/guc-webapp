@@ -76,6 +76,13 @@ export const ApiContextProvider = ({ children }) => {
     return await http.get({ url: `${BASE_URL}/applicants`, query })
   }
 
+  const getAllApplicantsDetails = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/applicants-details`,
+      body: JSON.stringify(payload)
+    })
+  }
+
   const getApplicant = async id => {
     return await http.get({ url: `${BASE_URL}/applicants/${id}` })
   }
@@ -377,6 +384,7 @@ export const ApiContextProvider = ({ children }) => {
         updateEmergenyContact,
         deleteEmergenyContact,
         applicantUpdateProfile,
+        getAllApplicantsDetails,
         updateStudentBackground,
         deleteStudentBackground
       }}
