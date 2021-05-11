@@ -245,7 +245,7 @@ export const ApiContextProvider = ({ children }) => {
   //#endregion
 
   //#region GUARDIAN CONTACT INFORMATION API
-  const setguardianContact = async payload => {
+  const setGuardianContact = async payload => {
     return await http.post({
       url: `${BASE_URL}/guardian-contact-informations`,
       body: JSON.stringify(payload)
@@ -366,7 +366,7 @@ export const ApiContextProvider = ({ children }) => {
         clearDownloadLists,
         adminUpdateProfile,
         getPreviousSchools,
-        setguardianContact,
+        setGuardianContact,
         getGuardianContact,
         setEmergenyContact,
         getEmergenyContact,

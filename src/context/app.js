@@ -12,6 +12,15 @@ export const AppContextProvider = ({ children }) => {
 
   const toggleMenu = () => setMenuOpen(!isMenuOpen)
 
+  const clearAppState = () => {
+    setSuccessMessage(null)
+    setErrorMessage(null)
+    setMenuOpen(false)
+    setEditData(null)
+    setStep(1)
+    window.sessionStorage.removeItem('step')
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -21,6 +30,7 @@ export const AppContextProvider = ({ children }) => {
         toggleMenu,
         setEditData,
         errorMessage,
+        clearAppState,
         successMessage,
         setErrorMessage,
         setSuccessMessage

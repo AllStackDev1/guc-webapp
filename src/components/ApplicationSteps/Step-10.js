@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
+import isEmpty from 'lodash/isEmpty'
 import {
   Box,
   Flex,
@@ -13,12 +14,36 @@ import {
 
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
-
-import { StepTenSchema } from './validations'
 import CustomButton from 'components/Forms/CustomButton'
 
-const StepTen = ({ setStep, setguardianContact }) => {
+import FetchCard from 'components/FetchCard'
+
+import useFetch from 'hooks/useFetch'
+
+import { StepTenSchema } from './validations'
+import { objDiff } from 'utils/mics'
+
+const StepTen = ({
+  user,
+  setStep,
+  setGuardianContact,
+  getGuardianContact,
+  updateGuardianContact
+}) => {
+  const [reload, setReload] = React.useState(0)
   const toast = useToast()
+
+  const triggerReload = () => setReload(prevState => prevState + 1)
+
+  const { data, error, isLoading } = useFetch(
+    null,
+    getGuardianContact,
+    reload,
+    {
+      applicant: user._id
+    }
+  )
+
   const lists = [
     {
       id: 'relation',
@@ -127,34 +152,46 @@ const StepTen = ({ setStep, setguardianContact }) => {
 
   const formik = useFormik({
     initialValues: {
-      state: '',
-      title: '',
-      email: '',
-      familyName: '',
-      firstName: '',
-      relation: '',
-      occupation: '',
-      addressOne: '',
-      addressTwo: '',
-      homeNumber: '',
-      workNumber: '',
-      permissions: '',
-      hearAboutUs: '',
-      mobileNumber: '',
-      homeLanguage: '',
-      studentAddress: ''
+      state: data?.state || '',
+      title: data?.title || '',
+      email: data?.email || '',
+      familyName: data?.familyName || '',
+      firstName: data?.firstName || '',
+      relation: data?.relation || '',
+      occupation: data?.occupation || '',
+      addressOne: data?.addressOne || '',
+      addressTwo: data?.addressTwo || '',
+      homeNumber: data?.homeNumber || '',
+      workNumber: data?.workNumber || '',
+      permissions: data?.permissions || '',
+      hearAboutUs: data?.hearAboutUs || '',
+      mobileNumber: data?.mobileNumber || '',
+      homeLanguage: data?.homeLanguage || '',
+      studentAddress: data?.studentAddress || ''
     },
-    validationSchema: StepTenSchema,
+    enableReinitialize: true,
+    validationSchema: !data && StepTenSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await setguardianContact(values)
+        let mge = 'Guardian contact information saved!'
+        if (data?._id) {
+          let updatedValue = objDiff(values, data)
+          if (isEmpty(updatedValue)) {
+            mge = 'No changes made.'
+          } else {
+            await updateGuardianContact(data._id, updatedValue)
+            mge = 'Guardian contact information updated!'
+          }
+        } else {
+          await setGuardianContact(values)
+        }
         toast({
           duration: 5000,
           isClosable: true,
           status: 'success',
           position: 'top-right',
           title: 'Success',
-          description: 'Guardian contact information saved!'
+          description: mge
         })
         window.sessionStorage.setItem('step', 11)
         setStep(11)
@@ -203,80 +240,96 @@ const StepTen = ({ setStep, setguardianContact }) => {
         Guardian Contact Information
       </Heading>
 
-      <Flex
-        as='form'
-        mt={{ base: 5, lg: 20 }}
-        px={{ lg: 10 }}
-        flexDir='column'
-        onSubmit={handleSubmit}
-      >
-        <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={6}>
-          {lists.map((list, idx) => (
-            <GridItem
-              key={list.id}
-              colSpan={{ lg: [14, 15].includes(idx) ? 2 : 1 }}
-            >
-              {list.options ? (
-                <CustomSelect
-                  name={list.id}
-                  label={list.text}
-                  onBlur={handleBlur}
-                  options={list.options}
-                  onChange={handleChange}
-                  error={errors[list.id]}
-                  touched={touched[list.id]}
-                  placeholder='Select Option'
-                  isRequired={list.isRequired}
-                  defaultValue={values[list.id]}
-                />
-              ) : (
-                <CustomInput
-                  type='text'
-                  name={list.id}
-                  label={list.text}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={errors[list.id]}
-                  placeholder={list.text}
-                  touched={touched[list.id]}
-                  isRequired={list.isRequired}
-                  defaultValue={values[list.id]}
-                />
-              )}
-            </GridItem>
-          ))}
-        </Grid>
-
+      {isLoading || error ? (
+        <FetchCard
+          h='60vh'
+          align='center'
+          justify='center'
+          direction='column'
+          error={error}
+          loading={isLoading}
+          reload={triggerReload}
+          text='Loading'
+        />
+      ) : (
         <Flex
-          mt={6}
-          mb={{ base: 12, lg: 0 }}
-          flexDir={{ base: 'column-reverse', lg: 'row' }}
-          justify={{ lg: 'space-between' }}
+          as='form'
+          mt={{ base: 5, lg: 20 }}
+          px={{ lg: 10 }}
+          flexDir='column'
+          onSubmit={handleSubmit}
         >
-          <CustomButton
-            type='button'
-            variant='outline'
-            label='Previous'
-            color='gcu.100'
-            onClick={() => setStep(9)}
-          />
-          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
-          <CustomButton
-            label='Next'
-            type='submit'
-            color='#fff'
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
-          />
+          <Grid templateColumns={{ lg: 'repeat(2, 1fr)' }} gap={6}>
+            {lists.map((list, idx) => (
+              <GridItem
+                key={list.id}
+                colSpan={{ lg: [14, 15].includes(idx) ? 2 : 1 }}
+              >
+                {list.options ? (
+                  <CustomSelect
+                    name={list.id}
+                    label={list.text}
+                    onBlur={handleBlur}
+                    options={list.options}
+                    onChange={handleChange}
+                    error={errors[list.id]}
+                    touched={touched[list.id]}
+                    placeholder='Select Option'
+                    isRequired={!data && list.isRequired}
+                    value={values[list.id]}
+                  />
+                ) : (
+                  <CustomInput
+                    type='text'
+                    name={list.id}
+                    label={list.text}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    error={errors[list.id]}
+                    placeholder={list.text}
+                    touched={touched[list.id]}
+                    isRequired={!data && list.isRequired}
+                    defaultValue={values[list.id]}
+                  />
+                )}
+              </GridItem>
+            ))}
+          </Grid>
+
+          <Flex
+            mt={6}
+            mb={{ base: 12, lg: 0 }}
+            flexDir={{ base: 'column-reverse', lg: 'row' }}
+            justify={{ lg: 'space-between' }}
+          >
+            <CustomButton
+              type='button'
+              variant='outline'
+              label='Previous'
+              color='gcu.100'
+              onClick={() => setStep(9)}
+            />
+            <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+            <CustomButton
+              label='Next'
+              type='submit'
+              color='#fff'
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
+            />
+          </Flex>
         </Flex>
-      </Flex>
+      )}
     </Container>
   )
 }
 
 StepTen.propTypes = {
+  user: PropTypes.object.isRequired,
   setStep: PropTypes.func.isRequired,
-  setguardianContact: PropTypes.func.isRequired
+  setGuardianContact: PropTypes.func.isRequired,
+  getGuardianContact: PropTypes.func.isRequired,
+  updateGuardianContact: PropTypes.func.isRequired
 }
 
 export default StepTen

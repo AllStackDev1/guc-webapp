@@ -25,6 +25,15 @@ export const AuthContextProvider = ({ children }) => {
     }
   }
 
+  const clearAuthState = () => {
+    setPhoneNumber(null)
+    setSession(true)
+    setToken(null)
+    setOtpId(null)
+    setCode(null)
+    window.sessionStorage.removeItem('_gcut')
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -37,6 +46,7 @@ export const AuthContextProvider = ({ children }) => {
         setOtpId,
         setSession,
         phoneNumber,
+        clearAuthState,
         setPhoneNumber,
         isAuthenticated
       }}

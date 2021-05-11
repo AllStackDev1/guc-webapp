@@ -1,9 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Box, Text, Heading, Container } from '@chakra-ui/react'
 
 import { TrophyIcon } from 'theme/Icons'
+import CustomButton from 'components/Forms/CustomButton'
 
-const StepTwelve = () => {
+const StepTwelve = ({ clearAuthState, clearAppState }) => {
   return (
     <Container
       align='center'
@@ -37,8 +39,38 @@ const StepTwelve = () => {
           2020/2021 cohort
         </Text>
       </Text>
+      <Box mt={8}>
+        <CustomButton
+          w='100%'
+          color='#fff'
+          type='button'
+          label='Start a New Application'
+          onClick={_ => {
+            clearAuthState()
+            clearAppState()
+          }}
+        />
+        <Text my={2}>or</Text>
+
+        <CustomButton
+          w='100%'
+          color='gcu.100'
+          variant='outline'
+          type='button'
+          label='Logout'
+          onClick={_ => {
+            clearAuthState()
+            clearAppState()
+          }}
+        />
+      </Box>
     </Container>
   )
+}
+
+StepTwelve.propTypes = {
+  clearAppState: PropTypes.func.isRequired,
+  clearAuthState: PropTypes.func.isRequired
 }
 
 export default StepTwelve

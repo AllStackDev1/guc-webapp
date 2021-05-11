@@ -1,5 +1,8 @@
+import _ from 'lodash'
+
 export const fileToBase64 = async file => {
   return new Promise((resolve, reject) => {
+    if (!file.type) return resolve(file)
     const reader = new window.FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
@@ -24,4 +27,18 @@ export const getSelectedArrItems = (arr, selection) => {
     }
   })
   return filteredArray
+}
+
+export const objDiff = (object, base) => {
+  function changes(object, base) {
+    return _.transform(object, (result, value, key) => {
+      if (!_.isEqual(value, base[key])) {
+        result[key] =
+          _.isObject(value) && _.isObject(base[key])
+            ? changes(value, base[key])
+            : value
+      }
+    })
+  }
+  return changes(object, base)
 }

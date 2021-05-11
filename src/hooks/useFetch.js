@@ -1,4 +1,3 @@
-/*eslint-disable*/
 /* eslint-disable space-before-function-paren */
 import { useEffect, useReducer } from 'react'
 import useAuth from 'context/auth'
@@ -17,7 +16,7 @@ function fetchReducer(state, action) {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.data ? action.payload.data : action.payload,
+        data: action.payload.data,
         message: action.payload.message
       }
     case 'error':
@@ -31,7 +30,7 @@ function fetchReducer(state, action) {
   }
 }
 
-const INIT_STATE = { data: null, error: null, message:null, isLoading: true }
+const INIT_STATE = { data: null, error: null, message: null, isLoading: true }
 
 const useFetch = (key, func, reload, ...rest) => {
   const { setSession } = useAuth()

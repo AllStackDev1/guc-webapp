@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -29,7 +28,7 @@ const CustomRadio = ({
       <RadioGroup
         colorScheme='gcuButton'
         onChange={val => setFieldValue(name, val)}
-        defaultValue={value}
+        value={value}
       >
         <Stack {...rest}>
           {options?.map(e => (

@@ -32,6 +32,7 @@ const UserDetailModal = ({
   onClose,
   setSelectItem,
   handlePreview,
+  handleAddToList,
   ...rest
 }) => {
   const [reload, setReload] = React.useState(0)
@@ -40,8 +41,7 @@ const UserDetailModal = ({
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, message, error, isLoading } = useFetch(
-    // 'applicant',
-    null,
+    `applicant_${id}`,
     getApplicant,
     reload,
     id
@@ -173,7 +173,7 @@ const UserDetailModal = ({
       id: 4,
       title: 'Sibling(s)',
       layout: 'grid-gray-bg',
-      data: data?.specialNeeds,
+      data: data?.siblings,
       keys: [
         {
           id: 'name',
@@ -480,7 +480,7 @@ const UserDetailModal = ({
                         boxShadow='lg'
                         colorScheme='gcuButton'
                         title='Add to CSV Download List'
-                        // onClick={handleBulkDelete}
+                        onClick={() => handleAddToList(id)}
                       />
                     </GridItem>
                     <GridItem>
@@ -544,8 +544,7 @@ const UserDetailModal = ({
                     colorScheme='gcuButton'
                     fontWeight={300}
                     title='Add to CSV Download List'
-                    // isLoading={isSubmitting}
-                    // isDisabled={isSubmitting}
+                    onClick={() => handleAddToList(id)}
                   />
                 </DrawerFooter>
               </>
@@ -567,7 +566,8 @@ UserDetailModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   handlePreview: PropTypes.func.isRequired,
   finalFocusRef: PropTypes.any.isRequired,
-  setSelectItem: PropTypes.func.isRequired
+  setSelectItem: PropTypes.func.isRequired,
+  handleAddToList: PropTypes.func.isRequired
 }
 
 export default UserDetailModal

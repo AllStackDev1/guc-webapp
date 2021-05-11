@@ -283,7 +283,7 @@ const DownloadList = ({ history }) => {
 
   const JsontoCsv = async () => {
     try {
-      setMessage('Fetching applicants details')
+      setMessage('Preparing file for download.')
       setLoading(true)
       const selectedApplicants = getSelectedArrItems(
         data,
@@ -298,8 +298,8 @@ const DownloadList = ({ history }) => {
         isClosable: true,
         status: 'info',
         position: 'top-right',
-        title: 'Download started!',
-        description: 'Download list exported!'
+        title: 'Download completed!',
+        description: 'List export completed!'
       })
       const options = {
         fields: [
@@ -315,8 +315,7 @@ const DownloadList = ({ history }) => {
           },
           {
             name: 'code',
-            label: 'Unique Identifier *',
-            filter: value => '#' + value
+            label: 'Unique Identifier *'
           },
           {
             name: 'dob',
@@ -359,6 +358,14 @@ const DownloadList = ({ history }) => {
           {
             name: 'secondLanguage',
             label: 'English as a Second Language'
+          },
+          {
+            name: 'customOne',
+            label: 'Custom 1'
+          },
+          {
+            name: 'customTwo',
+            label: 'Custom 2'
           }
         ]
       }
@@ -372,7 +379,7 @@ const DownloadList = ({ history }) => {
           })
           saveAs(
             blob,
-            `${(Date.now() / 1000) | 0}-${selectedItems.length}-applicants`
+            `${selectedItems.length}-applicants-${(Date.now() / 1000) | 0}.csv`
           )
         }
       })

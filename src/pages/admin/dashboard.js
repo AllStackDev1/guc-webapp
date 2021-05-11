@@ -65,10 +65,15 @@ const Dashboard = ({ history }) => {
   const isIndeterminate =
     checkedItems?.some(e => e.checked === true) && !allChecked
 
-  const handleAddToList = async () => {
+  const handleAddToList = async applicant => {
     try {
       setLoading(true)
-      const data = selectedItems.map(e => ({ applicant: e._id }))
+      let data = []
+      if (applicant) {
+        data = [{ applicant }]
+      } else {
+        data = selectedItems.map(e => ({ applicant: e._id }))
+      }
       await setDownloadList(data)
       toast({
         duration: 5000,
@@ -76,7 +81,7 @@ const Dashboard = ({ history }) => {
         status: 'success',
         position: 'top-right',
         title: 'Download List',
-        description: 'Item(s) added to download list'
+        description: 'Applicant(s) added to download list'
       })
     } catch (error) {
       let eMgs
@@ -291,6 +296,7 @@ const Dashboard = ({ history }) => {
           finalFocusRef={btnRef}
           handlePreview={handlePreview}
           setSelectItem={setSelectItem}
+          handleAddToList={handleAddToList}
         />
       )}
       {file && (
@@ -329,7 +335,7 @@ const Dashboard = ({ history }) => {
             fontWeight={300}
             title='Add to CSV Download List'
             isDisabled={!selectedItems?.length}
-            onClick={handleAddToList}
+            onClick={() => handleAddToList()}
           />
           <Box mx={2} />
           <ActionButton
