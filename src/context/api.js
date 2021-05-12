@@ -336,6 +336,30 @@ export const ApiContextProvider = ({ children }) => {
   }
   //#endregion
 
+  //#region DOWNLOAD LIST API
+  const uploadScheduleTestCSV = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/schedule-tests`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const getScheduleTestLists = async () => {
+    return await http.get({ url: `${BASE_URL}/schedule-tests` })
+  }
+
+  const deleteScheduleTestLists = async payload => {
+    return await http.post({
+      url: `${BASE_URL}/schedule-tests/bulk-delete`,
+      body: JSON.stringify(payload)
+    })
+  }
+
+  const clearScheduleTestLists = async () => {
+    return await http.delete({ url: `${BASE_URL}/schedule-tests/drop` })
+  }
+  //#endregion
+
   return (
     <ApiContext.Provider
       value={{
@@ -374,16 +398,20 @@ export const ApiContextProvider = ({ children }) => {
         deleteDownloadLists,
         deleteHealthMedical,
         setStudentBackground,
+        getScheduleTestLists,
         getStudentBackground,
         updatePreviousSchool,
         deletePreviousSchool,
         updateInitialEnquiry,
         deleteInitialEnquiry,
+        uploadScheduleTestCSV,
         updateGuardianContact,
         deleteGuardianContact,
         updateEmergenyContact,
         deleteEmergenyContact,
+        clearScheduleTestLists,
         applicantUpdateProfile,
+        deleteScheduleTestLists,
         getAllApplicantsDetails,
         updateStudentBackground,
         deleteStudentBackground

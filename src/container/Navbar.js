@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import { Avatar, Badge, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
@@ -6,26 +7,29 @@ import { Menu } from '@headlessui/react'
 import { FiChevronDown, FiChevronUp, FiUser } from 'react-icons/fi'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { BsBell } from 'react-icons/bs'
-import { Link as ReachRouter } from 'react-router-dom'
+import { Link as ReachRouter, useHistory } from 'react-router-dom'
 
 import Logo1 from 'assets/images/logo@1x.svg'
 import Logo2 from 'assets/images/logo@2x.svg'
 
 import useAuth from 'context/auth'
-
-const menuLinks = [
-  { name: 'Profile', icon: FiUser, link: '/profile' },
-  { name: 'Logout', icon: HiOutlineLogout, link: '/logout' }
-]
+import ActionButton from 'components/ActionButton'
 
 const MotionBox = motion(Box)
 
 const Navbar = () => {
   const [count, setCount] = React.useState(0)
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, clearAuthState } = useAuth()
   const { user } = isAuthenticated()
 
   const countLen = ('' + count).length
+
+  const menuLinks = [
+    { name: 'Profile', icon: FiUser, link: '#' },
+    { name: 'Logout', icon: HiOutlineLogout, action: () => clearAuthState() }
+  ]
+
+  const history = useHistory()
 
   return (
     <Flex
@@ -58,6 +62,34 @@ const Navbar = () => {
       </Link>
 
       <Flex align='center'>
+        <Flex w={44} justify='space-between' mr={20}>
+          <ActionButton
+            title='Test'
+            fontSize='sm'
+            bg='transparent'
+            variant='outline'
+            fontWeight={300}
+            textColor='white'
+            _hover={{
+              bg: 'transparent'
+            }}
+            onClick={() => history.push('/admin/schedule-test')}
+          />
+
+          <ActionButton
+            title='Result'
+            fontSize='sm'
+            bg='transparent'
+            variant='outline'
+            fontWeight={300}
+            textColor='white'
+            _hover={{
+              bg: 'transparent'
+            }}
+            onClick={() => history.push('/admin/result')}
+          />
+        </Flex>
+
         <Flex align='center' mr={{ base: 4, md: 10 }}>
           <Box
             as='button'
@@ -166,7 +198,8 @@ const Navbar = () => {
                               bg={active && 'cf.400'}
                               color={active && 'white'}
                               d='block'
-                              href={item.link}
+                              href={item.link || '#'}
+                              onClick={() => item.action() || {}}
                             >
                               <Icon as={item.icon} boxSize={4} mr={2} />{' '}
                               {item.name}

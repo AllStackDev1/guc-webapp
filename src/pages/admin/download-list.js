@@ -33,7 +33,7 @@ import PreviewModal from 'components/PreviewModal'
 import { getformattedDate, getSelectedArrItems } from 'utils/mics'
 
 const DownloadList = ({ history }) => {
-  document.title = 'Dashboard | The GCU Application Portal'
+  document.title = 'Download List | The GCU Application Portal'
   const [selectItem, setSelectItem] = React.useState(null)
   const [isLoading, setLoading] = React.useState(false)
   const [checkedItems, setCheckedItems] = React.useState(null)
@@ -485,7 +485,7 @@ const DownloadList = ({ history }) => {
       <Box w='100%' mt={10} bg='white' rounded='md'>
         {fetchLoading || error ? (
           <FetchCard
-            h='60vh'
+            h='20vh'
             align='center'
             justify='center'
             direction='column'

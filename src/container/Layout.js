@@ -7,7 +7,7 @@ import Navbar from './Navbar'
 const Layout = ({ children, height, ...rest }) => {
   return (
     <>
-      <Navbar />
+      <Navbar {...rest} />
       <Box
         {...rest}
         as='main'

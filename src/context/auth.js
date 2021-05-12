@@ -27,7 +27,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const clearAuthState = () => {
     setPhoneNumber(null)
-    setSession(true)
+    setSession(false)
     setToken(null)
     setOtpId(null)
     setCode(null)
