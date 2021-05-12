@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -31,7 +29,6 @@ import CustomTable from 'components/CustomTable'
 import DropdownActions from 'components/DropdownActions'
 import CustomModal from 'components/CustomModal'
 import CustomInput from 'components/Forms/CustomInput'
-import moment from 'moment'
 import CustomDropzone from 'components/Forms/CustomDropzone'
 import CustomButton from 'components/Forms/CustomButton'
 

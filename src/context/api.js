@@ -344,8 +344,8 @@ export const ApiContextProvider = ({ children }) => {
     })
   }
 
-  const getScheduleTestLists = async () => {
-    return await http.get({ url: `${BASE_URL}/schedule-tests` })
+  const getScheduleTestLists = async (query = {}) => {
+    return await http.get({ url: `${BASE_URL}/schedule-tests`, query })
   }
 
   const deleteScheduleTestLists = async payload => {

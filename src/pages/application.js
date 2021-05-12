@@ -20,7 +20,8 @@ import {
   StepTen,
   StepSix,
   StepEleven,
-  StepTwelve
+  StepTwelve,
+  StepThirteen
 } from 'components/ApplicationSteps'
 
 import useApp from 'context/app'
@@ -36,6 +37,20 @@ const Auth = () => {
   const app = useApp()
 
   const { width, height } = useWindowSize()
+  const user = auth.isAuthenticated()?.user
+
+  React.useEffect(() => {
+    if (app.step >= 5) {
+      if (!user) {
+        app.setStep(3)
+      }
+    }
+    if (user) {
+      if (app.step < 5) {
+        app.setStep(user.stage)
+      }
+    }
+  }, [app, auth, user])
 
   const getStep = key => {
     switch (key) {
@@ -69,26 +84,18 @@ const Auth = () => {
         return { value: 91.67, Step: StepEleven }
       case 12:
         return { value: 100, Step: StepTwelve }
+      case 13:
+        return { value: 100, Step: StepThirteen }
+      case 14:
+        return { value: 100, Step: StepTwelve }
+      case 15:
+        return { value: 100, Step: StepTwelve }
       default:
         return null
     }
   }
 
   const display = getStep(app.step)
-  const user = auth.isAuthenticated()?.user
-
-  React.useEffect(() => {
-    if (app.step >= 5) {
-      if (!user) {
-        app.setStep(3)
-      }
-    }
-    if (user) {
-      if (app.step < 5) {
-        app.setStep(user.stage)
-      }
-    }
-  }, [app, auth, user])
 
   return (
     display && (

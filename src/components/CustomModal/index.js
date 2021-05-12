@@ -34,9 +34,9 @@ const CustomModal = ({
 
 CustomModal.propTypes = {
   footer: PropTypes.func,
+  footerStyle: PropTypes.any,
   isOpen: PropTypes.bool.isRequired,
   rounded: PropTypes.string.isRequired,
-  footerStyle: PropTypes.any.isRequired,
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
