@@ -5,10 +5,10 @@ import { Flex, Icon, Input, Text } from '@chakra-ui/react'
 import { IoMdCloudUpload } from 'react-icons/io'
 import { FiFileText } from 'react-icons/fi'
 
-const CustomDropzone = ({ value, onChange }) => {
+const CustomDropzone = ({ value, accept, multiple, onChange }) => {
   const { getRootProps, getInputProps } = useDropzone({
-    accept: '.csv',
-    multiple: false,
+    accept,
+    multiple,
     onDrop: acceptedFiles => {
       acceptedFiles.forEach(async file => onChange(file))
     }
@@ -43,6 +43,8 @@ const CustomDropzone = ({ value, onChange }) => {
 
 CustomDropzone.propTypes = {
   value: PropTypes.any,
+  accept: PropTypes.any,
+  multiple: PropTypes.any,
   onChange: PropTypes.func.isRequired
 }
 

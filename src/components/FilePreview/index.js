@@ -5,7 +5,7 @@ import SmallSpinner from 'components/Loading/Small'
 
 import useFileReader from 'hooks/useFileReader'
 
-const FilePreview = ({ src, alt, fileData }) => {
+const FilePreview = ({ src, alt, fileData, w = '100%', h = 130 }) => {
   const { loading, file } = useFileReader(fileData)
 
   if (!fileData && !src) return null
@@ -25,8 +25,8 @@ const FilePreview = ({ src, alt, fileData }) => {
       ) : (
         <Box
           as='iframe'
-          w='100%'
-          h={130}
+          w={w}
+          h={h}
           src={file || src}
           title={(fileData && fileData.name) || alt}
         />
@@ -36,6 +36,8 @@ const FilePreview = ({ src, alt, fileData }) => {
 }
 
 FilePreview.propTypes = {
+  w: PropTypes.any,
+  h: PropTypes.any,
   src: PropTypes.string,
   alt: PropTypes.string,
   fileData: PropTypes.object

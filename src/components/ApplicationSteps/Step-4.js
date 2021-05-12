@@ -20,7 +20,6 @@ const validationSchema = yup.object().shape({
 
 const StepFour = ({
   auth,
-  user,
   code,
   otpId,
   store,
@@ -192,7 +191,6 @@ const StepFour = ({
 }
 
 StepFour.propTypes = {
-  user: PropTypes.any,
   errorMessage: PropTypes.any,
   successMessage: PropTypes.any,
   auth: PropTypes.any.isRequired,

@@ -336,7 +336,7 @@ export const ApiContextProvider = ({ children }) => {
   }
   //#endregion
 
-  //#region DOWNLOAD LIST API
+  //#region SCHEDULE TEST API
   const uploadScheduleTestCSV = async payload => {
     return await http.post({
       url: `${BASE_URL}/schedule-tests`,

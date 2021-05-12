@@ -21,7 +21,9 @@ import {
   StepSix,
   StepEleven,
   StepTwelve,
-  StepThirteen
+  StepThirteen,
+  StepFourteen,
+  StepFifteen
 } from 'components/ApplicationSteps'
 
 import useApp from 'context/app'
@@ -87,9 +89,9 @@ const Auth = () => {
       case 13:
         return { value: 100, Step: StepThirteen }
       case 14:
-        return { value: 100, Step: StepTwelve }
+        return { value: 100, Step: StepFourteen }
       case 15:
-        return { value: 100, Step: StepTwelve }
+        return { value: 100, Step: StepFifteen }
       default:
         return null
     }
@@ -105,12 +107,13 @@ const Auth = () => {
           step={app.step}
           setStep={app.setStep}
         />
-        {[5, 12].includes(app.step) && (
+        {([5, 12].includes(app.step) ||
+          (user.isAdmitted && app.step === 15)) && (
           <Confetti
             width={width}
-            numberOfPieces={500}
             height={height}
             recycle={false}
+            numberOfPieces={500}
           />
         )}
         <Flex

@@ -86,7 +86,7 @@ const Navbar = () => {
             _hover={{
               bg: 'transparent'
             }}
-            onClick={() => history.push('/admin/result')}
+            onClick={() => {}} //history.push('/admin/result')
           />
         </Flex>
 

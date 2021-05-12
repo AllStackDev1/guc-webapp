@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -31,6 +32,7 @@ import CustomModal from 'components/CustomModal'
 import CustomInput from 'components/Forms/CustomInput'
 import CustomDropzone from 'components/Forms/CustomDropzone'
 import CustomButton from 'components/Forms/CustomButton'
+import { fileToBase64 } from 'utils/mics'
 
 const ScheduleTest = ({ history }) => {
   document.title = 'Schedule Test | The GCU Application Portal'
@@ -38,6 +40,9 @@ const ScheduleTest = ({ history }) => {
   const [checkedItems, setCheckedItems] = React.useState(null)
   const [message, setMessage] = React.useState(null)
   const [reload, setReload] = React.useState(0)
+  const [modal, setModal] = React.useState(null)
+  const [isSubmittingResult, setSubmittingResult] = React.useState(undefined)
+  const [resultFile, setResultFile] = React.useState(undefined)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
@@ -45,7 +50,8 @@ const ScheduleTest = ({ history }) => {
     uploadScheduleTestCSV,
     getScheduleTestLists,
     clearScheduleTestLists,
-    deleteScheduleTestLists
+    deleteScheduleTestLists,
+    updateApplicant
   } = useApi()
 
   const triggerReload = () => setReload(prevState => prevState + 1)
@@ -59,10 +65,6 @@ const ScheduleTest = ({ history }) => {
   const allChecked = checkedItems?.every(e => e?.checked === true)
   const isIndeterminate =
     checkedItems?.some(e => e.checked === true) && !allChecked
-
-  const actions = [
-    { name: 'Upload Test Result', icon: FiFileText, action: e => {} }
-  ]
 
   const selectedItems = checkedItems?.filter(e => e.checked === true)
 
@@ -305,60 +307,156 @@ const ScheduleTest = ({ history }) => {
     }
   }
 
+  const handleResultUpload = async () => {
+    try {
+      setMessage('Uploading applicant result..')
+      setSubmittingResult(true)
+      const res = await updateApplicant(modal.id.applicant, {
+        resultDoc: await fileToBase64(resultFile),
+        stage: 14
+      })
+      toast({
+        duration: 5000,
+        isClosable: true,
+        status: 'success',
+        position: 'top-right',
+        title: 'Success',
+        description: res.message
+      })
+      setResultFile(undefined)
+      onClose()
+    } catch (error) {
+      let eMgs
+      if (error?.data?.message === 'celebrate request validation failed') {
+        eMgs = 'Invalid data, please check file'
+      } else {
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
+      }
+      toast({
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+        title: 'Error',
+        description: eMgs
+      })
+    } finally {
+      setSubmittingResult(false)
+    }
+  }
+
+  const actions = [
+    {
+      name: 'Upload Test Result',
+      icon: FiFileText,
+      action: id => {
+        setModal({ type: 'upload-result', id })
+        onOpen()
+      }
+    }
+    // { name: 'View Result', icon: FiFileText, action: e => {} },
+  ]
+
+  const getModelOpen = ({ type, id }) => {
+    if (type === 'upload-result' && id) {
+      return (
+        <CustomModal
+          size='xl'
+          rounded='xl'
+          title='Upload Test Result'
+          headerStyle={{
+            fontWeight: 700,
+            fontSize: '28px',
+            textAlign: 'center',
+            fontFamily: 'heading'
+          }}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <Text textAlign='center' fontSize='sm' fontWeight='300'>
+            Lorem Ipsum is not simply random text. It has roots
+          </Text>
+          <Flex px={5} pb={5} mt={6} flexDir='column' align='center'>
+            <CustomDropzone
+              accept='application/pdf'
+              value={resultFile}
+              onChange={value => setResultFile(value)}
+            />
+
+            <CustomButton
+              color='#fff'
+              type='button'
+              label='Upload Test Result'
+              onClick={handleResultUpload}
+              isLoading={isSubmittingResult}
+              isDisabled={isSubmittingResult}
+            />
+          </Flex>
+        </CustomModal>
+      )
+    } else {
+      return (
+        <CustomModal
+          size='xl'
+          rounded='xl'
+          title='Upload CSV'
+          headerStyle={{
+            fontWeight: 700,
+            fontSize: '28px',
+            textAlign: 'center',
+            fontFamily: 'heading'
+          }}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <Text textAlign='center' fontSize='sm' fontWeight='300'>
+            Set the test date and upload the CSV downloaded from GL Assessment
+          </Text>
+          <Flex
+            px={5}
+            pb={5}
+            mt={6}
+            as='form'
+            flexDir='column'
+            align='center'
+            onSubmit={handleSubmit}
+          >
+            <CustomInput
+              type='datetime-local'
+              isRequired
+              name='date'
+              label='Set test date & time'
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={errors.date}
+              touched={touched.date}
+              defaultValue={values.date}
+            />
+
+            <CustomDropzone
+              accept='.csv'
+              value={values.file}
+              onChange={value => setFieldValue('file', value)}
+            />
+
+            <CustomButton
+              label='Submit CSV'
+              color='#fff'
+              type='submit'
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
+            />
+          </Flex>
+        </CustomModal>
+      )
+    }
+  }
+
   return (
     <Layout bg='#E5E5E5' px={20} py={10}>
       {isLoading && <Overlay text={message} />}
-      <CustomModal
-        size='xl'
-        rounded='xl'
-        title='Upload CSV'
-        headerStyle={{
-          fontWeight: 700,
-          fontSize: '28px',
-          textAlign: 'center',
-          fontFamily: 'heading'
-        }}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <Text textAlign='center' fontSize='sm' fontWeight='300'>
-          Set the test date and upload the CSV downloaded from GL Assessment
-        </Text>
-        <Flex
-          px={5}
-          pb={5}
-          mt={6}
-          as='form'
-          flexDir='column'
-          align='center'
-          onSubmit={handleSubmit}
-        >
-          <CustomInput
-            type='datetime-local'
-            isRequired
-            name='date'
-            label='Set test date & time'
-            onBlur={handleBlur}
-            onChange={handleChange}
-            error={errors.date}
-            touched={touched.date}
-            defaultValue={values.date}
-          />
-
-          <CustomDropzone
-            value={values.file}
-            onChange={value => setFieldValue('file', value)}
-          />
-
-          <CustomButton
-            label='Submit CSV'
-            color='#fff'
-            type='submit'
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
-          />
-        </Flex>
-      </CustomModal>
+      {modal && getModelOpen(modal)}
       <Flex w='100%' justify='space-between'>
         <Flex align='center'>
           <IconButton
@@ -390,7 +488,10 @@ const ScheduleTest = ({ history }) => {
             fontWeight={300}
             title='Upload Test List'
             rightIcon={<FiUpload />}
-            onClick={() => onOpen()}
+            onClick={() => {
+              setModal({ type: 'upload-list' })
+              onOpen()
+            }}
           />
           <Box mx={2} />
           <ActionButton
@@ -441,7 +542,7 @@ const ScheduleTest = ({ history }) => {
           </>
         )}
       </Box>
-      <Flex mt={4} w='full' justify='flex-end'>
+      <Flex mt={4} w='full' justify='flex-start'>
         <ActionButton
           colorScheme='gcuButton'
           fontSize='sm'
