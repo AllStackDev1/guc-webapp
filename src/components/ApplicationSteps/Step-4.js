@@ -10,8 +10,7 @@ import CustomOTPInput from 'components/Forms/CustomOTPInput'
 import CustomAlert from './CustomAlert'
 
 const validationSchema = yup.object().shape({
-  pin_id: yup.string(),
-  pin: yup
+  code: yup
     .string()
     .min(6, 'Invalid otp')
     .max(6, 'Invalid otp')
@@ -36,8 +35,7 @@ const StepFour = ({
 
   const formik = useFormik({
     initialValues: {
-      pin: '',
-      pin_id: otpId
+      code: ''
     },
     enableReinitialize: true,
     validationSchema,
@@ -45,7 +43,7 @@ const StepFour = ({
       try {
         setErrorMessage(null)
         setSuccessMessage(null)
-        const res = await verifyOTP(values)
+        const res = await verifyOTP({ to: phoneNumber, code: values.code })
         store(res.data)
         const user = jwt_decode(res.data)
         if (user.status === 'PENDING') {
@@ -66,11 +64,11 @@ const StepFour = ({
     }
   })
 
-  React.useEffect(() => {
-    if (!otpId) {
-      return setStep(3)
-    }
-  }, [otpId, setStep])
+  // React.useEffect(() => {
+  //   if (!otpId) {
+  //     return setStep(3)
+  //   }
+  // }, [otpId, setStep])
 
   const handleResendOTP = async () => {
     try {
@@ -135,10 +133,10 @@ const StepFour = ({
             </Text>
           </Text>
           <CustomOTPInput
-            value={formik.values.pin}
-            error={formik.errors.pin}
+            value={formik.values.code}
+            error={formik.errors.code}
             isDisabled={formik.isSubmitting}
-            onChange={otp => formik.setFieldValue('pin', otp)}
+            onChange={otp => formik.setFieldValue('code', otp)}
           />
         </Box>
 
@@ -195,7 +193,7 @@ StepFour.propTypes = {
   successMessage: PropTypes.any,
   auth: PropTypes.any.isRequired,
   code: PropTypes.any.isRequired,
-  otpId: PropTypes.any.isRequired,
+  otpId: PropTypes.any,
   store: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
   verifyOTP: PropTypes.func.isRequired,

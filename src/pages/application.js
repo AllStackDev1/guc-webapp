@@ -108,7 +108,7 @@ const Auth = () => {
           setStep={app.setStep}
         />
         {([5, 12].includes(app.step) ||
-          (user.isAdmitted && app.step === 15)) && (
+          (user?.isAdmitted && app.step === 15)) && (
           <Confetti
             width={width}
             height={height}

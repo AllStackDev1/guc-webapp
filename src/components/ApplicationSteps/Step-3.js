@@ -41,7 +41,7 @@ const StepThree = ({
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const res = await auth(values)
-        setOtpId(res.data.pinId)
+        // setOtpId(res.data.pinId)
         setPhoneNumber(res.data.to)
         setCode(values.code)
         setErrorMessage(null)
