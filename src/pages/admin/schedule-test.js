@@ -176,13 +176,11 @@ const ScheduleTest = ({ history }) => {
       reader.onload = async function (e) {
         try {
           const csvData = Papa.parse(reader.result)
-          const _data = csvData?.data?.slice(1).map(e => {
-            return {
-              code: e[0],
-              accessCode: e[1],
-              examDate: values.date
-            }
-          })
+          const _data = csvData?.data?.slice(1).map(e => ({
+            code: e[4],
+            accessCode: e[16],
+            examDate: values.date
+          }))
           setMessage('Extracting data from...')
           setSubmitting(true)
           const res = await uploadScheduleTestCSV(_data)
@@ -311,7 +309,7 @@ const ScheduleTest = ({ history }) => {
     try {
       setMessage('Uploading applicant result..')
       setSubmittingResult(true)
-      const res = await updateApplicant(modal.id.applicant, {
+      await updateApplicant(modal.id.applicant, {
         resultDoc: await fileToBase64(resultFile),
         stage: 14
       })
@@ -321,7 +319,7 @@ const ScheduleTest = ({ history }) => {
         status: 'success',
         position: 'top-right',
         title: 'Success',
-        description: res.message
+        description: 'Result upload successfully'
       })
       setResultFile(undefined)
       onClose()
@@ -374,9 +372,6 @@ const ScheduleTest = ({ history }) => {
           isOpen={isOpen}
           onClose={onClose}
         >
-          <Text textAlign='center' fontSize='sm' fontWeight='300'>
-            Lorem Ipsum is not simply random text. It has roots
-          </Text>
           <Flex px={5} pb={5} mt={6} flexDir='column' align='center'>
             <CustomDropzone
               accept='application/pdf'

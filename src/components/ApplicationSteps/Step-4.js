@@ -30,7 +30,7 @@ const StepFour = ({
   setErrorMessage,
   setSuccessMessage
 }) => {
-  const [count, setCount] = React.useState(60)
+  const [counter, setCounter] = React.useState(59)
   const [loading, setLoading] = React.useState(false)
 
   const formik = useFormik({
@@ -94,17 +94,8 @@ const StepFour = ({
   }
 
   React.useEffect(() => {
-    const idI = setInterval(() => {
-      setCount(prev => prev - 1)
-    }, 1000)
-    const idT = setTimeout(() => {
-      clearInterval(idI)
-    }, 60000)
-    return () => {
-      clearInterval(idI)
-      clearTimeout(idT)
-    }
-  }, [setCount])
+    counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
+  }, [counter])
 
   return (
     <Container
@@ -160,9 +151,9 @@ const StepFour = ({
         </Box>
 
         <Box fontSize={{ base: 'sm', lg: 'md' }} mt={{ base: 2, lg: 8 }}>
-          <Text>Didn't receive OTP ({count}s)</Text>
+          <Text>Didn't receive OTP ({counter}s)</Text>
 
-          {!count && (
+          {!counter && (
             <Button
               px={0}
               bg='unset'

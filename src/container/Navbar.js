@@ -25,7 +25,7 @@ const Navbar = () => {
   const countLen = ('' + count).length
 
   const menuLinks = [
-    { name: 'Profile', icon: FiUser, link: '#' },
+    // { name: 'Profile', icon: FiUser, link: '#' },
     { name: 'Logout', icon: HiOutlineLogout, action: () => clearAuthState() }
   ]
 
@@ -90,7 +90,7 @@ const Navbar = () => {
           />
         </Flex>
 
-        <Flex align='center' mr={{ base: 4, md: 10 }}>
+        <Flex d='none' align='center' mr={{ base: 4, md: 10 }}>
           <Box
             as='button'
             role='button'

@@ -65,7 +65,7 @@ const StepTen = ({
       id: 'title',
       text: 'Select Title',
       isRequired: true,
-      options: ['Mr', 'Mrs', 'Sir', 'Ma', 'Chief']
+      options: ['Mr', 'Mrs', 'Miss', 'Sir', 'Ma', 'Chief']
     },
     {
       id: 'firstName',

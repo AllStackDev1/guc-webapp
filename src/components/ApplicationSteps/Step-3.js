@@ -30,7 +30,7 @@ const StepThree = ({
   setErrorMessage,
   setSuccessMessage
 }) => {
-  const [count, setCount] = React.useState(60)
+  const [counter, setCounter] = React.useState(59)
   const [loading, setLoading] = React.useState(false)
 
   const formik = useFormik({
@@ -79,22 +79,10 @@ const StepThree = ({
 
   React.useEffect(() => {
     setErrorMessage(null)
-    let idi, idt
     if (phoneNumber) {
-      idi = setInterval(() => {
-        setCount(prev => prev - 1)
-      }, 1000)
-      idt = setTimeout(() => {
-        clearInterval(idi)
-      }, 60000)
+      counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
     }
-    return () => {
-      if (phoneNumber) {
-        clearInterval(idi)
-        clearTimeout(idt)
-      }
-    }
-  }, [setCount, phoneNumber, setErrorMessage])
+  }, [counter, phoneNumber, setErrorMessage])
 
   return (
     <Container
@@ -136,9 +124,9 @@ const StepThree = ({
 
         {phoneNumber && (
           <Box mt={{ lg: 8 }}>
-            <Text>Didn't receive code ({count}s)</Text>
+            <Text>Didn't receive code ({counter}s)</Text>
 
-            {!count && (
+            {!counter && (
               <Button
                 px={0}
                 bg='unset'

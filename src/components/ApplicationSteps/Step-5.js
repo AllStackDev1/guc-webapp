@@ -49,7 +49,7 @@ const StepFive = ({
         })
         const res2 = await auth({ code: res1.data.code })
         window.sessionStorage.removeItem('_gcut')
-        setOtpId(res2.data.pinId)
+        // setOtpId(res2.data.pinId)
         setPhoneNumber(res2.data.to)
         setCode(res2.data.code)
         setSuccessMessage(res2.message)

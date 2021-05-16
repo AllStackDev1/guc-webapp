@@ -12,13 +12,13 @@ export const AppContextProvider = ({ children }) => {
 
   const toggleMenu = () => setMenuOpen(!isMenuOpen)
 
-  const clearAppState = () => {
+  const clearAppState = step => {
     setSuccessMessage(null)
     setErrorMessage(null)
     setMenuOpen(false)
     setEditData(null)
-    setStep(1)
-    window.sessionStorage.removeItem('step')
+    setStep(step)
+    window.sessionStorage.setItem('step', step)
   }
 
   return (

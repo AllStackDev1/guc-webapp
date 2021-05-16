@@ -55,6 +55,7 @@ const StepThirteen = ({ user, getScheduleTestLists }) => {
       <Link
         fontSize='xl'
         color='#2F80ED'
+        target='_blank'
         href='https://www.testingforschools.com/GCU9680/Account?ReturnUrl=%2F'
       >
         https://www.testingforschools.com/GCU9680/Account?ReturnUrl=%2F

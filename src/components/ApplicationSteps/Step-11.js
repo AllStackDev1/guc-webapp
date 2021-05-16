@@ -174,6 +174,7 @@ const StepEleven = ({
                   'Aunt',
                   'Brother',
                   'Sister',
+                  'Guardian',
                   'Grand Father',
                   'Grand Mother'
                 ]}

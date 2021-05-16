@@ -5,8 +5,10 @@ import { useFormik } from 'formik'
 import PropTypes from 'prop-types'
 import {
   Box,
+  Text,
   Flex,
   Grid,
+  Icon,
   Heading,
   useToast,
   GridItem,
@@ -15,6 +17,7 @@ import {
 import CustomInput from 'components/Forms/CustomInput'
 import CustomSelect from 'components/Forms/CustomSelect'
 import CustomButton from 'components/Forms/CustomButton'
+import { FiChevronLeft } from 'react-icons/fi'
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('Name is required!'),
@@ -142,32 +145,39 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
             />
           </GridItem>
         </Grid>
-        <Flex
-          mt={6}
-          flexDir={{ base: 'column-reverse', lg: 'row' }}
-          justify={{ lg: 'flex-end' }}
-        >
-          <CustomButton
-            type='button'
-            variant='outline'
-            label={editData ? 'Cancel' : 'Skip'}
-            color='gcu.100'
-            onClick={() => {
-              if (editData) {
-                setStep(8.2)
-              } else {
-                setStep(9)
-              }
-            }}
-          />
-          <Box d={{ base: 'none', lg: 'block' }} mx={4} />
-          <CustomButton
-            label='Save'
-            type='submit'
-            color='#fff'
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
-          />
+        <Flex mt={6} align='center' justify='space-between'>
+          <Flex role='button' color='gcu.100' onClick={() => setStep(7)}>
+            <Icon as={FiChevronLeft} boxSize={6} />
+            <Text fontSize='md' fontWeight={600}>
+              Previous
+            </Text>
+          </Flex>
+          <Flex
+            flexDir={{ base: 'column-reverse', lg: 'row' }}
+            justify={{ lg: 'flex-end' }}
+          >
+            <CustomButton
+              type='button'
+              variant='outline'
+              label={editData ? 'Cancel' : 'Skip'}
+              color='gcu.100'
+              onClick={() => {
+                if (editData) {
+                  setStep(8.2)
+                } else {
+                  setStep(9)
+                }
+              }}
+            />
+            <Box d={{ base: 'none', lg: 'block' }} mx={4} />
+            <CustomButton
+              label='Save'
+              type='submit'
+              color='#fff'
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
+            />
+          </Flex>
         </Flex>
       </Box>
     </Container>

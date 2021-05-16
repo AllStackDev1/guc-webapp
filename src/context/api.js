@@ -38,6 +38,10 @@ export const ApiContextProvider = ({ children }) => {
     })
   }
 
+  const getApplicantResultFile = async () => {
+    return await http.get({ url: `${BASE_URL}/applicants/result` })
+  }
+
   const applicantUpdateProfile = async payload => {
     return await http.patch({
       url: `${BASE_URL}/applicants/update-profile`,
@@ -409,6 +413,7 @@ export const ApiContextProvider = ({ children }) => {
         deleteGuardianContact,
         updateEmergenyContact,
         deleteEmergenyContact,
+        getApplicantResultFile,
         clearScheduleTestLists,
         applicantUpdateProfile,
         deleteScheduleTestLists,

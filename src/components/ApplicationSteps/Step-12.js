@@ -47,7 +47,7 @@ const StepTwelve = ({ clearAuthState, clearAppState }) => {
           label='Start a New Application'
           onClick={_ => {
             clearAuthState()
-            clearAppState()
+            clearAppState(2)
           }}
         />
         <Text my={2}>or</Text>
@@ -60,7 +60,7 @@ const StepTwelve = ({ clearAuthState, clearAppState }) => {
           label='Logout'
           onClick={_ => {
             clearAuthState()
-            clearAppState()
+            clearAppState(1)
           }}
         />
       </Box>

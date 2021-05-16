@@ -2,9 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, Text, Heading, Container } from '@chakra-ui/react'
 
+import FetchCard from 'components/FetchCard'
 import FilePreview from 'components/FilePreview'
+import useFetch from 'hooks/useFetch'
 
-const StepFourteen = ({ user }) => {
+const StepFourteen = ({ user, getApplicantResultFile }) => {
+  const [reload, setReload] = React.useState(0)
+
+  const triggerReload = () => setReload(prevState => prevState + 1)
+
+  const { data, error, isLoading } = useFetch(
+    null,
+    getApplicantResultFile,
+    reload,
+    {
+      applicant: user._id
+    }
+  )
+
   return (
     <Container
       align='center'
@@ -15,10 +30,20 @@ const StepFourteen = ({ user }) => {
       <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
         RESULT
       </Heading>
-
-      {user?.resultDoc ? (
+      {isLoading || error ? (
+        <FetchCard
+          h='60vh'
+          align='center'
+          justify='center'
+          direction='column'
+          error={error}
+          loading={isLoading}
+          reload={triggerReload}
+          text='Loading'
+        />
+      ) : data ? (
         <Box my={10}>
-          <FilePreview src={user?.resultDoc} alt='applicant_result' />
+          <FilePreview src={data} alt='applicant_result' />
         </Box>
       ) : (
         <Text>No Result Yet</Text>
@@ -29,7 +54,7 @@ const StepFourteen = ({ user }) => {
 
 StepFourteen.propTypes = {
   user: PropTypes.object.isRequired,
-  getScheduleTestLists: PropTypes.func.isRequired
+  getApplicantResultFile: PropTypes.func.isRequired
 }
 
 export default StepFourteen
