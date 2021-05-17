@@ -43,7 +43,7 @@ const StepFour = ({
       try {
         setErrorMessage(null)
         setSuccessMessage(null)
-        const res = await verifyOTP({ to: phoneNumber, code: values.code })
+        const res = await verifyOTP({ pin_id: otpId, pin: values.code })
         store(res.data)
         const user = jwt_decode(res.data)
         if (user.status === 'PENDING') {
@@ -64,11 +64,11 @@ const StepFour = ({
     }
   })
 
-  // React.useEffect(() => {
-  //   if (!otpId) {
-  //     return setStep(3)
-  //   }
-  // }, [otpId, setStep])
+  React.useEffect(() => {
+    if (!otpId) {
+      return setStep(3)
+    }
+  }, [otpId, setStep])
 
   const handleResendOTP = async () => {
     try {

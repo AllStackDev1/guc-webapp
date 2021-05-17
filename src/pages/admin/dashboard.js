@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -15,19 +13,20 @@ import {
 } from '@chakra-ui/react'
 
 import Layout from 'container/Layout'
+import DropdownActions from 'components/DropdownActions'
 import { DashboardIcon, TrashIcon } from 'theme/Icons'
 import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
-import DropdownActions from 'components/DropdownActions'
+import FetchCard from 'components/FetchCard'
+import Overlay from 'components/Loading/Overlay'
+import PreviewModal from 'components/PreviewModal'
+import Search from 'components/CustomTable/Search'
 
 import { FiTrash2, FiFileText } from 'react-icons/fi'
 import UserDetailModal from 'components/UserDetailModal'
 
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
-import FetchCard from 'components/FetchCard'
-import Overlay from 'components/Loading/Overlay'
-import PreviewModal from 'components/PreviewModal'
 
 import { getformattedDate } from 'utils/mics'
 
@@ -54,7 +53,6 @@ const Dashboard = ({ history }) => {
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, error, isLoading: fetchLoading } = useFetch(
-    // 'applicants',
     null,
     getApplicants,
     reload,
@@ -347,7 +345,17 @@ const Dashboard = ({ history }) => {
           />
         </Flex>
       </Flex>
-      <Box w='100%' mt={10} bg='white' rounded='md'>
+      <Search
+        {...{
+          mb: 3,
+          mt: 10,
+          filterKey: '',
+          options: [''],
+          handleInputSearch: () => {},
+          handleSelectSearch: () => {}
+        }}
+      />
+      <Box w='100%' bg='white' rounded='md'>
         {fetchLoading || error ? (
           <FetchCard
             h='60vh'
