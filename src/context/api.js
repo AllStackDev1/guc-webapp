@@ -80,6 +80,10 @@ export const ApiContextProvider = ({ children }) => {
     return await http.get({ url: `${BASE_URL}/applicants`, query })
   }
 
+  const getApplicantsWithResult = async () => {
+    return await http.get({ url: `${BASE_URL}/applicants/with/result` })
+  }
+
   const getAllApplicantsDetails = async payload => {
     return await http.post({
       url: `${BASE_URL}/applicants-details`,
@@ -415,6 +419,7 @@ export const ApiContextProvider = ({ children }) => {
         deleteEmergenyContact,
         getApplicantResultFile,
         clearScheduleTestLists,
+        getApplicantsWithResult,
         applicantUpdateProfile,
         deleteScheduleTestLists,
         getAllApplicantsDetails,

@@ -14,8 +14,8 @@ import { FiSearch } from 'react-icons/fi'
 const Search = ({
   filterKey,
   options,
-  handleInputSearch,
-  handleSelectSearch,
+  handleSearch,
+  handleSelect,
   ...rest
 }) => {
   return (
@@ -27,13 +27,15 @@ const Search = ({
         color='cf.400'
         value={filterKey}
         _focus={{ borderColor: 'cf.400' }}
-        onChange={handleSelectSearch}
+        onChange={handleSelect}
+        placeholder='Filter By'
+        fontSize='xs'
       >
         {options.map(o => (
           <Box
             as='option'
             key={o.name}
-            value={o.selector}
+            value={o.value}
             _focus={{ bg: 'gcu.100' }}
           >
             {o.name}
@@ -48,8 +50,10 @@ const Search = ({
           name='searchBox'
           color='gcu.100'
           type='search'
+          fontSize='xs'
+          _focus={{ outline: 'none' }}
           placeholder='Search'
-          onChange={handleInputSearch}
+          onChange={handleSearch}
         />
       </InputGroup>
     </Flex>
@@ -59,8 +63,8 @@ const Search = ({
 Search.propTypes = {
   options: PropTypes.any.isRequired,
   filterKey: PropTypes.any.isRequired,
-  handleInputSearch: PropTypes.any.isRequired,
-  handleSelectSearch: PropTypes.any.isRequired
+  handleSearch: PropTypes.any.isRequired,
+  handleSelect: PropTypes.any.isRequired
 }
 
 export default Search

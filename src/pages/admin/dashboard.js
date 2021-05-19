@@ -1,5 +1,6 @@
+/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -32,13 +33,16 @@ import { getformattedDate } from 'utils/mics'
 
 const Dashboard = ({ history }) => {
   document.title = 'Dashboard | The GCU Application Portal'
-  const [selectItem, setSelectItem] = React.useState(null)
-  const [checkedItems, setCheckedItems] = React.useState(null)
-  const [isLoading, setLoading] = React.useState(false)
-  const [reload, setReload] = React.useState(0)
-  const [file, setFile] = React.useState(undefined)
+  const [selectItem, setSelectItem] = useState(null)
+  const [checkedItems, setCheckedItems] = useState(null)
+  const [filterKey, setFilterKey] = useState('')
+  const [isLoading, setLoading] = useState(false)
+  const [reload, setReload] = useState(0)
+  const [file, setFile] = useState(undefined)
+  const [initialTableData, setInitialTableData] = useState([])
+  const [tableData, setTableData] = useState([])
 
-  const btnRef = React.useRef()
+  const btnRef = useRef()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
@@ -178,15 +182,20 @@ const Dashboard = ({ history }) => {
     onOpen()
   }
 
-  React.useEffect(() => {
-    if (data?.length) {
-      const checked = data.map(e => ({
-        _id: e._id,
-        checked: false
-      }))
-      setCheckedItems(checked)
+  const handleSearch = event => {
+    let value = event.target.value ? event.target.value : ''
+    value = value.trim().toLowerCase()
+    let filtered = []
+    if (value) {
+      filtered = initialTableData.filter(item => {
+        const columnData = item[filterKey]?.toLowerCase()
+        return !!columnData?.match(new RegExp(value, 'i'))
+      })
+    } else {
+      filtered = JSON.parse(JSON.stringify(initialTableData))
     }
-  }, [data])
+    setTableData(filtered)
+  }
 
   const actions = [
     {
@@ -197,8 +206,6 @@ const Dashboard = ({ history }) => {
         onOpen()
       }
     },
-    // { name: 'Upload Test Result', icon: FiUpload, action: () => {} },
-    // { name: 'View Test Result', icon: FiNavigation, action: () => {} },
     {
       name: 'Delete',
       icon: FiTrash2,
@@ -283,6 +290,26 @@ const Dashboard = ({ history }) => {
     }
   ]
 
+  const filterOpts = [
+    { name: 'Application Code', value: 'code' },
+    { name: 'Phone Number', value: 'phoneNumber' },
+    { name: 'Email', value: 'email' },
+    { name: 'First Name', value: 'firstName' },
+    { name: 'Last Name', value: 'lastName' }
+  ]
+
+  React.useEffect(() => {
+    if (data?.length) {
+      const checked = data.map(e => ({
+        _id: e._id,
+        checked: false
+      }))
+      setCheckedItems(checked)
+      setInitialTableData(data || [])
+      setTableData(data || [])
+    }
+  }, [data])
+
   return (
     <Layout bg='#E5E5E5' px={20} py={10}>
       {isLoading && <Overlay text='Adding to download list' />}
@@ -349,10 +376,10 @@ const Dashboard = ({ history }) => {
         {...{
           mb: 3,
           mt: 10,
-          filterKey: '',
-          options: [''],
-          handleInputSearch: () => {},
-          handleSelectSearch: () => {}
+          filterKey,
+          options: filterOpts,
+          handleSearch,
+          handleSelect: e => setFilterKey(e.target.value)
         }}
       />
       <Box w='100%' bg='white' rounded='md'>
@@ -369,7 +396,11 @@ const Dashboard = ({ history }) => {
           />
         ) : (
           <>
-            <CustomTable variant='simple' _columns={_columns} _data={data} />
+            <CustomTable
+              variant='simple'
+              _columns={_columns}
+              _data={tableData}
+            />
             {!!selectedItems?.length && (
               <Flex w='full' justify='center' py={4}>
                 <Box px={6} py={4} bg='gcu.100' rounded='full'>

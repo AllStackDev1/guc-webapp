@@ -33,6 +33,11 @@ const Router = () => {
         />
         <PrivateRoute
           exact
+          path='/admin/result-lists'
+          component={Admin.ResultList}
+        />
+        <PrivateRoute
+          exact
           path='/admin/download-lists'
           component={Admin.DownloadList}
         />
