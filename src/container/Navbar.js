@@ -1,19 +1,19 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import React from 'react'
+import PropTypes from 'prop-types'
+import { Link as ReachRouter, NavLink } from 'react-router-dom'
 import { Avatar, Badge, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu } from '@headlessui/react'
-import { FiChevronDown, FiChevronUp, FiUser } from 'react-icons/fi'
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { BsBell } from 'react-icons/bs'
-import { Link as ReachRouter, useHistory } from 'react-router-dom'
 
 import Logo1 from 'assets/images/logo@1x.svg'
 import Logo2 from 'assets/images/logo@2x.svg'
 
 import useAuth from 'context/auth'
-import ActionButton from 'components/ActionButton'
 
 const MotionBox = motion(Box)
 
@@ -25,11 +25,13 @@ const Navbar = () => {
   const countLen = ('' + count).length
 
   const menuLinks = [
-    // { name: 'Profile', icon: FiUser, link: '#' },
     { name: 'Logout', icon: HiOutlineLogout, action: () => clearAuthState() }
   ]
 
-  const history = useHistory()
+  const menuTabs = [
+    { name: 'Test', link: '/admin/schedule-test' },
+    { name: 'Result', link: '/admin/result-lists' }
+  ]
 
   return (
     <Flex
@@ -63,31 +65,31 @@ const Navbar = () => {
 
       <Flex align='center'>
         <Flex w={44} justify='space-between' mr={20}>
-          <ActionButton
-            title='Test'
-            fontSize='sm'
-            bg='transparent'
-            variant='outline'
-            fontWeight={300}
-            textColor='white'
-            _hover={{
-              bg: 'transparent'
-            }}
-            onClick={() => history.push('/admin/schedule-test')}
-          />
-
-          <ActionButton
-            title='Result'
-            fontSize='sm'
-            bg='transparent'
-            variant='outline'
-            fontWeight={300}
-            textColor='white'
-            _hover={{
-              bg: 'transparent'
-            }}
-            onClick={() => history.push('/admin/result-lists')}
-          />
+          {menuTabs.map(item => (
+            <Link
+              key={item.name}
+              px={{ md: 4 }}
+              py={{ md: 2 }}
+              as={NavLink}
+              border='1px solid white'
+              rounded='lg'
+              to={item.link}
+              cursor='pointer'
+              transition='background-color .2s ease-in'
+              _hover={{
+                textDecor: 'none',
+                bg: 'transparent'
+              }}
+              activeStyle={{
+                color: '#1E1F20',
+                backgroundColor: 'white'
+              }}
+            >
+              <Text fontSize='sm' textAlign='center'>
+                {item.name}
+              </Text>
+            </Link>
+          ))}
         </Flex>
 
         <Flex d='none' align='center' mr={{ base: 4, md: 10 }}>

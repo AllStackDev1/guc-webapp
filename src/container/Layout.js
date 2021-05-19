@@ -4,12 +4,14 @@ import { Box } from '@chakra-ui/react'
 
 import Navbar from './Navbar'
 
-const Layout = ({ children, height, ...rest }) => {
+const Layout = ({ children, height, bg, px, py, ...rest }) => {
   return (
     <>
       <Navbar {...rest} />
       <Box
-        {...rest}
+        bg={bg}
+        px={px}
+        py={py}
         as='main'
         h='100vh'
         minH='100vh'
@@ -26,10 +28,11 @@ const Layout = ({ children, height, ...rest }) => {
 }
 
 Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-  height: PropTypes.any,
+  bg: PropTypes.any,
   px: PropTypes.any,
-  rest: PropTypes.any
+  py: PropTypes.any,
+  height: PropTypes.any,
+  children: PropTypes.node.isRequired
 }
 
 export default Layout

@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
+import { Text, Table, Thead, Tbody, Tr, Th, Td, Icon } from '@chakra-ui/react'
 import { useTable } from 'react-table'
+import { AiOutlineFileSearch } from 'react-icons/ai'
 
 const CustomTable = ({ _columns = [], _data = [], variant = '' }) => {
   const data = React.useMemo(() => _data, [_data])
@@ -41,24 +42,33 @@ const CustomTable = ({ _columns = [], _data = [], variant = '' }) => {
         ))}
       </Thead>
       <Tbody {...getTableBodyProps()}>
-        {rows.map((row, index) => {
-          prepareRow(row)
-          return (
-            <Tr key={getkey(index)} {...row.getRowProps()}>
-              {row.cells.map((cell, index) => {
-                return (
-                  <Td
-                    fontSize='sm'
-                    key={getkey(index)}
-                    {...cell.getCellProps()}
-                  >
-                    {cell.render('Cell')}
-                  </Td>
-                )
-              })}
-            </Tr>
-          )
-        })}
+        {!_data?.length ? (
+          <Tr>
+            <Td py={10} color='gray.400' colSpan={7} textAlign='center'>
+              <Icon as={AiOutlineFileSearch} boxSize={10} />
+              <Text>No record found</Text>
+            </Td>
+          </Tr>
+        ) : (
+          rows.map((row, index) => {
+            prepareRow(row)
+            return (
+              <Tr key={getkey(index)} {...row.getRowProps()}>
+                {row.cells.map((cell, index) => {
+                  return (
+                    <Td
+                      fontSize='sm'
+                      key={getkey(index)}
+                      {...cell.getCellProps()}
+                    >
+                      {cell.render('Cell')}
+                    </Td>
+                  )
+                })}
+              </Tr>
+            )
+          })
+        )}
       </Tbody>
     </Table>
   )

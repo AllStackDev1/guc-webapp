@@ -24,6 +24,7 @@ import Layout from 'container/Layout'
 
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
+import PreviewModal from 'components/PreviewModal'
 import { ArrowLeftIcon, DashboardIcon, TrashIcon } from 'theme/Icons'
 
 import CustomTable from 'components/CustomTable'
@@ -124,7 +125,8 @@ const ScheduleTest = ({ history }) => {
     },
     {
       Header: 'Full Name',
-      accessor: 'fullName'
+      id: 'fullName',
+      accessor: row => row.firstName + ' ' + row.lastName
     },
     {
       Header: 'Email address',
@@ -159,7 +161,11 @@ const ScheduleTest = ({ history }) => {
       accessor: 'action',
       Cell: ({ row }) => (
         <DropdownActions
-          data={{ id: row.original?._id, applicant: row.original?.applicant }}
+          data={{
+            id: row.original?._id,
+            resultDoc: row.original?.resultDoc,
+            applicant: row.original?.applicant
+          }}
           options={actions}
         />
       )
@@ -305,11 +311,11 @@ const ScheduleTest = ({ history }) => {
     }
   }
 
-  const handleResultUpload = async () => {
+  const handleResultUpload = async data => {
     try {
       setMessage('Uploading applicant result..')
       setSubmittingResult(true)
-      await updateApplicant(modal.id.applicant, {
+      await updateApplicant(data.applicant, {
         resultDoc: await fileToBase64(resultFile),
         stage: 14
       })
@@ -348,103 +354,127 @@ const ScheduleTest = ({ history }) => {
     {
       name: 'Upload Test Result',
       icon: FiFileText,
-      action: id => {
-        setModal({ type: 'upload-result', id })
+      action: data => {
+        setModal({ type: 'upload-result', data })
+        onOpen()
+      }
+    },
+    {
+      name: 'View Result',
+      icon: FiFileText,
+      action: data => {
+        setModal({ type: 'view-result', data })
         onOpen()
       }
     }
-    // { name: 'View Result', icon: FiFileText, action: e => {} },
   ]
 
-  const getModelOpen = ({ type, id }) => {
-    if (type === 'upload-result' && id) {
-      return (
-        <CustomModal
-          size='xl'
-          rounded='xl'
-          title='Upload Test Result'
-          headerStyle={{
-            fontWeight: 700,
-            fontSize: '28px',
-            textAlign: 'center',
-            fontFamily: 'heading'
-          }}
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <Flex px={5} pb={5} mt={6} flexDir='column' align='center'>
-            <CustomDropzone
-              accept='application/pdf'
-              value={resultFile}
-              onChange={value => setResultFile(value)}
-            />
+  const getModelOpen = ({ type, data }) => {
+    switch (type) {
+      case 'upload-result':
+        if (data) {
+          return (
+            <CustomModal
+              size='xl'
+              rounded='xl'
+              title='Upload Test Result'
+              headerStyle={{
+                fontWeight: 700,
+                fontSize: '28px',
+                textAlign: 'center',
+                fontFamily: 'heading'
+              }}
+              isOpen={isOpen}
+              onClose={onClose}
+            >
+              <Flex px={5} pb={5} mt={6} flexDir='column' align='center'>
+                <CustomDropzone
+                  accept='application/pdf'
+                  value={resultFile}
+                  onChange={value => setResultFile(value)}
+                />
 
-            <CustomButton
-              color='#fff'
-              type='button'
-              label='Upload Test Result'
-              onClick={handleResultUpload}
-              isLoading={isSubmittingResult}
-              isDisabled={isSubmittingResult}
+                <CustomButton
+                  color='#fff'
+                  type='button'
+                  label='Upload Test Result'
+                  onClick={() => handleResultUpload(data)}
+                  isLoading={isSubmittingResult}
+                  isDisabled={isSubmittingResult}
+                />
+              </Flex>
+            </CustomModal>
+          )
+        }
+        return null
+      case 'view-result':
+        if (data) {
+          return (
+            <PreviewModal
+              src={data.resultDoc}
+              isOpen={isOpen}
+              onClose={onClose}
             />
-          </Flex>
-        </CustomModal>
-      )
-    } else {
-      return (
-        <CustomModal
-          size='xl'
-          rounded='xl'
-          title='Upload CSV'
-          headerStyle={{
-            fontWeight: 700,
-            fontSize: '28px',
-            textAlign: 'center',
-            fontFamily: 'heading'
-          }}
-          isOpen={isOpen}
-          onClose={onClose}
-        >
-          <Text textAlign='center' fontSize='sm' fontWeight='300'>
-            Set the test date and upload the CSV downloaded from GL Assessment
-          </Text>
-          <Flex
-            px={5}
-            pb={5}
-            mt={6}
-            as='form'
-            flexDir='column'
-            align='center'
-            onSubmit={handleSubmit}
+          )
+        }
+        return null
+      case 'upload-list':
+        return (
+          <CustomModal
+            size='xl'
+            rounded='xl'
+            title='Upload CSV'
+            headerStyle={{
+              fontWeight: 700,
+              fontSize: '28px',
+              textAlign: 'center',
+              fontFamily: 'heading'
+            }}
+            isOpen={isOpen}
+            onClose={onClose}
           >
-            <CustomInput
-              type='datetime-local'
-              isRequired
-              name='date'
-              label='Set test date & time'
-              onBlur={handleBlur}
-              onChange={handleChange}
-              error={errors.date}
-              touched={touched.date}
-              defaultValue={values.date}
-            />
+            <Text textAlign='center' fontSize='sm' fontWeight='300'>
+              Set the test date and upload the CSV downloaded from GL Assessment
+            </Text>
+            <Flex
+              px={5}
+              pb={5}
+              mt={6}
+              as='form'
+              flexDir='column'
+              align='center'
+              onSubmit={handleSubmit}
+            >
+              <CustomInput
+                type='datetime-local'
+                isRequired
+                name='date'
+                label='Set test date & time'
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={errors.date}
+                touched={touched.date}
+                defaultValue={values.date}
+              />
 
-            <CustomDropzone
-              accept='.csv'
-              value={values.file}
-              onChange={value => setFieldValue('file', value)}
-            />
+              <CustomDropzone
+                accept='.csv'
+                value={values.file}
+                onChange={value => setFieldValue('file', value)}
+              />
 
-            <CustomButton
-              label='Submit CSV'
-              color='#fff'
-              type='submit'
-              isLoading={isSubmitting}
-              isDisabled={isSubmitting}
-            />
-          </Flex>
-        </CustomModal>
-      )
+              <CustomButton
+                label='Submit CSV'
+                color='#fff'
+                type='submit'
+                isLoading={isSubmitting}
+                isDisabled={isSubmitting}
+              />
+            </Flex>
+          </CustomModal>
+        )
+      default:
+        return null
     }
   }
 

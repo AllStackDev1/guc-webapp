@@ -8,16 +8,14 @@ import {
   Icon,
   Flex,
   Heading,
-  Checkbox,
   useToast,
   useDisclosure,
   IconButton
 } from '@chakra-ui/react'
 import { FiEye } from 'react-icons/fi'
-import upperFirst from 'lodash/upperFirst'
 
 import Layout from 'container/Layout'
-import { ArrowLeftIcon, DashboardIcon, TrashIcon } from 'theme/Icons'
+import { ArrowLeftIcon, DashboardIcon } from 'theme/Icons'
 import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
 
@@ -25,7 +23,6 @@ import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
 import FetchCard from 'components/FetchCard'
 import UserDetailModal from 'components/UserDetailModal'
-import Overlay from 'components/Loading/Overlay'
 import PreviewModal from 'components/PreviewModal'
 
 import { getformattedDate } from 'utils/mics'

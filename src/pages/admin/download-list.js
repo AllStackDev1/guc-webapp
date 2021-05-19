@@ -32,7 +32,7 @@ import PreviewModal from 'components/PreviewModal'
 
 import { getformattedDate, getSelectedArrItems } from 'utils/mics'
 
-const DownloadList = ({ history }) => {
+const DownloadList = ({ history, ...rest }) => {
   document.title = 'Download List | The GCU Application Portal'
   const [selectItem, setSelectItem] = React.useState(null)
   const [isLoading, setLoading] = React.useState(false)
@@ -84,6 +84,7 @@ const DownloadList = ({ history }) => {
         title: 'Success',
         description: res.message
       })
+      setCheckedItems(null)
       triggerReload()
     } catch (error) {
       let eMgs
@@ -121,6 +122,7 @@ const DownloadList = ({ history }) => {
         title: 'Success',
         description: res.message
       })
+      setCheckedItems(null)
       triggerReload()
     } catch (error) {
       let eMgs
@@ -157,6 +159,7 @@ const DownloadList = ({ history }) => {
         title: 'Success',
         description: res.message
       })
+      setCheckedItems(null)
       triggerReload()
     } catch (error) {
       let eMgs
@@ -405,7 +408,7 @@ const DownloadList = ({ history }) => {
   }
 
   return (
-    <Layout bg='#E5E5E5' px={20} py={10}>
+    <Layout bg='#E5E5E5' px={20} py={10} {...rest}>
       {isLoading && <Overlay text={message} />}
       {selectItem && (
         <UserDetailModal
