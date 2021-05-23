@@ -18,6 +18,7 @@ const StepFive = ({
   auth,
   user,
   setStep,
+  setEmail,
   setCode,
   setOtpId,
   setPhoneNumber,
@@ -38,7 +39,7 @@ const StepFive = ({
     if (resp.status === 'success') {
       try {
         setLoading(true)
-        const res1 = await applicantUpdateProfile({ status: 'PAID', stage: 6 })
+        await applicantUpdateProfile({ status: 'PAID', stage: 6 })
         toast({
           duration: 5000,
           isClosable: true,
@@ -47,13 +48,14 @@ const StepFive = ({
           title: 'Success',
           description: 'Payment successful'
         })
-        const res2 = await auth({ code: res1.data.code })
+        setEmail(null)
+        // const res2 = await auth({ code: res1.data.code })
         window.sessionStorage.removeItem('_gcut')
         // setOtpId(res2.data.pinId)
-        setPhoneNumber(res2.data.to)
-        setCode(res2.data.code)
-        setSuccessMessage(res2.message)
-        setStep(4)
+        // setPhoneNumber(res2.data.to)
+        // setCode(res2.data.code)
+        // setSuccessMessage(res2.message)
+        setStep(3)
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -114,7 +116,7 @@ const StepFive = ({
         />
 
         <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
-          OTP Verified
+          Account Verified
         </Heading>
 
         <Text
@@ -156,6 +158,7 @@ StepFive.propTypes = {
   user: PropTypes.object.isRequired,
   setStep: PropTypes.func.isRequired,
   setCode: PropTypes.func.isRequired,
+  setEmail: PropTypes.func.isRequired,
   setOtpId: PropTypes.func.isRequired,
   setPhoneNumber: PropTypes.func.isRequired,
   setErrorMessage: PropTypes.func.isRequired,

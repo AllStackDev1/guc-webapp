@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
+import jwt_decode from 'jwt-decode'
 import { useFormik } from 'formik'
 import { Box, Text, Flex, Button, Heading, Container } from '@chakra-ui/react'
 
@@ -19,8 +21,10 @@ const validationSchema = yup.object().shape({
 
 const StepThree = ({
   auth,
-  setStep,
+  store,
+  email,
   setCode,
+  setStep,
   setOtpId,
   resendCode,
   phoneNumber,
@@ -30,7 +34,7 @@ const StepThree = ({
   setErrorMessage,
   setSuccessMessage
 }) => {
-  const [counter, setCounter] = React.useState(59)
+  const [counter, setCounter] = React.useState(60)
   const [loading, setLoading] = React.useState(false)
 
   const formik = useFormik({
@@ -41,12 +45,23 @@ const StepThree = ({
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const res = await auth(values)
-        setOtpId(res.data.pinId)
-        setPhoneNumber(res.data.to)
-        setCode(values.code)
+        // setOtpId(res.data.pinId)
+        // setPhoneNumber(res.data.to)
+        // setCode(values.code)
+        // setErrorMessage(null)
+        // setSuccessMessage(res.message)
+        // setStep(4)
         setErrorMessage(null)
-        setSuccessMessage(res.message)
-        setStep(4)
+        setSuccessMessage(null)
+        store(res.data)
+        const user = jwt_decode(res.data)
+        if (user.status === 'PENDING') {
+          setStep(5)
+          sessionStorage.setItem('step', 5)
+        } else {
+          setStep(user.stage)
+          sessionStorage.setItem('step', user.stage)
+        }
       } catch (error) {
         setSuccessMessage(null)
         setErrorMessage(
@@ -79,10 +94,10 @@ const StepThree = ({
 
   React.useEffect(() => {
     setErrorMessage(null)
-    if (phoneNumber) {
+    if (email) {
       counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
     }
-  }, [counter, phoneNumber, setErrorMessage])
+  }, [counter, email, setErrorMessage])
 
   return (
     <Container
@@ -96,6 +111,15 @@ const StepThree = ({
       </Heading>
 
       <Legal />
+
+      {email && (
+        <Box mt={6}>
+          <Text>
+            An Email with your application code have been sent to <b>{email}</b>
+            , if it’s not in your inbox kindly check your spam box
+          </Text>
+        </Box>
+      )}
 
       <Flex
         as='form'
@@ -122,7 +146,7 @@ const StepThree = ({
           />
         </Box>
 
-        {phoneNumber && (
+        {email && (
           <Box mt={{ lg: 8 }}>
             <Text>Didn't receive code ({counter}s)</Text>
 
@@ -156,8 +180,10 @@ const StepThree = ({
 StepThree.propTypes = {
   errorMessage: PropTypes.any,
   successMessage: PropTypes.any,
+  email: PropTypes.string,
   phoneNumber: PropTypes.string,
   auth: PropTypes.func.isRequired,
+  store: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
   setCode: PropTypes.func.isRequired,
   setOtpId: PropTypes.func.isRequired,

@@ -180,11 +180,11 @@ const StepFour = ({
 }
 
 StepFour.propTypes = {
+  otpId: PropTypes.any,
   errorMessage: PropTypes.any,
   successMessage: PropTypes.any,
   auth: PropTypes.any.isRequired,
   code: PropTypes.any.isRequired,
-  otpId: PropTypes.any,
   store: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
   verifyOTP: PropTypes.func.isRequired,

@@ -30,6 +30,7 @@ const validationSchema = yup.object().shape({
 const StepTwo = ({
   enroll,
   setStep,
+  setEmail,
   errorMessage,
   setPhoneNumber,
   setErrorMessage,
@@ -50,6 +51,7 @@ const StepTwo = ({
         const res = await enroll(data)
         setErrorMessage(null)
         setPhoneNumber(res.data.phoneNumber)
+        setEmail(res.data.email)
         setSuccessMessage(
           'An Application code has been sent to your email address'
         )
@@ -222,6 +224,7 @@ StepTwo.propTypes = {
   errorMessage: PropTypes.any,
   enroll: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
+  setEmail: PropTypes.func.isRequired,
   setPhoneNumber: PropTypes.func.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
   setSuccessMessage: PropTypes.func.isRequired

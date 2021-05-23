@@ -7,6 +7,7 @@ const AuthContext = createContext()
 export const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState(window.sessionStorage.getItem('_gcut'))
   const [phoneNumber, setPhoneNumber] = useState(null)
+  const [email, setEmail] = useState(null)
   const [session, setSession] = useState(true)
   const [otpId, setOtpId] = useState(null)
   const [code, setCode] = useState(null)
@@ -38,12 +39,14 @@ export const AuthContextProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         code,
+        email,
         token,
         otpId,
         store,
         setCode,
         session,
         setOtpId,
+        setEmail,
         setSession,
         phoneNumber,
         clearAuthState,
