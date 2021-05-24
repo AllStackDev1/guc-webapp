@@ -12,7 +12,7 @@ import { PaystackButton } from 'react-paystack'
 import Overlay from 'components/Loading/Overlay'
 
 import { TrophyIcon } from 'theme/Icons'
-import configs from 'utils/configs'
+// import configs from 'utils/configs'
 
 const StepFive = ({
   auth,
@@ -23,6 +23,7 @@ const StepFive = ({
   setOtpId,
   setPhoneNumber,
   setSuccessMessage,
+  setEnterApplication,
   applicantUpdateProfile
 }) => {
   const [isLoading, setLoading] = React.useState(false)
@@ -32,7 +33,7 @@ const StepFive = ({
     reference: new Date().getTime(),
     email: user?.email,
     amount: 1000000,
-    publicKey: configs().PAYSTACK_PUBLIC_KEY
+    publicKey: 'pk_live_b4b04b88a20f8f3aaea70be0bced400674a47b32' //configs().PAYSTACK_PUBLIC_KEY
   }
 
   const handlePaystackSuccessAction = async resp => {
@@ -55,6 +56,7 @@ const StepFive = ({
         // setPhoneNumber(res2.data.to)
         // setCode(res2.data.code)
         // setSuccessMessage(res2.message)
+        setEnterApplication(true)
         setStep(3)
       } catch (error) {
         let eMgs
@@ -163,6 +165,7 @@ StepFive.propTypes = {
   setPhoneNumber: PropTypes.func.isRequired,
   setErrorMessage: PropTypes.func.isRequired,
   setSuccessMessage: PropTypes.func.isRequired,
+  setEnterApplication: PropTypes.func.isRequired,
   applicantUpdateProfile: PropTypes.func.isRequired
 }
 
