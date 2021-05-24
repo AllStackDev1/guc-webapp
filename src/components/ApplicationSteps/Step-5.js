@@ -12,7 +12,7 @@ import { PaystackButton } from 'react-paystack'
 import Overlay from 'components/Loading/Overlay'
 
 import { TrophyIcon } from 'theme/Icons'
-// import configs from 'utils/configs'
+import configs from 'utils/configs'
 
 const StepFive = ({
   auth,
@@ -33,7 +33,7 @@ const StepFive = ({
     reference: new Date().getTime(),
     email: user?.email,
     amount: 1000000,
-    publicKey: 'pk_live_b4b04b88a20f8f3aaea70be0bced400674a47b32' // configs().PAYSTACK_PUBLIC_KEY
+    publicKey: configs().PAYSTACK_PUBLIC_KEY
   }
 
   const handlePaystackSuccessAction = async resp => {
