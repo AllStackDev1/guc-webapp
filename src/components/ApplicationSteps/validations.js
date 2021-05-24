@@ -54,10 +54,12 @@ export const StepSixSchema = yup.object().shape({
 })
 
 export const StepNineSchema = yup.object().shape({
-  asthma: yup.bool().required('This field is required!'),
-  allergies: yup.bool().required('This field is required!'),
-  diabetes: yup.bool().required('This field is required!'),
-  epilepsy: yup.bool().required('This field is required!'),
+  asthma: yup.bool(),
+  allergies: yup.bool(),
+  diabetes: yup.bool(),
+  epilepsy: yup.bool(),
+  notApplicable: yup.bool(),
+  other: yup.bool(),
   requireMedicalPlan: yup.string(),
   takeRegularMedication: yup.string(),
   dietaryRestriction: yup.string(),

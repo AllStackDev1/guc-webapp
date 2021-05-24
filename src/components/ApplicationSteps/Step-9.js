@@ -52,7 +52,14 @@ const StepNine = ({
       id: 1,
       text:
         'Has your child been diagnosed with any of the following: (please tick appropriate and provide details)',
-      fields: ['asthma', 'allergies', 'diabetes', 'epilepsy', 'others'],
+      fields: [
+        'asthma',
+        'allergies',
+        'diabetes',
+        'epilepsy',
+        'notApplicable',
+        'others'
+      ],
       isRequired: true
     },
     {
@@ -95,7 +102,8 @@ const StepNine = ({
       allergies: data?.allergies || false,
       diabetes: data?.diabetes || false,
       epilepsy: data?.epilepsy || false,
-      others: data?.epilepsy || false,
+      others: data?.others || false,
+      notApplicable: data?.notApplicable || false,
       immuneFile: data?.immuneFile || '',
       requireMedicalPlan: data?.requireMedicalPlan || 'NA',
       takeRegularMedication: data?.takeRegularMedication || 'NA',
@@ -252,7 +260,9 @@ const StepNine = ({
                           colorScheme='gcuButton'
                           textTransform='capitalize'
                         >
-                          <Text fontSize={{ base: 'xs', lg: 'sm' }}>{e}</Text>
+                          <Text fontSize={{ base: 'xs', lg: 'sm' }}>
+                            {e === 'notApplicable' ? 'Not Applicable' : e}
+                          </Text>
                         </Checkbox>
                       ))}
                     </Flex>
