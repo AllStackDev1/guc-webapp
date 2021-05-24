@@ -33,7 +33,7 @@ const StepFive = ({
     reference: new Date().getTime(),
     email: user?.email,
     amount: 1000000,
-    publicKey: 'pk_live_b4b04b88a20f8f3aaea70be0bced400674a47b32' //configs().PAYSTACK_PUBLIC_KEY
+    publicKey: 'pk_live_b4b04b88a20f8f3aaea70be0bced400674a47b32' // configs().PAYSTACK_PUBLIC_KEY
   }
 
   const handlePaystackSuccessAction = async resp => {

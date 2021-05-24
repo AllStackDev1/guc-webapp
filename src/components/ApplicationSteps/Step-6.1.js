@@ -178,7 +178,7 @@ const StepSixOne = ({
               type='date'
               isRequired
               onBlur={handleBlur}
-              label='Date of Leaving'
+              label='Departure Date'
               name='dateOfLeaving'
               onChange={handleChange}
               error={errors.dateOfLeaving}

@@ -24,7 +24,10 @@ import { objDiff } from 'utils/mics'
 
 export const StepSevenSchema = yup.object().shape({
   specialNeeds: yup.string().required('This field is required!'),
-  details: yup.string()
+  details: yup.string().when('specialNeeds', {
+    is: 'yes',
+    then: yup.string().required('Please provide more information!')
+  })
 })
 
 const StepSeven = ({
@@ -161,6 +164,7 @@ const StepSeven = ({
             {lists.map((list, idx) => (
               <ListItem
                 d='flex'
+                opacity={idx && formik.values.specialNeeds === 'no' ? 0.2 : 1}
                 key={list.id}
                 flexDir={{ base: 'column', lg: 'row' }}
                 textAlign='left'

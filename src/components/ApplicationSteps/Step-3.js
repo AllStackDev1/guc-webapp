@@ -32,6 +32,7 @@ const StepThree = ({
   successMessage,
   setPhoneNumber,
   setErrorMessage,
+  enterApplication,
   setSuccessMessage
 }) => {
   const [counter, setCounter] = React.useState(60)
@@ -107,7 +108,7 @@ const StepThree = ({
       minW={{ lg: '2xl' }}
     >
       <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
-        Application Code
+        {enterApplication && 'Please Enter'} Application Code
       </Heading>
 
       <Legal />
@@ -185,6 +186,7 @@ StepThree.propTypes = {
   auth: PropTypes.func.isRequired,
   store: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
+  enterApplication: PropTypes.func.isRequired,
   setCode: PropTypes.func.isRequired,
   setOtpId: PropTypes.func.isRequired,
   resendCode: PropTypes.func.isRequired,

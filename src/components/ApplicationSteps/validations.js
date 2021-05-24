@@ -58,12 +58,12 @@ export const StepNineSchema = yup.object().shape({
   allergies: yup.bool().required('This field is required!'),
   diabetes: yup.bool().required('This field is required!'),
   epilepsy: yup.bool().required('This field is required!'),
-  requireMedicalPlan: yup.string().required('This field is required!'),
-  takeRegularMedication: yup.string().required('This field is required!'),
-  dietaryRestriction: yup.string().required('This field is required!'),
-  physicalRestriction: yup.string().required('This field is required!'),
-  otherMedicalIssues: yup.string().required('This field is required!'),
-  isImmunised: yup.string().required('This field is required!'),
+  requireMedicalPlan: yup.string(),
+  takeRegularMedication: yup.string(),
+  dietaryRestriction: yup.string(),
+  physicalRestriction: yup.string(),
+  otherMedicalIssues: yup.string(),
+  isImmunised: yup.string(),
   immuneFile: yup
     .mixed()
     .test('fileSize', `File Size is too large <= ${2}mb allowed!`, value =>

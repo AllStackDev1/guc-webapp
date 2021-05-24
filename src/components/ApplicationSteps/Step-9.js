@@ -52,7 +52,8 @@ const StepNine = ({
       id: 1,
       text:
         'Has your child been diagnosed with any of the following: (please tick appropriate and provide details)',
-      fields: ['asthma', 'allergies', 'diabetes', 'epilepsy']
+      fields: ['asthma', 'allergies', 'diabetes', 'epilepsy', 'others'],
+      isRequired: true
     },
     {
       id: 2,
@@ -94,13 +95,14 @@ const StepNine = ({
       allergies: data?.allergies || false,
       diabetes: data?.diabetes || false,
       epilepsy: data?.epilepsy || false,
+      others: data?.epilepsy || false,
       immuneFile: data?.immuneFile || '',
-      requireMedicalPlan: data?.requireMedicalPlan || '',
-      takeRegularMedication: data?.takeRegularMedication || '',
-      dietaryRestriction: data?.dietaryRestriction || '',
-      physicalRestriction: data?.physicalRestriction || '',
-      otherMedicalIssues: data?.otherMedicalIssues || '',
-      isImmunised: data?.isImmunised || ''
+      requireMedicalPlan: data?.requireMedicalPlan || 'NA',
+      takeRegularMedication: data?.takeRegularMedication || 'NA',
+      dietaryRestriction: data?.dietaryRestriction || 'NA',
+      physicalRestriction: data?.physicalRestriction || 'NA',
+      otherMedicalIssues: data?.otherMedicalIssues || 'NA',
+      isImmunised: data?.isImmunised || 'NA'
     },
     enableReinitialize: true,
     validationSchema: !data && StepNineSchema,
@@ -226,7 +228,7 @@ const StepNine = ({
                     fontSize={{ base: 'xs', lg: 'sm' }}
                   >
                     {list.text}{' '}
-                    {!data && (
+                    {list.isRequired && (
                       <Text as='span' color='red.500'>
                         *
                       </Text>
@@ -257,7 +259,7 @@ const StepNine = ({
                   )}
                   {list.field && (
                     <CustomTextarea
-                      isRequired={!data}
+                      isRequired={list.isRequired}
                       name={list.field}
                       onBlur={handleBlur}
                       placeholder='Please enter yes with more details or no'

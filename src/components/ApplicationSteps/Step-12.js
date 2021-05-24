@@ -39,6 +39,10 @@ const StepTwelve = ({ clearAuthState, clearAppState }) => {
           2020/2021 cohort
         </Text>
       </Text>
+
+      <Box as='br' />
+      <Text className='loading-text loading-text-b'>Review In Progress</Text>
+
       <Box mt={8}>
         <CustomButton
           w='100%'

@@ -11,6 +11,7 @@ export const AuthContextProvider = ({ children }) => {
   const [session, setSession] = useState(true)
   const [otpId, setOtpId] = useState(null)
   const [code, setCode] = useState(null)
+  const [enterApplication, setEnterApplication] = useState(false)
 
   const store = token => {
     setToken(token)
@@ -32,6 +33,7 @@ export const AuthContextProvider = ({ children }) => {
     setToken(null)
     setOtpId(null)
     setCode(null)
+    setEnterApplication(false)
     window.sessionStorage.removeItem('_gcut')
   }
 
@@ -51,7 +53,9 @@ export const AuthContextProvider = ({ children }) => {
         phoneNumber,
         clearAuthState,
         setPhoneNumber,
-        isAuthenticated
+        isAuthenticated,
+        enterApplication,
+        setEnterApplication
       }}
     >
       {children}
