@@ -200,7 +200,7 @@ const UserDetailModal = ({
           title:
             'Has your child been diagnosed with any of the following: (please tick appropriate and provide details)',
           value: data?.healthAndMedical,
-          checkboxes: ['asthma', 'allergies', 'epilepsy', 'diabiates']
+          checkboxes: ['asthma', 'allergies', 'epilepsy', 'diabetes']
         },
         {
           id: 'requireMedicalPlan',

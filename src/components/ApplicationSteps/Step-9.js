@@ -52,7 +52,7 @@ const StepNine = ({
       id: 1,
       text:
         'Has your child been diagnosed with any of the following: (please tick appropriate and provide details)',
-      fields: ['asthma', 'allergies', 'diabiates', 'epilepsy']
+      fields: ['asthma', 'allergies', 'diabetes', 'epilepsy']
     },
     {
       id: 2,
@@ -92,7 +92,7 @@ const StepNine = ({
     initialValues: {
       asthma: data?.asthma || false,
       allergies: data?.allergies || false,
-      diabiates: data?.diabiates || false,
+      diabetes: data?.diabetes || false,
       epilepsy: data?.epilepsy || false,
       immuneFile: data?.immuneFile || '',
       requireMedicalPlan: data?.requireMedicalPlan || '',
