@@ -293,7 +293,7 @@ const Dashboard = ({ history }) => {
         <Flex>
           <Icon as={DashboardIcon} boxSize={49} />
           <Box ml={4}>
-            <Heading fontSize='2xl'>Uncompleted Application</Heading>
+            <Heading fontSize='2xl'>Uncompleted Applications.</Heading>
             <Text fontWeight={300} fontSize='sm'>
               List of uncompleted applications
             </Text>
