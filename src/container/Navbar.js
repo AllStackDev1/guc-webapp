@@ -30,7 +30,8 @@ const Navbar = () => {
 
   const menuTabs = [
     { name: 'Test', link: '/admin/schedule-test' },
-    { name: 'Result', link: '/admin/result-lists' }
+    { name: 'Result', link: '/admin/result-lists' },
+    { name: 'Uncompleted', link: '/admin/uncompleted-applications' }
   ]
 
   return (
@@ -64,7 +65,7 @@ const Navbar = () => {
       </Link>
 
       <Flex align='center'>
-        <Flex w={44} justify='space-between' mr={20}>
+        <Flex w={80} justify='space-between' mr={20}>
           {menuTabs.map(item => (
             <Link
               key={item.name}

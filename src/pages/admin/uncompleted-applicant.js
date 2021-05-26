@@ -45,12 +45,7 @@ const Dashboard = ({ history }) => {
   const btnRef = useRef()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {
-    getApplicants,
-    setDownloadList,
-    deleteApplicant,
-    deleteApplicants
-  } = useApi()
+  const { getApplicants, deleteApplicant, deleteApplicants } = useApi()
 
   const toast = useToast()
 
@@ -60,51 +55,12 @@ const Dashboard = ({ history }) => {
     null,
     getApplicants,
     reload,
-    { completed: true }
+    { completed: false }
   )
 
   const allChecked = checkedItems?.every(e => e?.checked === true)
   const isIndeterminate =
     checkedItems?.some(e => e.checked === true) && !allChecked
-
-  const handleAddToList = async applicant => {
-    try {
-      setLoading(true)
-      let data = []
-      if (applicant) {
-        data = [{ applicant }]
-      } else {
-        data = selectedItems.map(e => ({ applicant: e._id }))
-      }
-      await setDownloadList(data)
-      toast({
-        duration: 5000,
-        isClosable: true,
-        status: 'success',
-        position: 'top-right',
-        title: 'Download List',
-        description: 'Applicant(s) added to download list'
-      })
-    } catch (error) {
-      let eMgs
-      if (error?.data?.message === 'celebrate request validation failed') {
-        eMgs = 'Invalid data, please check form.'
-      } else {
-        eMgs =
-          error?.message || error?.data?.message || 'Unexpected network error.'
-      }
-      toast({
-        duration: 9000,
-        status: 'error',
-        isClosable: true,
-        position: 'top-right',
-        title: 'Error',
-        description: eMgs
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleDelete = async id => {
     try {
@@ -321,7 +277,7 @@ const Dashboard = ({ history }) => {
           finalFocusRef={btnRef}
           handlePreview={handlePreview}
           setSelectItem={setSelectItem}
-          handleAddToList={handleAddToList}
+          handleAddToList={() => {}}
         />
       )}
       {file && (
@@ -337,9 +293,9 @@ const Dashboard = ({ history }) => {
         <Flex>
           <Icon as={DashboardIcon} boxSize={49} />
           <Box ml={4}>
-            <Heading fontSize='2xl'>Application List</Heading>
+            <Heading fontSize='2xl'>Uncompleted Application</Heading>
             <Text fontWeight={300} fontSize='sm'>
-              List of all applicants
+              List of uncompleted applications
             </Text>
           </Box>
         </Flex>
@@ -352,15 +308,6 @@ const Dashboard = ({ history }) => {
             rightIcon={<TrashIcon />}
             isDisabled={!selectedItems?.length}
             onClick={handleBulkDelete}
-          />
-          <Box mx={2} />
-          <ActionButton
-            bg='#F2F2F2'
-            fontSize='sm'
-            fontWeight={300}
-            title='Add to CSV Download List'
-            isDisabled={!selectedItems?.length}
-            onClick={() => handleAddToList()}
           />
           <Box mx={2} />
           <ActionButton
