@@ -129,7 +129,7 @@ const StepTen = ({
     },
     {
       id: 'hearAboutUs',
-      text: 'How did u hear about us',
+      text: 'How did you hear about us',
       isRequired: true,
       options: [
         'Search Engine',
