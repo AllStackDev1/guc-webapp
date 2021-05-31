@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Link as ReachRouter, NavLink } from 'react-router-dom'
 import { Avatar, Badge, Box, Flex, Icon, Link, Text } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
