@@ -31,7 +31,7 @@ const Navbar = () => {
   const menuTabs = [
     { name: 'Test', link: '/admin/schedule-test' },
     { name: 'Result', link: '/admin/result-lists' },
-    { name: 'Uncompleted', link: '/admin/uncompleted-applications' }
+    { name: 'Incomplete', link: '/admin/incomplete-applications' }
   ]
 
   return (

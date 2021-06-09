@@ -10,12 +10,13 @@ import {
   Heading,
   useToast,
   Checkbox,
+  IconButton,
   useDisclosure
 } from '@chakra-ui/react'
 
 import Layout from 'container/Layout'
 import DropdownActions from 'components/DropdownActions'
-import { DashboardIcon, TrashIcon } from 'theme/Icons'
+import { ArrowLeftIcon, DashboardIcon, TrashIcon } from 'theme/Icons'
 import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
 import FetchCard from 'components/FetchCard'
@@ -290,12 +291,26 @@ const Dashboard = ({ history }) => {
         />
       )}
       <Flex w='100%' justify='space-between'>
-        <Flex>
+        <Flex align='center'>
+          <IconButton
+            as={ArrowLeftIcon}
+            boxSize={8}
+            bg='unset'
+            _hover={{
+              bg: 'unset'
+            }}
+            _focus={{
+              bg: 'unset'
+            }}
+            cursor='pointer'
+            onClick={() => history.push('/admin/dashboard')}
+          />
+          <Box mr={14} />
           <Icon as={DashboardIcon} boxSize={49} />
           <Box ml={4}>
-            <Heading fontSize='2xl'>Uncompleted Applications.</Heading>
+            <Heading fontSize='2xl'>Incomplete Applications.</Heading>
             <Text fontWeight={300} fontSize='sm'>
-              List of uncompleted applications
+              List of incomplete applications
             </Text>
           </Box>
         </Flex>

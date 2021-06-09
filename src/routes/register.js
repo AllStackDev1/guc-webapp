@@ -38,8 +38,8 @@ const Router = () => {
         />
         <PrivateRoute
           exact
-          path='/admin/uncompleted-applications'
-          component={Admin.Uncompleted}
+          path='/admin/incomplete-applications'
+          component={Admin.Incomplete}
         />
         <PrivateRoute
           exact

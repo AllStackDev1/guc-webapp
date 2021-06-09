@@ -42,20 +42,22 @@ const Search = ({
           </Box>
         ))}
       </Select>
-      <InputGroup bgColor='white' rounded='md'>
-        <InputLeftElement>
-          <Icon as={FiSearch} color='gcu.100' boxSize={6} />
-        </InputLeftElement>
-        <Input
-          name='searchBox'
-          color='gcu.100'
-          type='search'
-          fontSize='xs'
-          _focus={{ outline: 'none' }}
-          placeholder='Search'
-          onChange={handleSearch}
-        />
-      </InputGroup>
+      {filterKey && (
+        <InputGroup bgColor='white' rounded='md'>
+          <InputLeftElement>
+            <Icon as={FiSearch} color='gcu.100' boxSize={6} />
+          </InputLeftElement>
+          <Input
+            name='searchBox'
+            color='gcu.100'
+            type='search'
+            fontSize='xs'
+            _focus={{ outline: 'none' }}
+            placeholder='Search'
+            onChange={handleSearch}
+          />
+        </InputGroup>
+      )}
     </Flex>
   )
 }

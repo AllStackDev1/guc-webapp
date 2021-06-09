@@ -9,7 +9,7 @@ const MotionBox = motion(Box)
 
 const DropdownActions = ({ data, options }) => {
   return (
-    <Menu as={Box} ml={2} userSelect='none'>
+    <Menu as={Box} ml={2} userSelect='none' pos='relative'>
       {({ open }) => (
         <>
           <Menu.Button
@@ -32,24 +32,26 @@ const DropdownActions = ({ data, options }) => {
             {open && (
               <Menu.Items
                 static
+                w={56}
+                mt={3}
+                bg='white'
+                rounded='sm'
+                pos='absolute'
                 as={MotionBox}
+                borderWidth={1}
+                color='gray.600'
+                right={5}
+                zIndex={1}
+                borderColor='gray.100'
+                shadow='lg'
+                _focus={{ outline: 'none' }}
+                exit={{ opacity: 0, y: 50 }}
                 initial={{ opacity: 0, y: -50 }}
                 animate={{
                   opacity: 1,
                   y: 0,
                   transition: { duration: 0.3 }
                 }}
-                exit={{ opacity: 0, y: 50 }}
-                pos={{ base: 'fixed', md: 'absolute' }}
-                w={56}
-                mt={3}
-                bg='white'
-                rounded='sm'
-                borderWidth={1}
-                color='gray.600'
-                right={{ base: 5, md: 20 }}
-                _focus={{ outline: 'none' }}
-                borderColor='gray.100'
               >
                 <AnimatePresence>
                   {options.map((item, i) => (

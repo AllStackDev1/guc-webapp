@@ -27,13 +27,7 @@ import LogoBGImage from 'assets/images/login-side-bg-img.png'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email!').required('Email is required!'),
-  password: yup
-    .string()
-    // .matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, {
-    //   message:
-    //     ' Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character'
-    // })
-    .required('Password is Required!')
+  password: yup.string().required('Password is Required!')
 })
 
 const Login = () => {
@@ -52,6 +46,7 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
+        setSubmitting(true)
         const res = await login(values)
         store(res.data)
         // toast({

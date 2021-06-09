@@ -60,7 +60,7 @@ const Dashboard = ({ history }) => {
     null,
     getApplicants,
     reload,
-    { completed: true }
+    { completed: true, stage: 12 }
   )
 
   const allChecked = checkedItems?.every(e => e?.checked === true)

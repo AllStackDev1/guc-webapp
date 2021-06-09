@@ -20,6 +20,7 @@ import { FiDownload, FiFileText, FiUpload } from 'react-icons/fi'
 import ActionButton from 'components/ActionButton'
 import Overlay from 'components/Loading/Overlay'
 import FetchCard from 'components/FetchCard'
+import Search from 'components/CustomTable/Search'
 import Layout from 'container/Layout'
 
 import useApi from 'context/api'
@@ -39,11 +40,14 @@ const ScheduleTest = ({ history }) => {
   document.title = 'Schedule Test | The GCU Application Portal'
   const [isLoading, setLoading] = React.useState(false)
   const [checkedItems, setCheckedItems] = React.useState(null)
+  const [filterKey, setFilterKey] = React.useState('')
   const [message, setMessage] = React.useState(null)
   const [reload, setReload] = React.useState(0)
   const [modal, setModal] = React.useState(null)
   const [isSubmittingResult, setSubmittingResult] = React.useState(undefined)
   const [resultFile, setResultFile] = React.useState(undefined)
+  const [initialTableData, setInitialTableData] = React.useState([])
+  const [tableData, setTableData] = React.useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
@@ -68,16 +72,6 @@ const ScheduleTest = ({ history }) => {
     checkedItems?.some(e => e.checked === true) && !allChecked
 
   const selectedItems = checkedItems?.filter(e => e.checked === true)
-
-  React.useEffect(() => {
-    if (data?.length) {
-      const checked = data.map(e => ({
-        _id: e._id,
-        checked: false
-      }))
-      setCheckedItems(checked)
-    }
-  }, [data])
 
   const _columns = [
     {
@@ -350,6 +344,26 @@ const ScheduleTest = ({ history }) => {
     }
   }
 
+  const filterOpts = [
+    { name: 'Application Code', value: 'code' },
+    { name: 'Phone Number', value: 'phoneNumber' },
+    { name: 'Email', value: 'email' },
+    { name: 'First Name', value: 'firstName' },
+    { name: 'Last Name', value: 'lastName' }
+  ]
+
+  React.useEffect(() => {
+    if (data?.length) {
+      const checked = data.map(e => ({
+        _id: e._id,
+        checked: false
+      }))
+      setCheckedItems(checked)
+      setInitialTableData(data || [])
+      setTableData(data || [])
+    }
+  }, [data])
+
   const actions = [
     {
       name: 'Upload Test Result',
@@ -478,6 +492,21 @@ const ScheduleTest = ({ history }) => {
     }
   }
 
+  const handleSearch = event => {
+    let value = event.target.value ? event.target.value : ''
+    value = value.trim().toLowerCase()
+    let filtered = []
+    if (value) {
+      filtered = initialTableData.filter(item => {
+        const columnData = item[filterKey]?.toLowerCase()
+        return !!columnData?.match(new RegExp(value, 'i'))
+      })
+    } else {
+      filtered = JSON.parse(JSON.stringify(initialTableData))
+    }
+    setTableData(filtered)
+  }
+
   return (
     <Layout bg='#E5E5E5' px={20} py={10}>
       {isLoading && <Overlay text={message} />}
@@ -540,6 +569,16 @@ const ScheduleTest = ({ history }) => {
           />
         </Flex>
       </Flex>
+      <Search
+        {...{
+          mb: 3,
+          mt: 10,
+          filterKey,
+          options: filterOpts,
+          handleSearch,
+          handleSelect: e => setFilterKey(e.target.value)
+        }}
+      />
       <Box w='100%' mt={10} bg='white' rounded='md'>
         {fetchLoading || error ? (
           <FetchCard
@@ -554,7 +593,11 @@ const ScheduleTest = ({ history }) => {
           />
         ) : (
           <>
-            <CustomTable variant='simple' _columns={_columns} _data={data} />
+            <CustomTable
+              variant='simple'
+              _columns={_columns}
+              _data={tableData}
+            />
             {!!selectedItems?.length && (
               <Flex w='full' justify='center' py={4}>
                 <Box px={6} py={4} bg='gcu.100' rounded='full'>

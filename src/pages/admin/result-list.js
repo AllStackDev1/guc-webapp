@@ -18,6 +18,7 @@ import Layout from 'container/Layout'
 import { ArrowLeftIcon, DashboardIcon } from 'theme/Icons'
 import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
+import Search from 'components/CustomTable/Search'
 
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
@@ -31,11 +32,14 @@ const ResultList = ({ history }) => {
   document.title = 'Result List | The GCU Application Portal'
   const [selectItem, setSelectItem] = React.useState(null)
   const [checkedItems, setCheckedItems] = React.useState(null)
+  const [filterKey, setFilterKey] = React.useState('')
   const [file, setFile] = React.useState(undefined)
   const [reload, setReload] = React.useState(0)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const { getApplicantsWithResult } = useApi()
+  const [initialTableData, setInitialTableData] = React.useState([])
+  const [tableData, setTableData] = React.useState([])
 
   const toast = useToast()
 
@@ -45,6 +49,7 @@ const ResultList = ({ history }) => {
     null,
     getApplicantsWithResult,
     reload
+    // { completed: true, stage: 14 }
   )
 
   const handlePreview = file => {
@@ -55,6 +60,14 @@ const ResultList = ({ history }) => {
 
   const selectedItems = checkedItems?.filter(e => e.checked === true)
 
+  const filterOpts = [
+    { name: 'Application Code', value: 'code' },
+    { name: 'Phone Number', value: 'phoneNumber' },
+    { name: 'Email', value: 'email' },
+    { name: 'First Name', value: 'firstName' },
+    { name: 'Last Name', value: 'lastName' }
+  ]
+
   React.useEffect(() => {
     if (data?.length) {
       const checked = data.map(e => ({
@@ -62,8 +75,25 @@ const ResultList = ({ history }) => {
         checked: false
       }))
       setCheckedItems(checked)
+      setInitialTableData(data || [])
+      setTableData(data || [])
     }
   }, [data])
+
+  const handleSearch = event => {
+    let value = event.target.value ? event.target.value : ''
+    value = value.trim().toLowerCase()
+    let filtered = []
+    if (value) {
+      filtered = initialTableData.filter(item => {
+        const columnData = item[filterKey]?.toLowerCase()
+        return !!columnData?.match(new RegExp(value, 'i'))
+      })
+    } else {
+      filtered = JSON.parse(JSON.stringify(initialTableData))
+    }
+    setTableData(filtered)
+  }
 
   const _columns = [
     {
@@ -152,7 +182,17 @@ const ResultList = ({ history }) => {
           </Box>
         </Flex>
       </Flex>
-      <Box w='100%' mt={10} bg='white' rounded='md'>
+      <Search
+        {...{
+          mb: 3,
+          mt: 10,
+          filterKey,
+          options: filterOpts,
+          handleSearch,
+          handleSelect: e => setFilterKey(e.target.value)
+        }}
+      />
+      <Box w='100%' bg='white' rounded='md'>
         {fetchLoading || error ? (
           <FetchCard
             h='20vh'
@@ -166,7 +206,11 @@ const ResultList = ({ history }) => {
           />
         ) : (
           <>
-            <CustomTable variant='simple' _columns={_columns} _data={data} />
+            <CustomTable
+              variant='simple'
+              _columns={_columns}
+              _data={tableData}
+            />
             {!!selectedItems?.length && (
               <Flex w='full' justify='center' py={4}>
                 <Box px={6} py={4} bg='gcu.100' rounded='full'>
