@@ -1,13 +1,12 @@
 import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 
-import getConfig from 'utils/configs'
 import http from 'utils/httpFacade'
 
 const ApiContext = createContext()
 
 export const ApiContextProvider = ({ children }) => {
-  const { BASE_URL } = getConfig()
+  const BASE_URL = 'https://api.gcu.sch.ng'
 
   //#region APPLICANT API
   const enroll = async payload => {
