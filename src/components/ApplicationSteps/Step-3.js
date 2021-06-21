@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 import React from 'react'
+import validator from 'validator'
 import PropTypes from 'prop-types'
 import * as yup from 'yup'
 import jwt_decode from 'jwt-decode'
@@ -10,14 +12,35 @@ import Legal from './Legal'
 import CustomOTPInput from 'components/Forms/CustomOTPInput'
 import CustomAlert from './CustomAlert'
 import CustomButton from 'components/Forms/CustomButton'
+import CustomPhoneInput from 'components/Forms/CustomPhoneInput'
 
-const validationSchema = yup.object().shape({
-  code: yup
-    .string()
-    .min(6, 'Invalid code')
-    .max(6, 'Invalid code')
-    .required('Application code is required!')
-})
+const validationSchema = yup.object().shape(
+  {
+    code: yup.string().when('phoneNumber', {
+      is: phoneNumber => !phoneNumber || phoneNumber.length === 0,
+      then: yup
+        .string()
+        .min(6, 'Invalid code')
+        .max(6, 'Invalid code')
+        .required('This field is required!'),
+      otherwise: yup.string()
+    }),
+    phoneNumber: yup.string().when('code', {
+      is: code => !code || code.length === 0,
+      then: yup
+        .string()
+        .test(
+          'valid',
+          'Invalid phone number, exclude country code!',
+          value =>
+            value && validator.isMobilePhone(value, 'any', { strictMode: true })
+        )
+        .required('This field is required!'),
+      otherwise: yup.string()
+    })
+  },
+  [['code', 'phoneNumber']]
+)
 
 const StepThree = ({
   auth,
@@ -37,31 +60,43 @@ const StepThree = ({
 }) => {
   const [counter, setCounter] = React.useState(60)
   const [loading, setLoading] = React.useState(false)
+  const [phoneNumberInput, setPhoneNumberInput] = React.useState(false)
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      code: ''
+      code: '',
+      phoneNumber: ''
     },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const res = await auth(values)
-        // setOtpId(res.data.pinId)
-        // setPhoneNumber(res.data.to)
-        // setCode(values.code)
-        // setErrorMessage(null)
-        // setSuccessMessage(res.message)
-        // setStep(4)
-        setErrorMessage(null)
-        setSuccessMessage(null)
-        store(res.data)
-        const user = jwt_decode(res.data)
-        if (user.status === 'PENDING') {
-          setStep(5)
-          sessionStorage.setItem('step', 5)
+        delete values.country
+        if (phoneNumberInput) {
+          delete values.code
+          const res = await resendCode(values)
+          setErrorMessage(null)
+          setSuccessMessage(res.message)
         } else {
-          setStep(user.stage)
-          sessionStorage.setItem('step', user.stage)
+          delete values.phoneNumber
+          const res = await auth(values)
+          // setOtpId(res.data.pinId)
+          // setPhoneNumber(res.data.to)
+          // setCode(values.code)
+          // setErrorMessage(null)
+          // setSuccessMessage(res.message)
+          // setStep(4)
+          setErrorMessage(null)
+          setSuccessMessage(null)
+          store(res.data)
+          const user = jwt_decode(res.data)
+          if (user.status === 'PENDING') {
+            setStep(5)
+            sessionStorage.setItem('step', 5)
+          } else {
+            setStep(user.stage)
+            sessionStorage.setItem('step', user.stage)
+          }
         }
       } catch (error) {
         setSuccessMessage(null)
@@ -93,12 +128,16 @@ const StepThree = ({
     }
   }
 
+  const togglePhoneNumberInput = () => setPhoneNumberInput(e => !e)
+
   React.useEffect(() => {
     setErrorMessage(null)
     if (email) {
       counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)
     }
   }, [counter, email, setErrorMessage])
+
+  console.log(formik.errors)
 
   return (
     <Container
@@ -128,23 +167,66 @@ const StepThree = ({
         flexDir='column'
         onSubmit={formik.handleSubmit}
       >
-        <CustomOTPInput
-          mt={{ base: 8, lg: 12 }}
-          value={formik.values.code}
-          error={formik.errors.code}
-          isDisabled={formik.isSubmitting}
-          onChange={code => formik.setFieldValue('code', code)}
-        />
+        {phoneNumberInput ? (
+          <Box mx='auto' w={{ base: '100%', lg: 120 }} my={{ base: 5, lg: 8 }}>
+            <CustomPhoneInput
+              isRequired
+              name='phoneNumber'
+              error={formik.errors.phoneNumber}
+              touched={formik.touched.phoneNumber}
+              onChange={formik.handleChange}
+              defaultValue={formik.values.phoneNumber}
+              setFieldValue={formik.setFieldValue}
+              setFieldTouched={formik.setFieldTouched}
+            />
+          </Box>
+        ) : (
+          <CustomOTPInput
+            mt={{ base: 8, lg: 12 }}
+            value={formik.values.code}
+            error={formik.errors.code}
+            isDisabled={formik.isSubmitting}
+            onChange={code => formik.setFieldValue('code', code)}
+          />
+        )}
 
         <Box mx='auto' w={{ base: '100%', lg: 120 }}>
           <CustomButton
             w='100%'
             color='#fff'
             type='submit'
-            label='Next'
+            label={phoneNumberInput ? 'Continue' : 'Next'}
             isLoading={formik.isSubmitting}
             isDisabled={formik.isSubmitting}
           />
+          {!!counter && !email && !phoneNumberInput ? (
+            <Box mt={4} justify='center'>
+              <Button
+                bg='unset'
+                px={0}
+                type='button'
+                color='gcu.100'
+                isLoading={loading}
+                isDisabled={loading}
+                _hover={{ bg: 'unset' }}
+                onClick={togglePhoneNumberInput}
+              >
+                Resend application code
+              </Button>
+            </Box>
+          ) : (
+            <Flex mt={4} justify='center'>
+              <Text
+                color='gcu.100'
+                cursor='pointer'
+                fontWeight='bold'
+                textDecor='underline'
+                onClick={togglePhoneNumberInput}
+              >
+                Login with code
+              </Text>
+            </Flex>
+          )}
         </Box>
 
         {email && (
@@ -155,6 +237,7 @@ const StepThree = ({
               <Button
                 px={0}
                 bg='unset'
+                type='button'
                 color='gcu.100'
                 isLoading={loading}
                 isDisabled={loading}

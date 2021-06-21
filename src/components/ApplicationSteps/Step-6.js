@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useRef, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useFormik } from 'formik'
@@ -15,7 +16,6 @@ import {
   Heading,
   TabPanel,
   GridItem,
-  Checkbox,
   TabPanels,
   Container,
   useDisclosure
@@ -40,9 +40,6 @@ const StepSixOne = ({
   getInitialEnquiry,
   updateInitialEnquiry
 }) => {
-  const [docOne, setDocOne] = useState(false)
-  const [docTwo, setDocTwo] = useState(false)
-  const [docThree, setDocThree] = useState(false)
   const [file, setFile] = useState(undefined)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [reload, setReload] = React.useState(0)
@@ -172,24 +169,18 @@ const StepSixOne = ({
   const tabOne = [
     {
       id: 1,
-      checked: docOne,
       name: 'birthCertOrPassport',
-      toggle: () => setDocOne(!docOne),
       title: 'Birth Certificate / Passport'
     },
     {
       id: 2,
-      checked: docTwo,
       name: 'schoolReport',
-      toggle: () => setDocTwo(!docTwo),
       title: 'Most recent school report'
     },
     {
       id: 3,
-      checked: docThree,
       name: 'passportPhoto',
-      title: 'Passport Photo',
-      toggle: () => setDocThree(!docThree)
+      title: 'Passport Photo'
     }
   ]
 
@@ -311,7 +302,11 @@ const StepSixOne = ({
           <Tabs isFitted>
             <TabList w={{ lg: '70%' }}>
               <Tab {...tabBtnStyle}>Document Upload</Tab>
-              <Tab ref={tabRef} {...tabBtnStyle}>
+              <Tab
+                isDisabled={!isEmpty(errors.documents)}
+                ref={tabRef}
+                {...tabBtnStyle}
+              >
                 Student Information
               </Tab>
             </TabList>
@@ -348,73 +343,64 @@ const StepSixOne = ({
                     </Box>
 
                     <Flex>
-                      <Checkbox
-                        color='gray.500'
-                        fontWeight='500'
-                        colorScheme='green'
-                        checked={e.checked}
-                        onChange={e.toggle}
-                        isDisabled={values.documents[e.name]}
-                      />
-                      {e.checked &&
-                        (values.documents[e.name] ? (
-                          <>
-                            <Box mx={2} d={{ base: 'none', lg: 'block' }}>
-                              <Button
-                                p={0}
-                                bg='unset'
-                                type='button'
-                                color='gcu.100'
-                                _hover={{ bg: 'unset' }}
-                                fontSize={{ base: 'xs', lg: 'inherit' }}
-                                onClick={_ => {
-                                  _.preventDefault()
-                                  handlePreview(values.documents[e.name])
-                                }}
-                              >
-                                Preview
-                              </Button>
-                            </Box>
-
-                            <Box ml={{ base: 2, lg: 0 }}>
-                              <Button
-                                p={0}
-                                bg='unset'
-                                type='button'
-                                color='gcu.100'
-                                _hover={{ bg: 'unset' }}
-                                fontSize={{ base: 'xs', lg: 'inherit' }}
-                                onClick={_ => {
-                                  _.preventDefault()
-                                  return setFieldValue(
-                                    `documents.${e.name}`,
-                                    undefined
-                                  )
-                                }}
-                              >
-                                Remove
-                              </Button>
-                            </Box>
-                          </>
-                        ) : (
-                          <Flex ml={2} pos='relative' align='center'>
-                            <CustomUploader
-                              left={0}
-                              form={formik}
-                              pos='absolute'
-                              cursor='pointer'
-                              field={{ name: `documents.${e.name}` }}
-                              accept='application/pdf, image/jpg, image/jpeg, image/png'
-                            />
-                            <Text
+                      {values.documents[e.name] ? (
+                        <>
+                          <Box mx={2} d={{ base: 'none', lg: 'block' }}>
+                            <Button
+                              p={0}
+                              bg='unset'
+                              type='button'
                               color='gcu.100'
+                              _hover={{ bg: 'unset' }}
                               fontSize={{ base: 'xs', lg: 'inherit' }}
-                              fontWeight='600'
+                              onClick={_ => {
+                                _.preventDefault()
+                                handlePreview(values.documents[e.name])
+                              }}
                             >
-                              Click to upload
-                            </Text>
-                          </Flex>
-                        ))}
+                              Preview
+                            </Button>
+                          </Box>
+
+                          <Box ml={{ base: 2, lg: 0 }}>
+                            <Button
+                              p={0}
+                              bg='unset'
+                              type='button'
+                              color='gcu.100'
+                              _hover={{ bg: 'unset' }}
+                              fontSize={{ base: 'xs', lg: 'inherit' }}
+                              onClick={_ => {
+                                _.preventDefault()
+                                return setFieldValue(
+                                  `documents.${e.name}`,
+                                  undefined
+                                )
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </Box>
+                        </>
+                      ) : (
+                        <Flex ml={2} pos='relative' align='center'>
+                          <CustomUploader
+                            left={0}
+                            form={formik}
+                            pos='absolute'
+                            cursor='pointer'
+                            field={{ name: `documents.${e.name}` }}
+                            accept='application/pdf, image/jpg, image/jpeg, image/png'
+                          />
+                          <Text
+                            color='gcu.100'
+                            fontSize={{ base: 'xs', lg: 'inherit' }}
+                            fontWeight='600'
+                          >
+                            Click to upload
+                          </Text>
+                        </Flex>
+                      )}
                     </Flex>
                   </Flex>
                 ))}

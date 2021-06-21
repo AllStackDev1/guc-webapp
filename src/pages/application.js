@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React from 'react'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Text, Flex } from '@chakra-ui/react'
 import Confetti from 'react-confetti'
 import useWindowSize from 'react-use/lib/useWindowSize'
 
@@ -124,6 +124,22 @@ const Auth = () => {
           py={{ base: '', lg: 16 }}
         >
           <display.Step {...app} {...apis} {...auth} user={user} />
+          {[1, 2].includes(app.step) && (
+            <Flex mt={4} justify='center'>
+              <Text
+                color='gcu.100'
+                cursor='pointer'
+                fontWeight='bold'
+                textDecor='underline'
+                onClick={_ => app.setStep(3)}
+              >
+                Login
+              </Text>
+              <Text d={{ base: 'none', lg: 'block' }} ml={3}>
+                to resume pending applications
+              </Text>
+            </Flex>
+          )}
         </Flex>
         <Box
           right={0}
