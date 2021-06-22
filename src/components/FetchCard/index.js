@@ -10,10 +10,19 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
         textAlign='center'
         align='center'
         justify='center'
+        fontWeight='500'
         direction='column'
       >
         <>
-          {loading && <Spinner size='md' color='gcu.100' />}
+          {loading && (
+            <Spinner
+              thickness='5px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              size='md'
+              color='gcu.100'
+            />
+          )}
           {text && !error && (
             <Text className='loading-text loading-text-b'>{text}</Text>
           )}

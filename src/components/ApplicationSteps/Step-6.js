@@ -292,7 +292,7 @@ const StepSixOne = ({
           text='Loading'
         />
       ) : (
-        <Box as='form' onSubmit={handleSubmit} noValidate>
+        <Box as='form' onSubmit={handleSubmit} on>
           <Text
             my={{ base: 4, lg: 8 }}
             fontSize={{ base: 'sm', lg: 'inherit' }}
@@ -303,7 +303,7 @@ const StepSixOne = ({
             <TabList w={{ lg: '70%' }}>
               <Tab {...tabBtnStyle}>Document Upload</Tab>
               <Tab
-                isDisabled={!isEmpty(errors.documents)}
+                isDisabled={!(dirty && isEmpty(errors.documents))}
                 ref={tabRef}
                 {...tabBtnStyle}
               >
@@ -327,7 +327,7 @@ const StepSixOne = ({
                         fontWeight='500'
                         fontSize={{ base: 'sm', lg: 'lg' }}
                       >
-                        {e.title}{' '}
+                        {e.title}
                         {!data && (
                           <Text as='span' color='gcu.100'>
                             *
@@ -464,6 +464,18 @@ const StepSixOne = ({
               color='#fff'
               type={(isValid && dirty) || data ? 'submit' : 'button'}
               onClick={async e => {
+                if (isEmpty(errors.documents)) {
+                  setFieldTouched('studentInfo.firstName')
+                  setFieldTouched('studentInfo.dob')
+                  setFieldTouched('studentInfo.gender')
+                  setFieldTouched('studentInfo.familyName')
+                  setFieldTouched('studentInfo.middleName')
+                  setFieldTouched('studentInfo.nationality')
+                  setFieldTouched('studentInfo.homeLanguage')
+                  setFieldTouched('studentInfo.preferedName')
+                  setFieldTouched('studentInfo.firstLanguage')
+                  setFieldTouched('studentInfo.countryOfBirth')
+                }
                 if (!(isValid && dirty) && !data) {
                   handleNext(e)
                 }

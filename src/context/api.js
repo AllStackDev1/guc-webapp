@@ -7,6 +7,7 @@ const ApiContext = createContext()
 
 export const ApiContextProvider = ({ children }) => {
   const BASE_URL = 'https://api.gcu.sch.ng/api/v1'
+  // const BASE_URL = 'https://guc-webserver-test.herokuapp.com/api/v1'
 
   //#region APPLICANT API
   const enroll = async payload => {
