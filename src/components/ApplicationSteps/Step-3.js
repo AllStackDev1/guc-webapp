@@ -137,8 +137,6 @@ const StepThree = ({
     }
   }, [counter, email, setErrorMessage])
 
-  console.log(formik.errors)
-
   return (
     <Container
       align='center'

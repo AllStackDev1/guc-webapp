@@ -2,12 +2,12 @@ import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 
 import http from 'utils/httpFacade'
+import configs from 'utils/configs'
 
 const ApiContext = createContext()
 
 export const ApiContextProvider = ({ children }) => {
-  const BASE_URL = 'https://api.gcu.sch.ng/api/v1'
-  // const BASE_URL = 'https://guc-webserver-test.herokuapp.com/api/v1'
+  const { BASE_URL } = configs()
 
   //#region APPLICANT API
   const enroll = async payload => {

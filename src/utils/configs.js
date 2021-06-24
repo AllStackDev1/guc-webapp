@@ -4,12 +4,9 @@
  * */
 
 const configs = () => {
-  // Get REACT ENV
-  const ENV = process.env.REACT_APP_ENV
-
   return {
-    BASE_URL: process.env[`REACT_APP_${ENV}_BASE_URL`],
-    PAYSTACK_PUBLIC_KEY: process.env[`REACT_APP_${ENV}_PAYSTACK_PUBLIC_KEY`]
+    BASE_URL: process.env.REACT_APP_BASE_URL,
+    PAYSTACK_PUBLIC_KEY: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY
   }
 }
 
