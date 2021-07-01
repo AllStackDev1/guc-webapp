@@ -91,7 +91,7 @@ const StepFive = ({
   }
 
   return (
-    <>
+    <div>
       {isLoading && <Overlay text='verfying payment' />}
       <Container
         align='center'
@@ -143,11 +143,11 @@ const StepFive = ({
         <Box mt={4}>
           <Text fontWeight='bold' fontSize='sm' color='red.500'>
             Please do not close the payment page until payment is confirmed, the
-            page would close automatically after confirmation
+            page would close automatically after confirmation.
           </Text>
         </Box>
       </Container>
-    </>
+    </div>
   )
 }
 

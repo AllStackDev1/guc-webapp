@@ -13,7 +13,7 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
         fontWeight='500'
         direction='column'
       >
-        <>
+        <div>
           {loading && (
             <Spinner
               thickness='5px'
@@ -27,7 +27,7 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
             <Text className='loading-text loading-text-b'>{text}</Text>
           )}
           {error && (
-            <>
+            <div>
               <Text fontSize={{ base: 'xs', lg: 'md' }} ml={2} color='gcu.100'>
                 Something went wrong
               </Text>
@@ -43,9 +43,9 @@ const FetchCard = ({ loading, error, text, reload, ...rest }) => {
               >
                 <Text fontSize={{ base: 'xs', lg: 'sm' }}>Try again</Text>
               </Button>
-            </>
+            </div>
           )}
-        </>
+        </div>
       </Flex>
     </Flex>
   )

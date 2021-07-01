@@ -592,7 +592,7 @@ const ScheduleTest = ({ history }) => {
             text='Loading'
           />
         ) : (
-          <>
+          <div>
             <CustomTable
               variant='simple'
               _columns={_columns}
@@ -607,7 +607,7 @@ const ScheduleTest = ({ history }) => {
                 </Box>
               </Flex>
             )}
-          </>
+          </div>
         )}
       </Box>
       <Flex mt={4} w='full' justify='flex-start'>

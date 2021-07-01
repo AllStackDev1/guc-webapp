@@ -124,7 +124,7 @@ const Navbar = () => {
 
         <Menu as={Box} ml={2} userSelect='none'>
           {({ open }) => (
-            <>
+            <div>
               <Menu.Button
                 as={Box}
                 _focus={{ outline: 'none' }}
@@ -214,7 +214,7 @@ const Navbar = () => {
                   </Menu.Items>
                 )}
               </AnimatePresence>
-            </>
+            </div>
           )}
         </Menu>
       </Flex>

@@ -13,7 +13,7 @@ const FilePreview = ({ src, alt, fileData, w = '100%', h = 130 }) => {
   return loading ? (
     <SmallSpinner />
   ) : (
-    <>
+    <div>
       {fileData?.type?.match('image.*') ? (
         <Image
           w='60%'
@@ -31,7 +31,7 @@ const FilePreview = ({ src, alt, fileData, w = '100%', h = 130 }) => {
           title={(fileData && fileData.name) || alt}
         />
       )}
-    </>
+    </div>
   )
 }
 

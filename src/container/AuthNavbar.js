@@ -12,7 +12,7 @@ const AuthNavbar = ({ showLogin }) => {
   const { step } = useApp()
 
   return (
-    <>
+    <div>
       <Flex
         w='100%'
         as='header'
@@ -54,7 +54,7 @@ const AuthNavbar = ({ showLogin }) => {
         value={getStep(step)}
         h={{ base: '6px', lg: '11px' }}
       />
-    </>
+    </div>
   )
 }
 

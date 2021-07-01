@@ -11,7 +11,7 @@ const DropdownActions = ({ data, options }) => {
   return (
     <Menu as={Box} ml={2} userSelect='none' pos='relative'>
       {({ open }) => (
-        <>
+        <div>
           <Menu.Button
             h={10}
             as={Flex}
@@ -107,7 +107,7 @@ const DropdownActions = ({ data, options }) => {
               </Menu.Items>
             )}
           </AnimatePresence>
-        </>
+        </div>
       )}
     </Menu>
   )

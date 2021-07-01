@@ -86,7 +86,7 @@ const StepEightTwo = ({
   }, [isLoading, error, data, setView])
 
   return (
-    <>
+    <div>
       {isSubmitting && <Overlay text='Deleting record' />}
       <Container
         align='center'
@@ -208,7 +208,7 @@ const StepEightTwo = ({
           </Flex>
         )}
       </Container>
-    </>
+    </div>
   )
 }
 

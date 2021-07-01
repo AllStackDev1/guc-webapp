@@ -31,10 +31,10 @@ const CustomDropzone = ({ value, accept, multiple, onChange }) => {
             {value.name}
           </Flex>
         ) : (
-          <>
+          <div>
             <Icon as={IoMdCloudUpload} boxSize={10} />
             <Text fontSize='sm'>Select or Drag a file to upload</Text>
-          </>
+          </div>
         )}
       </Flex>
     </Flex>

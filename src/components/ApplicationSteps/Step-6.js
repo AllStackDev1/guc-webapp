@@ -343,7 +343,7 @@ const StepSixOne = ({
 
                     <Flex>
                       {values.documents[e.name] ? (
-                        <>
+                        <div>
                           <Box mx={2} d={{ base: 'none', lg: 'block' }}>
                             <Button
                               p={0}
@@ -380,7 +380,7 @@ const StepSixOne = ({
                               Remove
                             </Button>
                           </Box>
-                        </>
+                        </div>
                       ) : (
                         <Flex ml={2} pos='relative' align='center'>
                           <CustomUploader

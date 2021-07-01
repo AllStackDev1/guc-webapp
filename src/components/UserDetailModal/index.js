@@ -426,7 +426,7 @@ const UserDetailModal = ({
             text='Loading'
           />
         ) : (
-          <>
+          <div>
             <Flex>
               <Button
                 cursor='pointer'
@@ -446,7 +446,7 @@ const UserDetailModal = ({
               </Button>
             </Flex>
             {data.initialEnquiry ? (
-              <>
+              <div>
                 <DrawerHeader
                   fontWeight='700'
                   fontFamily='heading'
@@ -547,13 +547,13 @@ const UserDetailModal = ({
                     onClick={() => handleAddToList(id)}
                   />
                 </DrawerFooter>
-              </>
+              </div>
             ) : (
               <Flex h='60vh' align='center' w='full' justify='center'>
                 <Text>{message}</Text>
               </Flex>
             )}
-          </>
+          </div>
         )}
       </DrawerContent>
     </Drawer>

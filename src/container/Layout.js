@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 
 const Layout = ({ children, height, bg, px, py, ...rest }) => {
   return (
-    <>
+    <div>
       <Navbar {...rest} />
       <Box
         bg={bg}
@@ -23,7 +23,7 @@ const Layout = ({ children, height, bg, px, py, ...rest }) => {
       >
         {children}
       </Box>
-    </>
+    </div>
   )
 }
 

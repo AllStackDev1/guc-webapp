@@ -498,7 +498,7 @@ const DownloadList = ({ history, ...rest }) => {
             text='Loading'
           />
         ) : (
-          <>
+          <div>
             <CustomTable variant='simple' _columns={_columns} _data={data} />
             {!!selectedItems?.length && (
               <Flex w='full' justify='center' py={4}>
@@ -509,7 +509,7 @@ const DownloadList = ({ history, ...rest }) => {
                 </Box>
               </Flex>
             )}
-          </>
+          </div>
         )}
       </Box>
     </Layout>

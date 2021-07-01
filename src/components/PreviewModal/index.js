@@ -14,7 +14,7 @@ import FilePreview from 'components/FilePreview'
 
 const PreviewModal = ({ data, src, isOpen, onClose }) => {
   return (
-    <>
+    <div>
       <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
         <ModalOverlay />
         <ModalContent>
@@ -25,7 +25,7 @@ const PreviewModal = ({ data, src, isOpen, onClose }) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 

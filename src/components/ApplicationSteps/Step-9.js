@@ -280,7 +280,7 @@ const StepNine = ({
                   )}
                   {list.file &&
                     (values.immuneFile ? (
-                      <>
+                      <div>
                         <Flex
                           mt={{ lg: 1 }}
                           color='gcu.100'
@@ -323,7 +323,7 @@ const StepNine = ({
                             {errors.immuneFile}
                           </Text>
                         )}
-                      </>
+                      </div>
                     ) : (
                       <Flex
                         mt={{ lg: 1 }}

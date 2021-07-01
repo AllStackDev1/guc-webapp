@@ -426,7 +426,7 @@ const Dashboard = ({ history }) => {
             text='Loading'
           />
         ) : (
-          <>
+          <div>
             <CustomTable
               variant='simple'
               _columns={_columns}
@@ -441,7 +441,7 @@ const Dashboard = ({ history }) => {
                 </Box>
               </Flex>
             )}
-          </>
+          </div>
         )}
       </Box>
     </Layout>

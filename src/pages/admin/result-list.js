@@ -205,7 +205,7 @@ const ResultList = ({ history }) => {
             text='Loading'
           />
         ) : (
-          <>
+          <div>
             <CustomTable
               variant='simple'
               _columns={_columns}
@@ -220,7 +220,7 @@ const ResultList = ({ history }) => {
                 </Box>
               </Flex>
             )}
-          </>
+          </div>
         )}
       </Box>
     </Layout>

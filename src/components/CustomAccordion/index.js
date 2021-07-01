@@ -81,7 +81,7 @@ const CustomAccordion = ({ details, handlePreview }) => {
                           ))}
                         </Flex>
                       ) : (
-                        <>
+                        <div>
                           <Text flex={2} fontSize='sm'>
                             Ans: {_e.value}
                           </Text>
@@ -107,7 +107,7 @@ const CustomAccordion = ({ details, handlePreview }) => {
                               </Button>
                             </Flex>
                           )}
-                        </>
+                        </div>
                       )}
                     </Flex>
                   </ListItem>
@@ -147,7 +147,7 @@ const CustomAccordion = ({ details, handlePreview }) => {
               </Grid>
             )}
             {e.layout === 'grid-gray-bg' && (
-              <>
+              <div>
                 {e?.data?.map(_e => (
                   <Grid
                     p={6}
@@ -172,7 +172,7 @@ const CustomAccordion = ({ details, handlePreview }) => {
                     ))}
                   </Grid>
                 ))}
-              </>
+              </div>
             )}
           </AccordionPanel>
         </AccordionItem>
