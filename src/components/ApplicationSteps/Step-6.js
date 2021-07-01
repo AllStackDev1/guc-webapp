@@ -35,7 +35,7 @@ import { fileToBase64, objDiff } from 'utils/mics'
 
 const StepSixOne = ({
   user,
-  setStep,
+  history,
   setInitialEnquiry,
   getInitialEnquiry,
   updateInitialEnquiry
@@ -70,7 +70,7 @@ const StepSixOne = ({
         birthCertOrPassport: data?.documents?.birthCertOrPassport
       },
       studentInfo: {
-        dob: data?.studentInfo?.dob || '',
+        dob: data?.studentInfo?.dob || '2008-01-01',
         gender: data?.studentInfo?.gender || '',
         familyName: data?.studentInfo?.familyName || '',
         religion: data?.studentInfo?.religion || '',
@@ -118,8 +118,7 @@ const StepSixOne = ({
           title: 'Success',
           description: mge
         })
-        window.sessionStorage.setItem('step', 6.2)
-        setStep(6.2)
+        history.push('/applicant/previous-schools')
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -443,6 +442,7 @@ const StepSixOne = ({
                           touched={touched.studentInfo?.[list.id]}
                           defaultValue={values.studentInfo?.[list.id]}
                           type={list.id === 'dob' ? 'date' : 'text'}
+                          min={list.id === 'dob' ? '2008-01-01' : ''}
                         />
                       )}
                     </GridItem>
@@ -492,7 +492,7 @@ const StepSixOne = ({
 
 StepSixOne.propTypes = {
   user: PropTypes.object.isRequired,
-  setStep: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setInitialEnquiry: PropTypes.func.isRequired,
   getInitialEnquiry: PropTypes.func.isRequired,
   updateInitialEnquiry: PropTypes.func.isRequired

@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 import React from 'react'
 import validator from 'validator'
 import PropTypes from 'prop-types'
@@ -13,6 +12,7 @@ import CustomOTPInput from 'components/Forms/CustomOTPInput'
 import CustomAlert from './CustomAlert'
 import CustomButton from 'components/Forms/CustomButton'
 import CustomPhoneInput from 'components/Forms/CustomPhoneInput'
+import { stepResolver } from 'utils/mics'
 
 const validationSchema = yup.object().shape(
   {
@@ -46,14 +46,12 @@ const StepThree = ({
   auth,
   store,
   email,
-  setCode,
-  setStep,
-  setOtpId,
+  history,
+  setSession,
   resendCode,
   phoneNumber,
   errorMessage,
   successMessage,
-  setPhoneNumber,
   setErrorMessage,
   enterApplication,
   setSuccessMessage
@@ -80,22 +78,15 @@ const StepThree = ({
         } else {
           delete values.phoneNumber
           const res = await auth(values)
-          // setOtpId(res.data.pinId)
-          // setPhoneNumber(res.data.to)
-          // setCode(values.code)
-          // setErrorMessage(null)
-          // setSuccessMessage(res.message)
-          // setStep(4)
           setErrorMessage(null)
           setSuccessMessage(null)
           store(res.data)
+          setSession(true)
           const user = jwt_decode(res.data)
           if (user.status === 'PENDING') {
-            setStep(5)
-            sessionStorage.setItem('step', 5)
+            history.push('/applicant/payment')
           } else {
-            setStep(user.stage)
-            sessionStorage.setItem('step', user.stage)
+            history.push(`/applicant/${stepResolver(user.stage)}`)
           }
         }
       } catch (error) {
@@ -266,8 +257,9 @@ StepThree.propTypes = {
   phoneNumber: PropTypes.string,
   auth: PropTypes.func.isRequired,
   store: PropTypes.func.isRequired,
-  setStep: PropTypes.func.isRequired,
-  enterApplication: PropTypes.func.isRequired,
+  setSession: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  enterApplication: PropTypes.bool.isRequired,
   setCode: PropTypes.func.isRequired,
   setOtpId: PropTypes.func.isRequired,
   resendCode: PropTypes.func.isRequired,

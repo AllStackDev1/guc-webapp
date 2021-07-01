@@ -1,11 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Text, Flex, Progress } from '@chakra-ui/react'
+import { Box, Link, Text, Flex, Progress } from '@chakra-ui/react'
 
 import Logo1 from 'assets/images/logo@1x.svg'
 import Logo2 from 'assets/images/logo@2x.svg'
+import { NavLink } from 'react-router-dom'
+import useApp from 'context/app'
+import { getStep } from 'utils/mics'
 
-const AuthNavbar = ({ value, step, setStep }) => {
+const AuthNavbar = ({ showLogin }) => {
+  const { step } = useApp()
+
   return (
     <>
       <Flex
@@ -28,17 +33,16 @@ const AuthNavbar = ({ value, step, setStep }) => {
           w={{ base: '3.125rem', lg: '5.875rem' }}
           h={{ base: '3.063rem', lg: '5.688rem' }}
         />
-        {step === 2 && (
+        {showLogin && (
           <Flex pos='absolute' mt={{ lg: 10 }} right={{ base: 6, lg: 20 }}>
-            <Text
+            <Link
+              to='/applicant/login'
+              as={NavLink}
               color='gcu.100'
-              cursor='pointer'
               fontWeight='bold'
-              textDecor='underline'
-              onClick={_ => setStep(3)}
             >
               Login
-            </Text>
+            </Link>
             <Text d={{ base: 'none', lg: 'block' }} ml={3}>
               to resume pending applications
             </Text>
@@ -47,7 +51,7 @@ const AuthNavbar = ({ value, step, setStep }) => {
       </Flex>
       <Progress
         colorScheme='gcuButton'
-        value={value}
+        value={getStep(step)}
         h={{ base: '6px', lg: '11px' }}
       />
     </>
@@ -55,9 +59,7 @@ const AuthNavbar = ({ value, step, setStep }) => {
 }
 
 AuthNavbar.propTypes = {
-  step: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-  setStep: PropTypes.func.isRequired
+  showLogin: PropTypes.bool
 }
 
 export default AuthNavbar

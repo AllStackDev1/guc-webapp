@@ -25,7 +25,7 @@ const validationSchema = yup.object().shape({
 })
 
 const StepSixOne = ({
-  setStep,
+  setView,
   editData,
   setPreviousSchool,
   updatePreviousSchool
@@ -59,8 +59,7 @@ const StepSixOne = ({
           description: 'Previous schoool saved successfully!'
         })
         window.sessionStorage.removeItem('previous-schoools')
-        window.sessionStorage.setItem('step', 6.2)
-        setStep(6.2)
+        setView(6.2)
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -199,7 +198,7 @@ const StepSixOne = ({
             variant='outline'
             label='Cancel'
             type='button'
-            onClick={() => setStep(6.2)}
+            onClick={() => setView(6.2)}
           />
           <Box d={{ base: 'none', lg: 'block' }} mx={4} />
           <CustomButton
@@ -217,7 +216,7 @@ const StepSixOne = ({
 
 StepSixOne.propTypes = {
   editData: PropTypes.object,
-  setStep: PropTypes.func.isRequired,
+  setView: PropTypes.func.isRequired,
   setPreviousSchool: PropTypes.func.isRequired,
   updatePreviousSchool: PropTypes.func.isRequired
 }

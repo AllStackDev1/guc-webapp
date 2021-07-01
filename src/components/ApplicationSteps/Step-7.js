@@ -32,7 +32,7 @@ export const StepSevenSchema = yup.object().shape({
 
 const StepSeven = ({
   user,
-  setStep,
+  history,
   setStudentBackground,
   getStudentBackground,
   updateStudentBackground
@@ -94,8 +94,7 @@ const StepSeven = ({
           title: 'Success',
           description: mge
         })
-        window.sessionStorage.setItem('step', 8.2)
-        setStep(8.2)
+        history.push('/applicant/siblings')
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -233,7 +232,7 @@ const StepSeven = ({
                 variant='outline'
                 label='Previous'
                 type='button'
-                onClick={() => setStep(6.2)}
+                onClick={() => history.push('/applicant/student-background')}
               />
 
               <CustomButton
@@ -253,7 +252,7 @@ const StepSeven = ({
 
 StepSeven.propTypes = {
   user: PropTypes.object.isRequired,
-  setStep: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setStudentBackground: PropTypes.func.isRequired,
   getStudentBackground: PropTypes.func.isRequired,
   updateStudentBackground: PropTypes.func.isRequired

@@ -11,7 +11,7 @@ const StepFifteen = ({ user }) => {
       minW={{ lg: '3xl' }}
     >
       <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
-        ASMISSION STATUS
+        ADMISSION STATUS
       </Heading>
 
       <Box my={10}>

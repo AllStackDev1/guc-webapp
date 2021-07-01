@@ -15,14 +15,9 @@ import { TrophyIcon } from 'theme/Icons'
 import configs from 'utils/configs'
 
 const StepFive = ({
-  auth,
   user,
-  setStep,
+  history,
   setEmail,
-  setCode,
-  setOtpId,
-  setPhoneNumber,
-  setSuccessMessage,
   setEnterApplication,
   applicantUpdateProfile
 }) => {
@@ -50,14 +45,9 @@ const StepFive = ({
           description: 'Payment successful'
         })
         setEmail(null)
-        // const res2 = await auth({ code: res1.data.code })
         window.sessionStorage.removeItem('_gcut')
-        // setOtpId(res2.data.pinId)
-        // setPhoneNumber(res2.data.to)
-        // setCode(res2.data.code)
-        // setSuccessMessage(res2.message)
         setEnterApplication(true)
-        setStep(3)
+        history.push('/applicant/login')
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -150,21 +140,22 @@ const StepFive = ({
             />
           </Box>
         )}
+        <Box mt={4}>
+          <Text fontWeight='bold' fontSize='sm' color='red.500'>
+            Please do not close the payment model when processing your payment,
+            as this will disrupt your payment from been verified. Wait until you
+            see a payment confirmation, the modal will close automatically.
+          </Text>
+        </Box>
       </Container>
     </>
   )
 }
 
 StepFive.propTypes = {
-  auth: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  setStep: PropTypes.func.isRequired,
-  setCode: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setEmail: PropTypes.func.isRequired,
-  setOtpId: PropTypes.func.isRequired,
-  setPhoneNumber: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired,
-  setSuccessMessage: PropTypes.func.isRequired,
   setEnterApplication: PropTypes.func.isRequired,
   applicantUpdateProfile: PropTypes.func.isRequired
 }

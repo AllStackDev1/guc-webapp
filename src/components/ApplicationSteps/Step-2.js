@@ -29,7 +29,7 @@ const validationSchema = yup.object().shape({
 
 const StepTwo = ({
   enroll,
-  setStep,
+  history,
   setEmail,
   errorMessage,
   setPhoneNumber,
@@ -55,7 +55,7 @@ const StepTwo = ({
         setSuccessMessage(
           'An Application code has been sent to your email address'
         )
-        setStep(3)
+        history.push('/applicant/login')
       } catch (error) {
         setSuccessMessage(null)
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -223,7 +223,7 @@ const StepTwo = ({
 StepTwo.propTypes = {
   errorMessage: PropTypes.any,
   enroll: PropTypes.func.isRequired,
-  setStep: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setEmail: PropTypes.func.isRequired,
   setPhoneNumber: PropTypes.func.isRequired,
   setErrorMessage: PropTypes.func.isRequired,

@@ -13,19 +13,90 @@ const Router = () => {
   return (
     <React.Suspense fallback={<Splash />}>
       <Switch>
-        <Redirect exact from='/' to='/application-process' />
-        <Route
-          exact
-          path='/application-process'
-          component={Index.Application}
-        />
-        <Route path='/logout' component={Index.Logout} />
-        <Route exact path='/login' component={Index.Login} />
+        {/* APPLICANT */}
+        <Redirect exact from='/' to='/applicant/start' />
+        <Redirect exact from='/applicant' to='/applicant/start' />
+        <Route exact path='/applicant/start' component={Applicant.Start} />
+        <Route exact path='/applicant/signup' component={Applicant.Signup} />
+        <Route exact path='/applicant/login' component={Applicant.Login} />
+
+        {/* APPLICANT Authenticated */}
         <PrivateRoute
           exact
-          path='/applicant/dashboard'
-          component={Applicant.Dashboard}
+          path='/applicant/payment'
+          component={Applicant.Authenticated.Payment}
         />
+
+        <PrivateRoute
+          exact
+          path='/applicant/initial-enquiry'
+          component={Applicant.Authenticated.InitialEnquiry}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/previous-schools'
+          component={Applicant.Authenticated.PreviousSchool}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/student-background'
+          component={Applicant.Authenticated.StudentBackground}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/siblings'
+          component={Applicant.Authenticated.Siblings}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/health-and-medical'
+          component={Applicant.Authenticated.HealthMedical}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/guardian-info'
+          component={Applicant.Authenticated.GuardianInfo}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/emergency-contact'
+          component={Applicant.Authenticated.EmergencyContact}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/success'
+          component={Applicant.Authenticated.Success}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/exam-scheduled'
+          component={Applicant.Authenticated.ExamScheduled}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/result'
+          component={Applicant.Authenticated.Result}
+        />
+
+        <PrivateRoute
+          exact
+          path='/applicant/admission-status'
+          component={Applicant.Authenticated.AdmissionStatus}
+        />
+
+        {/* ADMIN */}
+
+        <Route exact path='/auth/logout' component={Index.Logout} />
+        <Route exact path='/auth/login' component={Index.Login} />
         <PrivateRoute
           exact
           path='/admin/dashboard'

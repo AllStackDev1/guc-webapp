@@ -7,7 +7,7 @@ export const AppContextProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isMenuOpen, setMenuOpen] = useState(false)
-  const [step, setStep] = useState(sessionStorage.getItem('step') * 1 || 1)
+  const [step, setStep] = useState(1)
   const [editData, setEditData] = useState(null)
 
   const toggleMenu = () => setMenuOpen(!isMenuOpen)
@@ -18,7 +18,6 @@ export const AppContextProvider = ({ children }) => {
     setMenuOpen(false)
     setEditData(null)
     setStep(step)
-    window.sessionStorage.setItem('step', step)
   }
 
   return (

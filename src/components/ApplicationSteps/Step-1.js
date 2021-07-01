@@ -33,7 +33,7 @@ const CircleCheckIcon = () => (
   </svg>
 )
 
-const StepOne = ({ setStep }) => {
+const StepOne = ({ history }) => {
   const textStyle = {
     my: 4,
     fontSize: { base: 'xs', lg: 'sm' },
@@ -110,7 +110,7 @@ const StepOne = ({ setStep }) => {
           color='#fff'
           type='button'
           label='Apply Now'
-          onClick={_ => setStep(2)}
+          onClick={_ => history.push('/applicant/signup')}
         />
       </Box>
     </Container>
@@ -118,7 +118,7 @@ const StepOne = ({ setStep }) => {
 }
 
 StepOne.propTypes = {
-  setStep: PropTypes.func.isRequired
+  history: PropTypes.object.isRequired
 }
 
 export default StepOne

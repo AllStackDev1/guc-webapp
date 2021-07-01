@@ -1,12 +1,13 @@
-/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
+  Tag,
   Text,
   Icon,
   Flex,
+  Switch,
   Heading,
   useToast,
   Checkbox,
@@ -46,7 +47,12 @@ const Dashboard = ({ history }) => {
   const btnRef = useRef()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { getApplicants, deleteApplicant, deleteApplicants } = useApi()
+  const {
+    updateApplicant,
+    getApplicants,
+    deleteApplicant,
+    deleteApplicants
+  } = useApi()
 
   const toast = useToast()
 
@@ -103,6 +109,44 @@ const Dashboard = ({ history }) => {
       setLoading(true)
       const data = selectedItems.map(e => ({ _id: e._id }))
       const res = await deleteApplicants(data)
+      window.sessionStorage.removeItem('applicants')
+      toast({
+        duration: 5000,
+        isClosable: true,
+        status: 'success',
+        position: 'top-right',
+        title: 'Success',
+        description: res.message
+      })
+      triggerReload()
+    } catch (error) {
+      let eMgs
+      if (error?.data?.message === 'celebrate request validation failed') {
+        eMgs = 'Invalid data, please check form.'
+      } else {
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
+      }
+      toast({
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+        title: 'Error',
+        description: eMgs
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleStatusUpdate = async e => {
+    try {
+      setLoading(true)
+      const res = await updateApplicant(e.target.id, {
+        stage: e.target.checked ? 6 : 5,
+        status: e.target.checked ? 'PAID' : 'PENDING'
+      })
       window.sessionStorage.removeItem('applicants')
       toast({
         duration: 5000,
@@ -232,6 +276,31 @@ const Dashboard = ({ history }) => {
     {
       Header: 'Application Code',
       accessor: 'code'
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+      Cell: ({ row }) => {
+        const state = row.original?.status === 'PAID'
+        return (
+          <Flex flexDir='column' align='center' justify='center'>
+            <Tag
+              bgColor={state ? 'green.300' : ''}
+              color={state ? 'white' : 'gray.300'}
+            >
+              {row.original?.status}
+            </Tag>
+            <Box h={1} />
+            <Switch
+              size='sm'
+              colorScheme='gcuButton'
+              id={row.original._id}
+              onChange={handleStatusUpdate}
+              isChecked={state}
+            />
+          </Flex>
+        )
+      }
     },
     {
       Header: 'Date Registered',

@@ -25,7 +25,7 @@ import { objDiff } from 'utils/mics'
 
 const StepTen = ({
   user,
-  setStep,
+  history,
   setGuardianContact,
   getGuardianContact,
   updateGuardianContact
@@ -193,8 +193,7 @@ const StepTen = ({
           title: 'Success',
           description: mge
         })
-        window.sessionStorage.setItem('step', 11)
-        setStep(11)
+        history.push('/applicant/emergency-contact')
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -307,7 +306,7 @@ const StepTen = ({
               variant='outline'
               label='Previous'
               color='gcu.100'
-              onClick={() => setStep(9)}
+              onClick={() => history.push('/applicant/guardian-info')}
             />
             <Box d={{ base: 'none', lg: 'block' }} mx={4} />
             <CustomButton
@@ -326,7 +325,7 @@ const StepTen = ({
 
 StepTen.propTypes = {
   user: PropTypes.object.isRequired,
-  setStep: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setGuardianContact: PropTypes.func.isRequired,
   getGuardianContact: PropTypes.func.isRequired,
   updateGuardianContact: PropTypes.func.isRequired

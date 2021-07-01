@@ -19,7 +19,8 @@ import { getformattedDate } from 'utils/mics'
 import CustomButton from 'components/Forms/CustomButton'
 
 const StepSixTwo = ({
-  setStep,
+  setView,
+  history,
   setEditData,
   getPreviousSchools,
   deletePreviousSchool
@@ -37,12 +38,12 @@ const StepSixTwo = ({
 
   const handleAdd = () => {
     setEditData(null)
-    setStep(6.1)
+    setView(6.1)
   }
 
   const handleEdit = e => {
     setEditData(e)
-    setStep(6.1)
+    setView(6.1)
   }
 
   const handleDelete = async id => {
@@ -82,9 +83,9 @@ const StepSixTwo = ({
 
   React.useEffect(() => {
     if (!isLoading && !error && !data?.length) {
-      setStep(6.1)
+      setView(6.1)
     }
-  }, [isLoading, error, data, setStep])
+  }, [isLoading, error, data, setView])
 
   return (
     <>
@@ -199,14 +200,14 @@ const StepSixTwo = ({
                 variant='outline'
                 label='Previous'
                 type='button'
-                onClick={() => setStep(6)}
+                onClick={() => history.push('/applicant/initial-enquiry')}
               />
 
               <CustomButton
                 label='Next'
                 color='#fff'
                 type='button'
-                onClick={() => setStep(7)}
+                onClick={() => history.push('/applicant/student-background')}
               />
             </Flex>
           </Flex>
@@ -217,7 +218,8 @@ const StepSixTwo = ({
 }
 
 StepSixTwo.propTypes = {
-  setStep: PropTypes.func.isRequired,
+  setView: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setEditData: PropTypes.func.isRequired,
   deletePreviousSchool: PropTypes.func.isRequired,
   getPreviousSchools: PropTypes.func.isRequired

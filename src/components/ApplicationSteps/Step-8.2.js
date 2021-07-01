@@ -20,7 +20,13 @@ import Overlay from 'components/Loading/Overlay'
 import { getformattedDate } from 'utils/mics'
 import CustomButton from 'components/Forms/CustomButton'
 
-const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
+const StepEightTwo = ({
+  setView,
+  history,
+  setEditData,
+  getSiblings,
+  deleteSibling
+}) => {
   const [reload, setReload] = React.useState(0)
   const [isSubmitting, setSubmitting] = React.useState(false)
   const triggerReload = () => setReload(prevState => prevState + 1)
@@ -30,12 +36,12 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
 
   const handleAdd = () => {
     setEditData({})
-    setStep(8.1)
+    setView(8.1)
   }
 
   const handleEdit = e => {
     setEditData(e)
-    setStep(8.1)
+    setView(8.1)
   }
 
   const handleDelete = async id => {
@@ -75,9 +81,9 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
 
   React.useEffect(() => {
     if (!isLoading && !error && !data?.length) {
-      setStep(8.1)
+      setView(8.1)
     }
-  }, [isLoading, error, data, setStep])
+  }, [isLoading, error, data, setView])
 
   return (
     <>
@@ -189,14 +195,14 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
                 variant='outline'
                 label='Previous'
                 type='button'
-                onClick={() => setStep(7)}
+                onClick={() => history.push('/applicant/student-background')}
               />
 
               <CustomButton
                 label='Next'
                 color='#fff'
                 type='button'
-                onClick={() => setStep(9)}
+                onClick={() => history.push('/applicant/health-and-medical')}
               />
             </Flex>
           </Flex>
@@ -207,7 +213,8 @@ const StepEightTwo = ({ setStep, setEditData, getSiblings, deleteSibling }) => {
 }
 
 StepEightTwo.propTypes = {
-  setStep: PropTypes.func.isRequired,
+  setView: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
   setEditData: PropTypes.func.isRequired,
   getSiblings: PropTypes.func.isRequired,
   deleteSibling: PropTypes.func.isRequired

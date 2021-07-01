@@ -25,7 +25,13 @@ const validationSchema = yup.object().shape({
   dob: yup.string().required('Date of birth is required!')
 })
 
-const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
+const StepEightOne = ({
+  setView,
+  history,
+  editData,
+  setSibling,
+  updateSibling
+}) => {
   const toast = useToast()
 
   const formik = useFormik({
@@ -52,8 +58,7 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
           description: 'Sibling saved successfully!'
         })
         window.sessionStorage.removeItem('siblings')
-        window.sessionStorage.setItem('step', 8.2)
-        setStep(8.2)
+        setView(8.2)
       } catch (error) {
         let eMgs
         if (error?.data?.message === 'celebrate request validation failed') {
@@ -146,7 +151,11 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
           </GridItem>
         </Grid>
         <Flex mt={6} align='center' justify='space-between'>
-          <Flex role='button' color='gcu.100' onClick={() => setStep(7)}>
+          <Flex
+            role='button'
+            color='gcu.100'
+            onClick={() => history.push('/applicant/student-background')}
+          >
             <Icon as={FiChevronLeft} boxSize={6} />
             <Text fontSize='md' fontWeight={600}>
               Previous
@@ -163,9 +172,9 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
               color='gcu.100'
               onClick={() => {
                 if (editData) {
-                  setStep(8.2)
+                  setView(8.2)
                 } else {
-                  setStep(9)
+                  history.push('/applicant/health-and-medical')
                 }
               }}
             />
@@ -186,7 +195,8 @@ const StepEightOne = ({ setStep, editData, setSibling, updateSibling }) => {
 
 StepEightOne.propTypes = {
   editData: PropTypes.object,
-  setStep: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  setView: PropTypes.func.isRequired,
   setSibling: PropTypes.func.isRequired,
   updateSibling: PropTypes.func.isRequired
 }

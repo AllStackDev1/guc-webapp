@@ -10,7 +10,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
   React.useEffect(() => {
     if (!session) {
-      return history.push('/logout')
+      return history.push('/auth/logout')
     }
   }, [session, history])
 
