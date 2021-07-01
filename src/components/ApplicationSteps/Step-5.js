@@ -142,9 +142,8 @@ const StepFive = ({
         )}
         <Box mt={4}>
           <Text fontWeight='bold' fontSize='sm' color='red.500'>
-            Please do not close the payment model when processing your payment,
-            as this will disrupt your payment from been verified. Wait until you
-            see a payment confirmation, the modal will close automatically.
+            Please do not close the payment page until payment is confirmed, the
+            page would close automatically after confirmation
           </Text>
         </Box>
       </Container>
