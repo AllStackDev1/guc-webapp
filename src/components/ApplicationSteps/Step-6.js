@@ -18,7 +18,8 @@ import {
   GridItem,
   TabPanels,
   Container,
-  useDisclosure
+  useDisclosure,
+  Link
 } from '@chakra-ui/react'
 import countryList from 'react-select-country-list'
 
@@ -275,9 +276,21 @@ const StepSixOne = ({
     >
       {file && <PreviewModal data={file} isOpen={isOpen} onClose={onClose} />}
 
-      <Heading fontWeight='bold' fontSize={{ base: 'lg', lg: '2.625rem' }}>
+      <Heading
+        mb={3}
+        fontWeight='bold'
+        fontSize={{ base: 'lg', lg: '2.625rem' }}
+      >
         Initial Enquiry
       </Heading>
+
+      <Link
+        href='/GCU-Entrance-Examination-Application-Form.pdf'
+        color='gcu.100'
+        fontWeight={500}
+      >
+        Click here to download the offline form
+      </Link>
 
       {isLoading || error ? (
         <FetchCard
@@ -293,7 +306,7 @@ const StepSixOne = ({
       ) : (
         <Box as='form' onSubmit={handleSubmit} on>
           <Text
-            my={{ base: 4, lg: 8 }}
+            my={{ base: 4, lg: 5 }}
             fontSize={{ base: 'sm', lg: 'inherit' }}
           >
             only upload <b>jpg, png</b> and <b>pdf</b> files.
