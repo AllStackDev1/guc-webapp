@@ -5,8 +5,7 @@
 
 const configs = () => {
   return {
-    BASE_URL: 'https://guc-webserver-test.herokuapp.com/api/v1',
-    // process.env.REACT_APP_BASE_URL,
+    BASE_URL: process.env.REACT_APP_BASE_URL,
     PAYSTACK_PUBLIC_KEY: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY
   }
 }
