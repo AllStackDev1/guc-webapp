@@ -41,19 +41,11 @@ const UserDetailModal = ({
   const triggerReload = () => setReload(prevState => prevState + 1)
 
   const { data, message, error, isLoading } = useFetch(
-    `applicant_${id}`,
+    null,
     getApplicant,
     reload,
     id
   )
-
-  // const onClose = rest.onClose
-
-  // React.useEffect(() => {
-  //   if (!id) {
-  //     onClose()
-  //   }
-  // }, [id, onClose])
 
   const details = [
     {
