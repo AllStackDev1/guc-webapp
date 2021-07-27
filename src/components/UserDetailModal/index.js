@@ -405,7 +405,7 @@ const UserDetailModal = ({
       {...rest}
     >
       <DrawerOverlay />
-      <DrawerContent p={10}>
+      <DrawerContent p={10} overflowY='scroll'>
         {isLoading || error ? (
           <FetchCard
             h='60vh'
