@@ -114,3 +114,9 @@ export const stepResolver = i => {
       break
   }
 }
+
+export const confirmAction = func => {
+  if (window !== undefined && window?.confirm('Do you want to continue?')) {
+    func()
+  }
+}

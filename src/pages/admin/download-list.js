@@ -30,7 +30,11 @@ import UserDetailModal from 'components/UserDetailModal'
 import Overlay from 'components/Loading/Overlay'
 import PreviewModal from 'components/PreviewModal'
 
-import { getformattedDate, getSelectedArrItems } from 'utils/mics'
+import {
+  confirmAction,
+  getformattedDate,
+  getSelectedArrItems
+} from 'utils/mics'
 
 const DownloadList = ({ history, ...rest }) => {
   document.title = 'Download List | The GCU Application Portal'
@@ -191,7 +195,11 @@ const DownloadList = ({ history, ...rest }) => {
         onOpen()
       }
     },
-    { name: 'Delete', icon: FiTrash2, action: e => handleDelete(e.id) }
+    {
+      name: 'Delete',
+      icon: FiTrash2,
+      action: e => confirmAction(() => handleDelete(e.id))
+    }
   ]
 
   const selectedItems = checkedItems?.filter(e => e.checked === true)
@@ -472,7 +480,7 @@ const DownloadList = ({ history, ...rest }) => {
             title='Bulk Delete'
             rightIcon={<TrashIcon />}
             isDisabled={!selectedItems?.length}
-            onClick={handleBulkDelete}
+            onClick={() => confirmAction(handleBulkDelete)}
           />
           <Box mx={2} />
           <ActionButton

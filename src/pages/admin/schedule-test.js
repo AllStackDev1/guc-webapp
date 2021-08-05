@@ -34,7 +34,7 @@ import CustomModal from 'components/CustomModal'
 import CustomInput from 'components/Forms/CustomInput'
 import CustomDropzone from 'components/Forms/CustomDropzone'
 import CustomButton from 'components/Forms/CustomButton'
-import { fileToBase64 } from 'utils/mics'
+import { confirmAction, fileToBase64 } from 'utils/mics'
 
 const ScheduleTest = ({ history }) => {
   document.title = 'Schedule Test | The GCU Application Portal'
@@ -564,7 +564,7 @@ const ScheduleTest = ({ history }) => {
             fontWeight={300}
             title='Bulk Delete'
             rightIcon={<TrashIcon />}
-            onClick={handleBulkDelete}
+            onClick={() => confirmAction(handleBulkDelete)}
             isDisabled={!selectedItems?.length}
           />
         </Flex>

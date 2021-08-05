@@ -29,7 +29,7 @@ import UserDetailModal from 'components/UserDetailModal'
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
 
-import { getformattedDate } from 'utils/mics'
+import { confirmAction, getformattedDate } from 'utils/mics'
 
 const Dashboard = ({ history }) => {
   document.title = 'Dashboard | The GCU Application Portal'
@@ -209,7 +209,7 @@ const Dashboard = ({ history }) => {
     {
       name: 'Delete',
       icon: FiTrash2,
-      action: e => handleDelete(e.id)
+      action: e => confirmAction(() => handleDelete(e.id))
     }
   ]
 
@@ -351,7 +351,7 @@ const Dashboard = ({ history }) => {
             title='Bulk Delete'
             rightIcon={<TrashIcon />}
             isDisabled={!selectedItems?.length}
-            onClick={handleBulkDelete}
+            onClick={() => confirmAction(handleBulkDelete)}
           />
           <Box mx={2} />
           <ActionButton
