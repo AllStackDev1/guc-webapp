@@ -463,17 +463,19 @@ const UserDetailModal = ({
                       />
                     </GridItem>
                     <GridItem d='flex' alignItems='center'>
-                      <ActionButton
-                        px={4}
-                        rounded='md'
-                        color='#fff'
-                        fontSize='sm'
-                        fontWeight={300}
-                        boxShadow='lg'
-                        colorScheme='gcuButton'
-                        title='Add to CSV Download List'
-                        onClick={() => handleAddToList(id)}
-                      />
+                      {handleAddToList && (
+                        <ActionButton
+                          px={4}
+                          rounded='md'
+                          color='#fff'
+                          fontSize='sm'
+                          fontWeight={300}
+                          boxShadow='lg'
+                          colorScheme='gcuButton'
+                          title='Add to CSV Download List'
+                          onClick={() => handleAddToList(id)}
+                        />
+                      )}
                     </GridItem>
                     <GridItem>
                       <Text fontSize='xs'>Birth Certificate</Text>
@@ -527,17 +529,19 @@ const UserDetailModal = ({
                   />
                 </DrawerBody>
                 <DrawerFooter>
-                  <ActionButton
-                    px={4}
-                    rounded='md'
-                    fontSize='sm'
-                    color='#fff'
-                    boxShadow='lg'
-                    colorScheme='gcuButton'
-                    fontWeight={300}
-                    title='Add to CSV Download List'
-                    onClick={() => handleAddToList(id)}
-                  />
+                  {handleAddToList && (
+                    <ActionButton
+                      px={4}
+                      rounded='md'
+                      fontSize='sm'
+                      color='#fff'
+                      boxShadow='lg'
+                      colorScheme='gcuButton'
+                      fontWeight={300}
+                      title='Add to CSV Download List'
+                      onClick={() => handleAddToList(id)}
+                    />
+                  )}
                 </DrawerFooter>
               </div>
             ) : (

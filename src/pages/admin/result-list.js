@@ -12,13 +12,13 @@ import {
   useDisclosure,
   IconButton
 } from '@chakra-ui/react'
-import { FiEye } from 'react-icons/fi'
+import { FiEye, FiFileText } from 'react-icons/fi'
 
 import Layout from 'container/Layout'
 import { ArrowLeftIcon, DashboardIcon } from 'theme/Icons'
-import ActionButton from 'components/ActionButton'
 import CustomTable from 'components/CustomTable'
 import Search from 'components/CustomTable/Search'
+import DropdownActions from 'components/DropdownActions'
 
 import useApi from 'context/api'
 import useFetch from 'hooks/useFetch'
@@ -49,7 +49,6 @@ const ResultList = ({ history }) => {
     null,
     getApplicantsWithResult,
     reload
-    // { completed: true, stage: 14 }
   )
 
   const handlePreview = file => {
@@ -122,16 +121,27 @@ const ResultList = ({ history }) => {
       Header: '',
       accessor: 'action',
       Cell: ({ row }) => (
-        <ActionButton
-          bg='#F2F2F2'
-          fontSize='xs'
-          //   width='80px'
-          fontWeight={300}
-          title='View Result'
-          rightIcon={<FiEye />}
-          onClick={() => handlePreview(row.original.resultDoc)}
+        <DropdownActions
+          data={{ id: row.original?._id, resultDoc: row.original.resultDoc }}
+          options={actions}
         />
       )
+    }
+  ]
+
+  const actions = [
+    {
+      name: 'View Application',
+      icon: FiFileText,
+      action: e => {
+        setSelectItem(e.id)
+        onOpen()
+      }
+    },
+    {
+      name: 'View Result',
+      icon: FiEye,
+      action: e => handlePreview(e.resultDoc)
     }
   ]
 
@@ -153,6 +163,7 @@ const ResultList = ({ history }) => {
           isOpen={isOpen}
           onClose={onClose}
           finalFocusRef={btnRef}
+          handlePreview={handlePreview}
           setSelectItem={setSelectItem}
         />
       )}
