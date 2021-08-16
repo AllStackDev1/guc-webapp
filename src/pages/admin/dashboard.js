@@ -23,7 +23,7 @@ import Overlay from 'components/Loading/Overlay'
 import PreviewModal from 'components/PreviewModal'
 import Search from 'components/CustomTable/Search'
 
-import { FiTrash2, FiFileText } from 'react-icons/fi'
+import { FiTrash2, FiFileText, FiDownload } from 'react-icons/fi'
 import UserDetailModal from 'components/UserDetailModal'
 
 import useApi from 'context/api'
@@ -41,16 +41,18 @@ const Dashboard = ({ history }) => {
   const [file, setFile] = useState(undefined)
   const [initialTableData, setInitialTableData] = useState([])
   const [tableData, setTableData] = useState([])
-
-  const btnRef = useRef()
-
+  const [message, setMessage] = useState('Adding to download list')
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const {
     getApplicants,
     setDownloadList,
     deleteApplicant,
-    deleteApplicants
+    deleteApplicants,
+    downloadApplicationForm
   } = useApi()
+
+  const btnRef = useRef()
 
   const toast = useToast()
 
@@ -177,6 +179,34 @@ const Dashboard = ({ history }) => {
     }
   }
 
+  const handleDownload = async id => {
+    try {
+      setMessage('Processing Request')
+      setLoading(true)
+      const res = await downloadApplicationForm(id)
+      setFile(res.data)
+      onOpen()
+    } catch (error) {
+      let eMgs
+      if (error?.data?.message === 'celebrate request validation failed') {
+        eMgs = 'Invalid data, please check form.'
+      } else {
+        eMgs =
+          error?.message || error?.data?.message || 'Unexpected network error.'
+      }
+      toast({
+        duration: 9000,
+        status: 'error',
+        isClosable: true,
+        position: 'top-right',
+        title: 'Error',
+        description: eMgs
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handlePreview = file => {
     setFile(file)
     onOpen()
@@ -205,6 +235,11 @@ const Dashboard = ({ history }) => {
         setSelectItem(e.id)
         onOpen()
       }
+    },
+    {
+      name: 'Application Form',
+      icon: FiDownload,
+      action: e => handleDownload(e.id)
     },
     {
       name: 'Delete',
@@ -312,7 +347,7 @@ const Dashboard = ({ history }) => {
 
   return (
     <Layout bg='#E5E5E5' px={20} py={10}>
-      {isLoading && <Overlay text='Adding to download list' />}
+      {isLoading && <Overlay text={message} />}
       {selectItem && (
         <UserDetailModal
           id={selectItem}

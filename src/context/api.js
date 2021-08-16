@@ -95,6 +95,10 @@ export const ApiContextProvider = ({ children }) => {
     return await http.get({ url: `${BASE_URL}/applicants/${id}` })
   }
 
+  const downloadApplicationForm = async id => {
+    return await http.get({ url: `${BASE_URL}/applicants/${id}/form` })
+  }
+
   const updateApplicant = async (id, payload) => {
     return await http.patch({
       url: `${BASE_URL}/applicants/${id}`,
@@ -419,8 +423,9 @@ export const ApiContextProvider = ({ children }) => {
         deleteEmergenyContact,
         getApplicantResultFile,
         clearScheduleTestLists,
-        getApplicantsWithResult,
         applicantUpdateProfile,
+        downloadApplicationForm,
+        getApplicantsWithResult,
         deleteScheduleTestLists,
         getAllApplicantsDetails,
         updateStudentBackground,
