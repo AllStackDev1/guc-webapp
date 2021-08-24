@@ -176,11 +176,18 @@ const ScheduleTest = ({ history }) => {
       reader.onload = async function (e) {
         try {
           const csvData = Papa.parse(reader.result)
-          const _data = csvData?.data?.slice(1).map(e => ({
-            code: e[4],
-            accessCode: e[16],
-            examDate: values.date
-          }))
+          const _data = csvData?.data
+            ?.slice(1)
+            .map(e => {
+              if (e[4] && e[16]) {
+                return {
+                  code: e[4],
+                  accessCode: e[16],
+                  examDate: values.date
+                }
+              }
+            })
+            .filter(e => e !== undefined)
           setMessage('Extracting data from...')
           setSubmitting(true)
           const res = await uploadScheduleTestCSV(_data)
